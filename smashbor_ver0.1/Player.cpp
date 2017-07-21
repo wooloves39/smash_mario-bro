@@ -407,7 +407,6 @@ void CPlayer::attack(CPlayer **other, int player_num) {
 							damage_num += 5;
 						else
 							damage_num += 12;
-
 					}
 					break;
 				case HATTACK_LEFT:
@@ -418,8 +417,6 @@ void CPlayer::attack(CPlayer **other, int player_num) {
 							damage_num += 5;
 						else
 							damage_num += 12;
-
-
 					}
 					break;
 				case ATTACK1_RIGHT:
@@ -432,7 +429,7 @@ void CPlayer::attack(CPlayer **other, int player_num) {
 						}
 						else
 							damage_num += 8;
-						gage += 6;
+						gage += 4;
 
 
 					}
@@ -441,12 +438,11 @@ void CPlayer::attack(CPlayer **other, int player_num) {
 					if (m_Position.x - 80 < other_POS.x&&m_Position.x > other_POS.x) {
 						other[i]->attacker_num = myindex;
 						other[i]->impact = true;
-
 						if (other[i]->GetStatus() == DEFENSE_LEFT || other[i]->GetStatus() == DEFENSE_RIGHT)
 							damage_num += 3;
 						else
 							damage_num += 8;
-						gage += 6;
+						gage += 4;
 
 					}
 					break;
@@ -458,7 +454,7 @@ void CPlayer::attack(CPlayer **other, int player_num) {
 							damage_num += 3;
 						else
 							damage_num += 8;
-						gage += 6;
+						gage += 4;
 
 					}
 					break;
@@ -470,7 +466,7 @@ void CPlayer::attack(CPlayer **other, int player_num) {
 							damage_num += 3;
 						else
 							damage_num += 8;
-						gage += 6;
+						gage += 4;
 
 					}
 					break;
@@ -515,25 +511,16 @@ void CPlayer::KeyState(CCamera& cam, int state, int mode, int player) {
 					DIR = 1;
 					dwDirection |= DIR_LEFT;
 
-					if (GetStatus() == DEFENSE_LEFT || GetStatus() == DEFENSE_RIGHT)
-					{
-
-					}
-					else if (GetStatus() == ATTACK1_LEFT || GetStatus() == ATTACK2_LEFT ||
+					if (GetStatus() == DEFENSE_LEFT || GetStatus() == DEFENSE_RIGHT ||
+						GetStatus() == ATTACK1_LEFT || GetStatus() == ATTACK2_LEFT ||
 						GetStatus() == ATTACK1_RIGHT || GetStatus() == ATTACK2_RIGHT ||
-						GetStatus() == HATTACK_RIGHT || GetStatus() == HATTACK_LEFT)
-					{
-
-					}
+						GetStatus() == HATTACK_RIGHT || GetStatus() == HATTACK_LEFT);
 					else
 					{
 
 						if (mapobject_collsion == true)
 							SetStatus(MOVE_LEFT);
-						else if (GetStatus() == KICK_LEFT || GetStatus() == KICK_RIGHT)
-						{
-
-						}
+						else if (GetStatus() == KICK_LEFT || GetStatus() == KICK_RIGHT);
 						else
 							SetStatus(JUMP_LEFT);
 					}
@@ -544,25 +531,15 @@ void CPlayer::KeyState(CCamera& cam, int state, int mode, int player) {
 				{
 					DIR = 2;
 					dwDirection |= DIR_RIGHT;
-					if (GetStatus() == DEFENSE_LEFT || GetStatus() == DEFENSE_RIGHT)
-					{
-					}
-
-					else if (GetStatus() == ATTACK1_LEFT || GetStatus() == ATTACK2_LEFT ||
+					if (GetStatus() == DEFENSE_LEFT || GetStatus() == DEFENSE_RIGHT ||
+						GetStatus() == ATTACK1_LEFT || GetStatus() == ATTACK2_LEFT ||
 						GetStatus() == ATTACK1_RIGHT || GetStatus() == ATTACK2_RIGHT ||
-						GetStatus() == HATTACK_RIGHT || GetStatus() == HATTACK_LEFT)
-					{
-
-					}
-
+						GetStatus() == HATTACK_RIGHT || GetStatus() == HATTACK_LEFT);
 					else
 					{
 						if (mapobject_collsion == true)
 							SetStatus(MOVE_RIGHT);
-						else if (GetStatus() == KICK_LEFT || GetStatus() == KICK_RIGHT)
-						{
-
-						}
+						else if (GetStatus() == KICK_LEFT || GetStatus() == KICK_RIGHT);
 						else
 							SetStatus(JUMP_RIGHT);
 					}
@@ -575,16 +552,10 @@ void CPlayer::KeyState(CCamera& cam, int state, int mode, int player) {
 				{
 					if (jump == false) {
 
-						if (GetStatus() == DEFENSE_LEFT || GetStatus() == DEFENSE_RIGHT)
-							return;
-						if (GetStatus() == ATTACK1_LEFT || GetStatus() == ATTACK2_LEFT ||
+						if (GetStatus() == DEFENSE_LEFT || GetStatus() == DEFENSE_RIGHT||
+							GetStatus() == ATTACK1_LEFT || GetStatus() == ATTACK2_LEFT ||
 							GetStatus() == ATTACK1_RIGHT || GetStatus() == ATTACK2_RIGHT)
-						{
 							return;
-
-						}
-
-
 						else
 						{
 
@@ -636,14 +607,9 @@ void CPlayer::KeyState(CCamera& cam, int state, int mode, int player) {
 				{
 					if (attack == false) {
 						if (GetStatus() == BASIC_RIGHT || GetStatus() == MOVE_RIGHT)
-						{
 							SetStatus(ATTACK1_RIGHT);
-						}
 						else if (GetStatus() == BASIC_LEFT || GetStatus() == MOVE_LEFT)
-						{
 							SetStatus(ATTACK1_LEFT);
-						}
-
 						else if (m_State == ATTACK1_RIGHT)
 						{
 							n_AttackCount = 2;
@@ -699,25 +665,16 @@ void CPlayer::KeyState(CCamera& cam, int state, int mode, int player) {
 						DIR = 1;
 						dwDirection |= DIR_LEFT;
 
-						if (GetStatus() == DEFENSE_LEFT || GetStatus() == DEFENSE_RIGHT)
-						{
-
-						}
-						else if (GetStatus() == ATTACK1_LEFT || GetStatus() == ATTACK2_LEFT ||
+						if (GetStatus() == DEFENSE_LEFT || GetStatus() == DEFENSE_RIGHT ||
+							GetStatus() == ATTACK1_LEFT || GetStatus() == ATTACK2_LEFT ||
 							GetStatus() == ATTACK1_RIGHT || GetStatus() == ATTACK2_RIGHT ||
-							GetStatus() == HATTACK_RIGHT || GetStatus() == HATTACK_LEFT)
-						{
-
-						}
+							GetStatus() == HATTACK_RIGHT || GetStatus() == HATTACK_LEFT);
 						else
 						{
 
 							if (mapobject_collsion == true)
 								SetStatus(MOVE_LEFT);
-							else if (GetStatus() == KICK_LEFT || GetStatus() == KICK_RIGHT)
-							{
-
-							}
+							else if (GetStatus() == KICK_LEFT || GetStatus() == KICK_RIGHT);
 							else
 								SetStatus(JUMP_LEFT);
 						}
@@ -728,17 +685,10 @@ void CPlayer::KeyState(CCamera& cam, int state, int mode, int player) {
 					{
 						DIR = 2;
 						dwDirection |= DIR_RIGHT;
-						if (GetStatus() == DEFENSE_LEFT || GetStatus() == DEFENSE_RIGHT)
-						{
-						}
-
-						else if (GetStatus() == ATTACK1_LEFT || GetStatus() == ATTACK2_LEFT ||
+						if (GetStatus() == DEFENSE_LEFT || GetStatus() == DEFENSE_RIGHT ||
+							GetStatus() == ATTACK1_LEFT || GetStatus() == ATTACK2_LEFT ||
 							GetStatus() == ATTACK1_RIGHT || GetStatus() == ATTACK2_RIGHT ||
-							GetStatus() == HATTACK_RIGHT || GetStatus() == HATTACK_LEFT)
-						{
-
-						}
-
+							GetStatus() == HATTACK_RIGHT || GetStatus() == HATTACK_LEFT);
 						else
 						{
 							if (mapobject_collsion == true)
@@ -759,19 +709,12 @@ void CPlayer::KeyState(CCamera& cam, int state, int mode, int player) {
 					{
 						if (jump == false) {
 
-							if (GetStatus() == DEFENSE_LEFT || GetStatus() == DEFENSE_RIGHT)
-								return;
-							if (GetStatus() == ATTACK1_LEFT || GetStatus() == ATTACK2_LEFT ||
+							if (GetStatus() == DEFENSE_LEFT || GetStatus() == DEFENSE_RIGHT|| 
+								GetStatus() == ATTACK1_LEFT || GetStatus() == ATTACK2_LEFT ||
 								GetStatus() == ATTACK1_RIGHT || GetStatus() == ATTACK2_RIGHT)
-							{
 								return;
-
-							}
-
-
 							else
 							{
-
 								if (m_bJump == false)
 								{
 									if (JumpCount != 2) {
@@ -786,9 +729,6 @@ void CPlayer::KeyState(CCamera& cam, int state, int mode, int player) {
 											SetStatus(JUMP_LEFT);
 										++JumpCount;
 									}
-
-
-
 								}
 							}
 						}
@@ -881,16 +821,10 @@ void CPlayer::KeyState(CCamera& cam, int state, int mode, int player) {
 						DIR = 1;
 						dwDirection |= DIR_LEFT;
 
-						if (GetStatus() == DEFENSE_LEFT || GetStatus() == DEFENSE_RIGHT)
-						{
-
-						}
-						else if (GetStatus() == ATTACK1_LEFT || GetStatus() == ATTACK2_LEFT ||
+						if (GetStatus() == DEFENSE_LEFT || GetStatus() == DEFENSE_RIGHT ||
+							GetStatus() == ATTACK1_LEFT || GetStatus() == ATTACK2_LEFT ||
 							GetStatus() == ATTACK1_RIGHT || GetStatus() == ATTACK2_RIGHT ||
-							GetStatus() == HATTACK_RIGHT || GetStatus() == HATTACK_LEFT)
-						{
-
-						}
+							GetStatus() == HATTACK_RIGHT || GetStatus() == HATTACK_LEFT);
 						else
 						{
 
@@ -910,25 +844,15 @@ void CPlayer::KeyState(CCamera& cam, int state, int mode, int player) {
 					{
 						DIR = 2;
 						dwDirection |= DIR_RIGHT;
-						if (GetStatus() == DEFENSE_LEFT || GetStatus() == DEFENSE_RIGHT)
-						{
-						}
-
-						else if (GetStatus() == ATTACK1_LEFT || GetStatus() == ATTACK2_LEFT ||
+						if (GetStatus() == DEFENSE_LEFT || GetStatus() == DEFENSE_RIGHT ||
+							GetStatus() == ATTACK1_LEFT || GetStatus() == ATTACK2_LEFT ||
 							GetStatus() == ATTACK1_RIGHT || GetStatus() == ATTACK2_RIGHT ||
-							GetStatus() == HATTACK_RIGHT || GetStatus() == HATTACK_LEFT)
-						{
-
-						}
-
+							GetStatus() == HATTACK_RIGHT || GetStatus() == HATTACK_LEFT);
 						else
 						{
 							if (mapobject_collsion == true)
 								SetStatus(MOVE_RIGHT);
-							else if (GetStatus() == KICK_LEFT || GetStatus() == KICK_RIGHT)
-							{
-
-							}
+							else if (GetStatus() == KICK_LEFT || GetStatus() == KICK_RIGHT);
 							else
 								SetStatus(JUMP_RIGHT);
 						}
@@ -940,17 +864,10 @@ void CPlayer::KeyState(CCamera& cam, int state, int mode, int player) {
 					if (GetAsyncKeyState(VK_NUMPAD6))
 					{
 						if (jump == false) {
-
-							if (GetStatus() == DEFENSE_LEFT || GetStatus() == DEFENSE_RIGHT)
-								return;
-							if (GetStatus() == ATTACK1_LEFT || GetStatus() == ATTACK2_LEFT ||
+							if (GetStatus() == DEFENSE_LEFT || GetStatus() == DEFENSE_RIGHT||
+								GetStatus() == ATTACK1_LEFT || GetStatus() == ATTACK2_LEFT ||
 								GetStatus() == ATTACK1_RIGHT || GetStatus() == ATTACK2_RIGHT)
-							{
 								return;
-
-							}
-
-
 							else
 							{
 
@@ -959,8 +876,6 @@ void CPlayer::KeyState(CCamera& cam, int state, int mode, int player) {
 									if (JumpCount != 2) {
 										charSystem->playSound(FMOD_CHANNEL_REUSE, charSound[1], false, &pChannel);
 										m_bJump = true;
-
-
 										JumpTimer();
 										if (GetStatus() == BASIC_RIGHT || GetStatus() == JUMP_RIGHT)
 											SetStatus(JUMP_RIGHT);
@@ -1106,19 +1021,11 @@ void CAIPlayer::KeyState(CCamera& cam, int state, int mode, int player) {
 					DIR = 1;
 					//dwDirection |= DIR_LEFT;
 					dwDirection = DIR_LEFT;
-					if (GetStatus() == DEFENSE_LEFT || GetStatus() == DEFENSE_RIGHT)
-					{
-
-					}
-					else if (GetStatus() == ATTACK1_LEFT || GetStatus() == ATTACK2_LEFT ||
+					if (GetStatus() == DEFENSE_LEFT || GetStatus() == DEFENSE_RIGHT|| GetStatus() == ATTACK1_LEFT || GetStatus() == ATTACK2_LEFT ||
 						GetStatus() == ATTACK1_RIGHT || GetStatus() == ATTACK2_RIGHT ||
-						GetStatus() == HATTACK_RIGHT || GetStatus() == HATTACK_LEFT)
-					{
-
-					}
+						GetStatus() == HATTACK_RIGHT || GetStatus() == HATTACK_LEFT);
 					else
 					{
-
 						if (mapobject_collsion == true)
 							SetStatus(MOVE_LEFT);
 						else if (GetStatus() == KICK_LEFT || GetStatus() == KICK_RIGHT)
@@ -1134,8 +1041,7 @@ void CAIPlayer::KeyState(CCamera& cam, int state, int mode, int player) {
 					DIR = 2;
 					///dwDirection |= DIR_RIGHT
 					dwDirection = DIR_RIGHT;
-					if (GetStatus() == DEFENSE_LEFT || GetStatus() == DEFENSE_RIGHT);
-					else if (GetStatus() == ATTACK1_LEFT || GetStatus() == ATTACK2_LEFT ||
+					if (GetStatus() == DEFENSE_LEFT || GetStatus() == DEFENSE_RIGHT|| GetStatus() == ATTACK1_LEFT || GetStatus() == ATTACK2_LEFT ||
 						GetStatus() == ATTACK1_RIGHT || GetStatus() == ATTACK2_RIGHT ||
 						GetStatus() == HATTACK_RIGHT || GetStatus() == HATTACK_LEFT);
 					else
@@ -1150,8 +1056,7 @@ void CAIPlayer::KeyState(CCamera& cam, int state, int mode, int player) {
 							SetStatus(JUMP_RIGHT);
 					}
 				}
-				if (target->GetPosition().y - 50 > m_Position.y) {
-
+				if (target->GetPosition().y - 80 > m_Position.y) {
 					pos = true;
 					if (m_Position.x > 0) {
 						DIR = 2;
@@ -1163,7 +1068,7 @@ void CAIPlayer::KeyState(CCamera& cam, int state, int mode, int player) {
 						dwDirection = DIR_LEFT;
 						SetStatus(MOVE_LEFT);
 					}
-					if (m_Position.x > 400 || m_Position.x < -400) {
+					if (m_Position.x > 550 || m_Position.x < -550) {
 						test = true;
 					}
 				}
@@ -1171,7 +1076,6 @@ void CAIPlayer::KeyState(CCamera& cam, int state, int mode, int player) {
 					test = false;
 			}
 			if (test == true) {
-				cout << "반대로 갑시다" << endl;
 				if (DIR == 2)DIR = 1;
 				else DIR = 2;
 				if (dwDirection == DIR_RIGHT)dwDirection = DIR_LEFT;

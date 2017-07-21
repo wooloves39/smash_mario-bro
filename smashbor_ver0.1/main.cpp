@@ -94,6 +94,8 @@ void reset() {
 	for (int i = 0; i < 3; i++) {
 		m_Player[i]->release();
 	}
+	sel2.y = 175 + 120 + 25;
+	sel2.x = 300 * 3 + 50 + 125;
 	PlayTime = 99;
 	pSystem->playSound(FMOD_CHANNEL_REUSE, stateSound[cho_map], false, &pChannel[0]);
 };
@@ -517,12 +519,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 				pSystem->playSound(FMOD_CHANNEL_REUSE, stateSound[state], false, &pChannel[0]);
 				sel.x = 140;
 				sel.y = 650;
-				if (mode == 2)
-				{
-					map_stage2 = 10;
-					sel2.x = 140 + 200 * 5;
-					sel2.y = 650;
-				}
 				map_stage = 1;
 				pSystem->playSound(FMOD_CHANNEL_REUSE, changeSound, false, &pChannel[1]);
 				break;
@@ -712,19 +708,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 				case VK_LEFT:
 					pSystem->playSound(FMOD_CHANNEL_REUSE, changeSound, false, &pChannel[1]);
 					sel2.x -= 250 + 50;
-					//	--nowPlayer;
+					
 					if (sel2.x < 0) {
 						sel2.x = 300 * 3 + 50 + 125;
-						//	nowPlayer = 3;
+						
 					}
 					break;
 				case VK_RIGHT:
 					pSystem->playSound(FMOD_CHANNEL_REUSE, changeSound, false, &pChannel[1]);
 					sel2.x += 300;
-					//++nowPlayer;
+					
 					if (sel2.x > 1200) {
 						sel2.x = 175;
-						//	nowPlayer = 0;
+						
 					}
 					break;
 				case VK_NUMPAD4:
@@ -913,13 +909,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 	}
 	case WM_TIMER:
 	{
-		if (state == play) //점프 고치면 수정해야함
+		if (state == play) 
 		{
 			if (mode == 1)
 				cam.realsetPos(m_Player[0]->GetPosition().x);
 			else if (mode == 2)
 				cam.realsetPos(m_Player[0]->GetPosition().x, m_Player[1]->GetPosition().x);
-			//cam.realsetPos(m_Player[0]->GetPosition().x);
+		
 			cam.add();
 			static int count = 0;
 			if (count >= 2) {
@@ -1042,7 +1038,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 			for (int i = 0; i < 6; ++i) {
 				Rectangle(memDC, (i)*(40 + 160) + rc.left + 80 + 60, 650 + rc.top, (i) * (40 + 160) + rc.right + 80 + 60, 650 + rc.bottom);
 				mapEX[i].Draw(memDC, (i)*(40 + 160) + rc.left + 80 + 60, 650 + rc.top, 160, 90, 0, 0, 800, 450);
-				//40 사각형간의 거리, 160 사각형의 크기,80 첫 사각형을 원점에 맞추는 것, 60,양쪽 보정
 			}
 			FrameRect(memDC, &selectRC, hBrush);
 			break; }
@@ -1069,7 +1064,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 		}
 		case play:
 			m.draw(memDC, rectView, cam, map_stage);
-			//현재 플레이하고있는 플레이어를 모두 draw 
 			SelectObject(memDC, UIFont);
 			for (int i = 0; i < nPlayer; ++i)
 			{
@@ -1098,8 +1092,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 				TextOut(memDC, 600, 100 + 245 * i, TEXT(m_Player[i]->PlayTime), strlen(m_Player[i]->PlayTime));
 				TextOut(memDC, 820, 100 + 245 * i, TEXT(m_Player[i]->total_score), strlen(m_Player[i]->total_score));
 				TextOut(memDC, 1100, 100 + 245 * i, TEXT(m_Player[i]->ranking), strlen(m_Player[i]->ranking));
-				//m_Player[i]->damage_num
-			}//랭킹 화면 구현 이미지 할다 후 수정 예정
+			}
 			SetTextColor(memDC, RGB(0, 0, 0));
 			break;
 		case ending:
