@@ -21,7 +21,7 @@ CImage Choice_map[6];
 CImage Choice_cha[4];
 CImage Ending;
 CImage Rankstate;
-CImage mapEX[6];
+CImage mapEX[10];
 POINT sel;
 POINT sel2;
 System*	pSystem;
@@ -373,16 +373,16 @@ void BuildPlayer(int nMyPlayer, int mode)
 	//1. Mario
 	if (mode == 1) {
 		m_Player[0] = new CPlayer(26);
-		m_Player[0]->SetPosition(-200, 300);
+		m_Player[0]->SetPosition(0, 300);
 		m_Player[0]->SetStatus(BASIC_RIGHT);	//현재상태 셋팅 
 
-		m_Player[1] = new CAIPlayer(26);
+		m_Player[1] = new CPlayer(26);
 		m_Player[1]->SetPosition(200, 300);
 		m_Player[1]->SetStatus(BASIC_LEFT);	//현재상태 셋팅 
 
 
-		m_Player[2] = new CAIPlayer(26);
-		m_Player[2]->SetPosition(0, 300);
+		m_Player[2] = new CPlayer(26);
+		m_Player[2]->SetPosition(300, 300);
 		m_Player[2]->SetStatus(BASIC_LEFT);	//현재상태 셋팅 
 	}
 	if (mode == 2) {
@@ -469,6 +469,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 		mapEX[3].Load(TEXT("map\\map4\\map4.bmp"));
 		mapEX[4].Load(TEXT("map\\map5\\map5.bmp"));
 		mapEX[5].Load(TEXT("sub_image\\random_map.bmp"));
+		mapEX[6].Load(TEXT("sub_image\\random_map.bmp"));
+		mapEX[7].Load(TEXT("sub_image\\random_map.bmp"));
+		mapEX[8].Load(TEXT("sub_image\\random_map.bmp"));
+		mapEX[9].Load(TEXT("sub_image\\random_map.bmp"));
 		UI[0].Load(TEXT("sub_image\\mario_UI.bmp"));
 		UI[1].Load(TEXT("sub_image\\luizy_UI.bmp"));
 		UI[2].Load(TEXT("sub_image\\wario_UI.bmp"));
@@ -514,11 +518,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 			case 'S':
 				if (sel.y < 550)mode = 1;
 				else mode = 2;
-
 				state = cho_map;
 				pSystem->playSound(FMOD_CHANNEL_REUSE, stateSound[state], false, &pChannel[0]);
 				sel.x = 140;
-				sel.y = 650;
+				sel.y = 550;
 				map_stage = 1;
 				pSystem->playSound(FMOD_CHANNEL_REUSE, changeSound, false, &pChannel[1]);
 				break;
@@ -535,9 +538,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 					pSystem->playSound(FMOD_CHANNEL_REUSE, changeSound, false, &pChannel[1]);
 					sel.x -= 200;
 					if (sel.x < 0)
-						sel.x = 140 + 200 * 5;
-					map_stage = ((sel.x - 140) / 200) + 1;
-					if (map_stage == 6)
+						sel.x = 140 + 200 * 4;
+					map_stage = ((sel.x - 140) / 100) + 1;
+					if (sel.y == 650)
+						map_stage += 1;
+					if (map_stage == 10)
 						SetTimer(hWnd, 1, 150, NULL);
 					else
 						KillTimer(hWnd, 1);
@@ -546,21 +551,56 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 				case VK_RIGHT:
 					pSystem->playSound(FMOD_CHANNEL_REUSE, changeSound, false, &pChannel[1]);
 					sel.x += 200;
-
-					if (sel.x > 140 + 200 * 5)
+					if (sel.x > 140 + 200 * 4)
 						sel.x = 140;
-					map_stage = ((sel.x - 140) / 200) + 1;
-					if (map_stage == 6)
+					map_stage = ((sel.x - 140) / 100) + 1;
+					if (sel.y == 650)
+						map_stage += 1;
+				
+					if (map_stage == 10)
 						SetTimer(hWnd, 1, 150, NULL);
 					else
 						KillTimer(hWnd, 1);
 					break;
+				case'W':
+					cout << map_stage << endl;
+					cout << sel.y << endl;
+					break;
+				case VK_UP:
+					pSystem->playSound(FMOD_CHANNEL_REUSE, changeSound, false, &pChannel[1]);
+					sel.y -= 100;
+					if (sel.y < 500)
+						sel.y = 650;
+					map_stage = ((sel.x - 140) / 100) + 1;
+					if(sel.y==650)
+					map_stage += 1;
+					if (map_stage == 10)
+						SetTimer(hWnd, 1, 150, NULL);
+					else
+						KillTimer(hWnd, 1);
+					break;
+				case VK_DOWN:
+					pSystem->playSound(FMOD_CHANNEL_REUSE, changeSound, false, &pChannel[1]);
+					sel.y += 100;
+					if (sel.y > 700)
+						sel.y = 550;
+					map_stage = ((sel.x - 140) / 100) + 1;
+					if (sel.y == 650)
+						map_stage += 1;
+					if (map_stage == 10)
+						SetTimer(hWnd, 1, 150, NULL);
+					else
+						KillTimer(hWnd, 1);
+					break;
+
 				case 'A':
 				{
 					state = cho_cha;
-					map_stage = ((sel.x - 140) / 200) + 1;
-					if (map_stage == 6)
-						map_stage = rand() % 5 + 1;
+					map_stage = ((sel.x - 140) / 100) + 1;
+					if (sel.y == 650)
+						map_stage += 1;
+					if (map_stage == 10)
+						map_stage = rand() % 9 + 1;
 					m.load(map_stage, rectView);
 					sel.x = 50 + 125;
 					sel.y = 175 + 120 + 25;
@@ -580,9 +620,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 					pSystem->playSound(FMOD_CHANNEL_REUSE, changeSound, false, &pChannel[1]);
 					sel.x -= 200;
 					if (sel.x < 0)
-						sel.x = 140 + 200 * 5;
-					map_stage = ((sel.x - 140) / 200) + 1;
-					if (map_stage == 6)
+						sel.x = 140 + 200 * 4;
+					map_stage = ((sel.x - 140) / 100) + 1;
+					if (sel.y == 650)
+						map_stage += 1;
+					if (map_stage == 10)
 						SetTimer(hWnd, 1, 150, NULL);
 					else
 						KillTimer(hWnd, 1);
@@ -590,30 +632,62 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 				case 'D':
 					pSystem->playSound(FMOD_CHANNEL_REUSE, changeSound, false, &pChannel[1]);
 					sel.x += 200;
-					if (sel.x > 140 + 200 * 5)
+					if (sel.x > 140 + 200 * 4)
 						sel.x = 140;
-					map_stage = ((sel.x - 140) / 200) + 1;
-					if (map_stage == 6)
+					map_stage = ((sel.x - 140) / 100) + 1;
+					if (sel.y == 650)
+						map_stage += 1;
+
+					if (map_stage == 10)
+						SetTimer(hWnd, 1, 150, NULL);
+					else
+						KillTimer(hWnd, 1);
+					break;
+				case 'W':
+					pSystem->playSound(FMOD_CHANNEL_REUSE, changeSound, false, &pChannel[1]);
+					sel.y -= 100;
+					if (sel.y < 500)
+						sel.y = 650;
+					map_stage = ((sel.x - 140) / 100) + 1;
+					if (sel.y == 650)
+						map_stage += 1;
+					if (map_stage == 10)
+						SetTimer(hWnd, 1, 150, NULL);
+					else
+						KillTimer(hWnd, 1);
+					break;
+				case 'S':
+					pSystem->playSound(FMOD_CHANNEL_REUSE, changeSound, false, &pChannel[1]);
+					sel.y += 100;
+					if (sel.y > 700)
+						sel.y = 550;
+					map_stage = ((sel.x - 140) / 100) + 1;
+					if (sel.y == 650)
+						map_stage += 1;
+					if (map_stage == 10)
 						SetTimer(hWnd, 1, 150, NULL);
 					else
 						KillTimer(hWnd, 1);
 					break;
 				case 'F':
 					state = cho_cha;
-					map_stage = ((sel.x - 140) / 200) + 1;
-					if (map_stage == 6)
-						map_stage = rand() % 5 + 1;
+					map_stage = ((sel.x - 140) / 100) + 1;
+					if (sel.y == 650)
+						map_stage += 1;
+					if (map_stage == 10)
+						map_stage = rand() % 9 + 1;
 					m.load(map_stage, rectView);
 					sel.x = 50 + 125;
 					sel.y = 175 + 120 + 25;
 					nowPlayer = MARIO;
 					pSystem->playSound(FMOD_CHANNEL_REUSE, choiceSound, false, &pChannel[1]);
-					sel2.y = 175 + 120 + 25;
-					sel2.x = 300 * 3 + 50 + 125;
+
 					KillTimer(hWnd, 1);
+
 					break;
 				}
 			}
+
 			break;
 		case cho_cha:
 			if (mode == 1) {
@@ -708,19 +782,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 				case VK_LEFT:
 					pSystem->playSound(FMOD_CHANNEL_REUSE, changeSound, false, &pChannel[1]);
 					sel2.x -= 250 + 50;
-					
+
 					if (sel2.x < 0) {
 						sel2.x = 300 * 3 + 50 + 125;
-						
+
 					}
 					break;
 				case VK_RIGHT:
 					pSystem->playSound(FMOD_CHANNEL_REUSE, changeSound, false, &pChannel[1]);
 					sel2.x += 300;
-					
+
 					if (sel2.x > 1200) {
 						sel2.x = 175;
-						
+
 					}
 					break;
 				case VK_NUMPAD4:
@@ -756,9 +830,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 			if (GetKeyboardState(pKeyBuffer))
 			{
 				SetTimer(hWnd, 2, 16, NULL);//점프타이머
-
 											//------PLAYER CHANGE------//
-
 			}
 			break;
 		case ranking:
@@ -909,21 +981,21 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 	}
 	case WM_TIMER:
 	{
-		if (state == play) 
+		if (state == play)
 		{
 			if (mode == 1)
 				cam.realsetPos(m_Player[0]->GetPosition().x);
 			else if (mode == 2)
 				cam.realsetPos(m_Player[0]->GetPosition().x, m_Player[1]->GetPosition().x);
-		
+
 			cam.add();
 			static int count = 0;
-			if (count >= 2) {
+		/*	if (count >= 2) {
 				setranking();
 				count = 0;
 				KillTimer(hWnd, 5);
 				break;
-			}
+			}*/
 			count = 0;
 			for (int i = 0; i < nPlayer; ++i)
 			{
@@ -955,7 +1027,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 		switch (wParam)
 		{
 		case 1:
-			stage_view = rand() % 5;
+			stage_view = rand() % 9;
 			break;
 
 		case 0:
@@ -974,7 +1046,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 		}
 				break;
 		case 6: {
-		
+
 			if (m_Player != nullptr) {
 				if (mode == 2) {
 					m_Player[2]->KeyState(cam, state, 2);
@@ -1014,9 +1086,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 			RECT rc2;
 			RECT selectRC;
 
-			selectRC.left = -80 + sel.x;
+			selectRC.left = -80 + sel.x+100;
 			selectRC.top = -45 + sel.y;
-			selectRC.right = 80 + sel.x;
+			selectRC.right = 80 + sel.x+100;
 			selectRC.bottom = 45 + sel.y;
 			Background.Draw(memDC, 0, 0);
 
@@ -1030,14 +1102,20 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 			rc.bottom = 45;
 
 			Rectangle(memDC, rectView.right / 2 + rc2.left, rectView.bottom / 2 + rc2.top - 100, rectView.right / 2 + rc2.right, rectView.bottom / 2 + rc2.bottom - 100);
-			if (map_stage == 6) {
+			if (map_stage == 10) {
 				mapEX[stage_view].Draw(memDC, rectView.right / 2 + rc2.left, rectView.bottom / 2 + rc2.top - 100, 800, 450, 0, 0, 800, 450);
 			}
 			else
 				mapEX[map_stage - 1].Draw(memDC, rectView.right / 2 + rc2.left, rectView.bottom / 2 + rc2.top - 100, 800, 450, 0, 0, 800, 450);
-			for (int i = 0; i < 6; ++i) {
-				Rectangle(memDC, (i)*(40 + 160) + rc.left + 80 + 60, 650 + rc.top, (i) * (40 + 160) + rc.right + 80 + 60, 650 + rc.bottom);
-				mapEX[i].Draw(memDC, (i)*(40 + 160) + rc.left + 80 + 60, 650 + rc.top, 160, 90, 0, 0, 800, 450);
+			for (int i = 0; i < 10; ++i) {
+				if (i % 2 == 0) {
+					Rectangle(memDC, (i/2)*(40 + 160) + rc.left + 80 + 60+100, 650 + rc.top - 100, (i/2) * (40 + 160) + rc.right + 80 + 60+100, 650 + rc.bottom-100);
+					mapEX[i].Draw(memDC, (i/2)*(40 + 160) + rc.left + 80 + 60+100, 650 + rc.top-100, 160, 90, 0, 0, 800, 450);
+				}
+				else {
+					Rectangle(memDC, (i/2)*(40 + 160) + rc.left + 80 + 60+100, 650 + rc.top, (i/2) * (40 + 160) + rc.right + 80 + 60+100, 650 + rc.bottom);
+					mapEX[i].Draw(memDC, (i/2)*(40 + 160) + rc.left + 80 + 60+100, 650 + rc.top, 160, 90, 0, 0, 800, 450);
+				}
 			}
 			FrameRect(memDC, &selectRC, hBrush);
 			break; }
@@ -1065,7 +1143,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 		case play:
 			m.draw(memDC, rectView, cam, map_stage);
 			SelectObject(memDC, UIFont);
-			for (int i = 0; i < nPlayer; ++i)
+			m_Player[0]->DrawSprite(memDC,
+				m_Player[0]->m_ppTexture[m_Player[0]->m_State].nSpriteCurrent, cam);
+		/*	for (int i = 0; i < nPlayer; ++i)
 			{
 
 				m_Player[i]->DrawSprite(memDC,
@@ -1079,7 +1159,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 
 			SelectObject(memDC, TimeFont);
 			SetBkMode(memDC, TRANSPARENT);
-			TextOut(memDC, 650, 20, TEXT(Playtime_t), strlen(Playtime_t));
+			TextOut(memDC, 650, 20, TEXT(Playtime_t), strlen(Playtime_t));*/
 			break;
 		case ranking:
 			Rankstate.Draw(memDC, 0, 0, rectView.right, rectView.bottom);
