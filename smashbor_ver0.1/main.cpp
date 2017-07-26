@@ -44,22 +44,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 map m;
 CCamera cam;
 int map_stage;
-int map_stage2;
-CImage UI[3];
 CImage demage_UI;
-void Timer(void);
 void setranking() {
 	pChannel[0]->stop();
 	pSystem->playSound(FMOD_CHANNEL_REUSE, stateSound[ranking - 2], false, &pChannel[0]);
 	state = ranking;
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < nPlayer; i++) {
 		if (m_Player[i]->live == true)m_Player[i]->PlayTime_num = 99;
 		m_Player[i]->total_score_num = m_Player[i]->PlayTime_num*m_Player[i]->damage_num;
 	}
-	for (int i = 0; i < 3; ++i) {
+	for (int i = 0; i < nPlayer; ++i) {
 
 		int rank = 1;
-		for (int j = 0; j < 3; j++) {
+		for (int j = 0; j < nPlayer; j++) {
 			if (m_Player[i]->total_score_num < m_Player[j]->total_score_num)rank++;
 		}
 		m_Player[i]->ranking_num = rank;
@@ -89,9 +86,9 @@ void reset() {
 	pChannel[1]->stop();
 	m.release();
 	sel.x = 140;
-	sel.y = 650;
+	sel.y = 550;
 	map_stage = 1;
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < nPlayer; i++) {
 		m_Player[i]->release();
 	}
 	sel2.y = 175 + 120 + 25;
@@ -136,11 +133,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdPa
 				m_Player[0]->KeyState(cam, state, mode, 1);
 				m_Player[1]->KeyState(cam, state, mode, 2);
 				m_Player[2]->KeyState(cam, state, 1);
+				m_Player[3]->KeyState(cam, state, 1);
 			}
 			else {
 				m_Player[0]->KeyState(cam, state, mode);
 				m_Player[1]->KeyState(cam, state, 1);
 				m_Player[2]->KeyState(cam, state, 1);
+				m_Player[3]->KeyState(cam, state, 1);
 			}
 		}
 	}
@@ -221,7 +220,7 @@ void BuildPlayer(int nMyPlayer, int mode)
 	//WIN
 	Mario->SetTexture(WIN,
 		_T("character\\MARIO\\MARIO_VICTORY.png"), 4);
-	Mario->rank_state.Load("character\\MARIO\\marioUI.bmp");
+	Mario->rank_state.Load("character\\MARIO\\marioUI.png");
 	Mario->UI.Load("character\\MARIO\\mario_UI.bmp");
 
 
@@ -295,7 +294,7 @@ void BuildPlayer(int nMyPlayer, int mode)
 	Wario->SetTexture(WIN,
 		_T("character\\WARIO\\WARIO_VICTORY.png"), 4);
 
-	Wario->rank_state.Load("character\\WARIO\\warioUI.bmp");
+	Wario->rank_state.Load("character\\WARIO\\warioUI.png");
 	Wario->UI.Load("character\\WARIO\\wario_UI.bmp");
 
 	//3. LUIZY
@@ -358,32 +357,108 @@ void BuildPlayer(int nMyPlayer, int mode)
 		_T("character\\LUIZY\\LUIZY_RIGHTUP.png"), 2);
 	//DYE
 	Luizy->SetTexture(DYE_LEFT,
-		_T("character\\LUIZY\\LUIZY_LEFTDYE.png"), 3);
+		_T("character\\LUIZY\\LUIZY_LEFTDIE.png"), 3);
 	Luizy->SetTexture(DYE_RIGHT,
-		_T("character\\LUIZY\\LUIZY_RIGHTDYE.png"), 3);
+		_T("character\\LUIZY\\LUIZY_RIGHTDIE.png"), 3);
 	//LOSE
 	Luizy->SetTexture(LOSE,
 		_T("character\\LUIZY\\LUIZY_LOSE.png"), 2);
 	//WIN
 	Luizy->SetTexture(WIN,
 		_T("character\\LUIZY\\LUIZY_VICTORY.png"), 4);
-	Luizy->rank_state.Load("character\\LUIZY\\luizyUI.bmp");
+	Luizy->rank_state.Load("character\\LUIZY\\luizyUI.png");
 	Luizy->UI.Load("character\\LUIZY\\luizy_UI.bmp");
-	m_Player = new CPlayer*[3];
+	
+	CPlayer *Waluizy = new CPlayer(26);
+	//BASIC
+	Waluizy->SetTexture(BASIC_RIGHT,
+		_T("character\\WALUIZY\\WALUIZY_RIGHTBASIC.png"), 4);
+	Waluizy->SetTexture(BASIC_LEFT,
+		_T("character\\WALUIZY\\WALUIZY_LEFTBASIC.png"), 4);
+	//RUN
+	Waluizy->SetTexture(MOVE_RIGHT,
+		_T("character\\WALUIZY\\waluizy_RIGHTMOVE.png"), 8);
+	Waluizy->SetTexture(MOVE_LEFT,
+		_T("character\\WALUIZY\\waluizy_LEFTMOVE.png"), 8);
+	//JUMP
+	Waluizy->SetTexture(JUMP_RIGHT,
+		_T("character\\WALUIZY\\waluizy_RIGHTJUMP.png"), 5);
+	Waluizy->SetTexture(JUMP_LEFT,
+		_T("character\\WALUIZY\\waluizy_LEFTJUMP.png"), 5);
+	//ATTACK - STRONG
+	Waluizy->SetTexture(HATTACK_RIGHT,
+		_T("character\\WALUIZY\\waluizy_RIGHTSTRONGATTACK.png"), 6);
+	Waluizy->SetTexture(HATTACK_LEFT,
+		_T("character\\WALUIZY\\waluizy_LEFTSTRONGATTACK.png"), 6);
+	//ATTACK 1 
+	//1-1
+	Waluizy->SetTexture(ATTACK1_RIGHT,
+		_T("character\\WALUIZY\\waluizy_RIGHTATTACK1-1.png"), 4);
+	Waluizy->SetTexture(ATTACK1_LEFT,
+		_T("character\\WALUIZY\\waluizy_LEFTATTACK1-1.png"), 4);
+	//1-2
+	Waluizy->SetTexture(ATTACK2_RIGHT,
+		_T("character\\WALUIZY\\waluizy_RIGHTATTACK1.png"), 4);
+	Waluizy->SetTexture(ATTACK2_LEFT,
+		_T("character\\WALUIZY\\waluizy_LEFTATTACK1.png"), 4);
+	//1-3 점프중 공격키누르면 나오는것 
+	Waluizy->SetTexture(KICK_RIGHT,
+		_T("character\\WALUIZY\\waluizy_RIGHTKICK.png"), 3);
+	Waluizy->SetTexture(KICK_LEFT,
+		_T("character\\WALUIZY\\waluizy_LEFTKICK.png"), 3);
+	//DEFENSE
+	Waluizy->SetTexture(DEFENSE_RIGHT,
+		_T("character\\WALUIZY\\waluizy_RIGHT_DEF.png"), 2);
+	Waluizy->SetTexture(DEFENSE_LEFT,
+		_T("character\\WALUIZY\\waluizy_LEFT_DEF.png"), 2);
+	//SIT
+	Waluizy->SetTexture(SIT_RIGHT,
+		_T("character\\WALUIZY\\waluizy_RIGHTSIT.png"), 3);
+	Waluizy->SetTexture(SIT_LEFT,
+		_T("character\\WALUIZY\\waluizy_LEFTSIT.png"), 3);
+	//FLY (날아가는 모션)
+	Waluizy->SetTexture(FLY_RIGHT,
+		_T("character\\WALUIZY\\waluizy_RIGHT_FLY.png"), 4);
+	Waluizy->SetTexture(FLY_LEFT,
+		_T("character\\WALUIZY\\waluizy_LEFT_FLY.png"), 4);
+	//UP(일어나는 모션)
+	Waluizy->SetTexture(UP_LEFT,
+		_T("character\\WALUIZY\\waluizy_LEFTUP.png"), 2);
+	Waluizy->SetTexture(UP_RIGHT,
+		_T("character\\WALUIZY\\waluizy_RIGHTUP.png"), 2);
+	//DYE
+	Waluizy->SetTexture(DYE_LEFT,
+		_T("character\\WALUIZY\\waluizy_LEFTDIE.png"), 3);
+	Waluizy->SetTexture(DYE_RIGHT,
+		_T("character\\WALUIZY\\waluizy_RIGHTDIE.png"), 3);
+	//LOSE
+	Waluizy->SetTexture(LOSE,
+		_T("character\\WALUIZY\\waluizy_LOSE.png"), 2);
+	//WIN
+	Waluizy->SetTexture(WIN,
+		_T("character\\WALUIZY\\waluizy_VICTORY.png"), 4);
+	Waluizy->rank_state.Load("character\\WALUIZY\\waluizyUI.png");
+	Waluizy->UI.Load("character\\WALUIZY\\waluizy_UI.bmp");
+
+	m_Player = new CPlayer*[4];
 	//1. Mario
 	if (mode == 1) {
 		m_Player[0] = new CPlayer(26);
-		m_Player[0]->SetPosition(0, 300);
+		m_Player[0]->SetPosition(-200, 300);
 		m_Player[0]->SetStatus(BASIC_RIGHT);	//현재상태 셋팅 
 
-		m_Player[1] = new CPlayer(26);
+		m_Player[1] = new CAIPlayer(26);
 		m_Player[1]->SetPosition(200, 300);
 		m_Player[1]->SetStatus(BASIC_LEFT);	//현재상태 셋팅 
 
 
-		m_Player[2] = new CPlayer(26);
-		m_Player[2]->SetPosition(300, 300);
+		m_Player[2] = new CAIPlayer(26);
+		m_Player[2]->SetPosition(0, 300);
 		m_Player[2]->SetStatus(BASIC_LEFT);	//현재상태 셋팅 
+
+		m_Player[3] = new CAIPlayer(26);
+		m_Player[3]->SetPosition(100, 300);
+		m_Player[3]->SetStatus(BASIC_LEFT);	//현재상태 셋팅 
 	}
 	if (mode == 2) {
 		m_Player[0] = new CPlayer(26);
@@ -398,8 +473,14 @@ void BuildPlayer(int nMyPlayer, int mode)
 		m_Player[2] = new CAIPlayer(26);
 		m_Player[2]->SetPosition(0, 300);
 		m_Player[2]->SetStatus(BASIC_LEFT);	//현재상태 셋팅 
+
+		m_Player[3] = new CAIPlayer(26);
+		m_Player[3]->SetPosition(100, 300);
+		m_Player[3]->SetStatus(BASIC_LEFT);	//현재상태 셋팅 
 	}
-	if (nMyPlayer == 0) {
+	switch (nMyPlayer)
+	{
+	case 0:
 		m_Player[0]->SetImage(Mario->GetImage());
 		m_Player[0]->rank_state = Mario->rank_state;
 		m_Player[0]->UI = Mario->UI;
@@ -409,9 +490,11 @@ void BuildPlayer(int nMyPlayer, int mode)
 		m_Player[2]->SetImage(Luizy->GetImage());
 		m_Player[2]->rank_state = Luizy->rank_state;
 		m_Player[2]->UI = Luizy->UI;
-
-	}
-	if (nMyPlayer == 1) {
+		m_Player[3]->SetImage(Waluizy->GetImage());
+		m_Player[3]->rank_state = Waluizy->rank_state;
+		m_Player[3]->UI = Waluizy->UI;
+		break; 
+	case 1:
 		m_Player[1]->SetImage(Mario->GetImage());
 		m_Player[1]->rank_state = Mario->rank_state;
 		m_Player[1]->UI = Mario->UI;
@@ -421,10 +504,11 @@ void BuildPlayer(int nMyPlayer, int mode)
 		m_Player[0]->SetImage(Luizy->GetImage());
 		m_Player[0]->rank_state = Luizy->rank_state;
 		m_Player[0]->UI = Luizy->UI;
-
-	}
-
-	if (nMyPlayer == 2) {
+		m_Player[3]->SetImage(Waluizy->GetImage());
+		m_Player[3]->rank_state = Waluizy->rank_state;
+		m_Player[3]->UI = Waluizy->UI;
+			break;
+	case 2:
 		m_Player[1]->SetImage(Mario->GetImage());
 		m_Player[1]->rank_state = Mario->rank_state;
 		m_Player[1]->UI = Mario->UI;
@@ -434,7 +518,29 @@ void BuildPlayer(int nMyPlayer, int mode)
 		m_Player[2]->SetImage(Luizy->GetImage());
 		m_Player[2]->rank_state = Luizy->rank_state;
 		m_Player[2]->UI = Luizy->UI;
+		m_Player[3]->SetImage(Waluizy->GetImage());
+		m_Player[3]->rank_state = Waluizy->rank_state;
+		m_Player[3]->UI = Waluizy->UI;
+		break;
+	case 3:
+		m_Player[0]->SetImage(Waluizy->GetImage());
+		m_Player[0]->rank_state = Waluizy->rank_state;
+		m_Player[0]->UI = Waluizy->UI;
 
+		m_Player[1]->SetImage(Mario->GetImage());
+		m_Player[1]->rank_state = Mario->rank_state;
+		m_Player[1]->UI = Mario->UI;
+
+		m_Player[3]->SetImage(Wario->GetImage());
+		m_Player[3]->rank_state = Wario->rank_state;
+		m_Player[3]->UI = Wario->UI;
+
+		m_Player[2]->SetImage(Luizy->GetImage());
+		m_Player[2]->rank_state = Luizy->rank_state;
+		m_Player[2]->UI = Luizy->UI;
+		break;
+	default:
+		break;
 	}
 }
 
@@ -468,14 +574,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 		mapEX[2].Load(TEXT("map\\map3\\map3.bmp"));
 		mapEX[3].Load(TEXT("map\\map4\\map4.bmp"));
 		mapEX[4].Load(TEXT("map\\map5\\map5.bmp"));
-		mapEX[5].Load(TEXT("sub_image\\random_map.bmp"));
-		mapEX[6].Load(TEXT("sub_image\\random_map.bmp"));
-		mapEX[7].Load(TEXT("sub_image\\random_map.bmp"));
-		mapEX[8].Load(TEXT("sub_image\\random_map.bmp"));
+		mapEX[5].Load(TEXT("map\\map6\\map6.bmp"));
+		mapEX[6].Load(TEXT("map\\map7\\map7.bmp"));
+		mapEX[7].Load(TEXT("map\\map8\\map8.bmp"));
+		mapEX[8].Load(TEXT("map\\map9\\map9.bmp"));
 		mapEX[9].Load(TEXT("sub_image\\random_map.bmp"));
-		UI[0].Load(TEXT("sub_image\\mario_UI.bmp"));
-		UI[1].Load(TEXT("sub_image\\luizy_UI.bmp"));
-		UI[2].Load(TEXT("sub_image\\wario_UI.bmp"));
 		demage_UI.Load(TEXT("sub_image\\demage_UI.bmp"));
 		createSound();
 		Rankstate.Load(TEXT("sub_image\\ranking.bmp"));//랭킹 배경 구현
@@ -489,14 +592,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 		wsprintf(Playtime_t, TEXT("%d"), PlayTime);
 
 		break;
-	case WM_COMMAND:
-		switch (LOWORD(wParam))
-		{
-
-		}
-		InvalidateRect(hWnd, NULL, TRUE);
-		break;
-
 	case WM_KEYDOWN:
 		switch (state)
 		{
@@ -556,7 +651,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 					map_stage = ((sel.x - 140) / 100) + 1;
 					if (sel.y == 650)
 						map_stage += 1;
-				
+
 					if (map_stage == 10)
 						SetTimer(hWnd, 1, 150, NULL);
 					else
@@ -572,8 +667,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 					if (sel.y < 500)
 						sel.y = 650;
 					map_stage = ((sel.x - 140) / 100) + 1;
-					if(sel.y==650)
-					map_stage += 1;
+					if (sel.y == 650)
+						map_stage += 1;
 					if (map_stage == 10)
 						SetTimer(hWnd, 1, 150, NULL);
 					else
@@ -604,6 +699,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 					m.load(map_stage, rectView);
 					sel.x = 50 + 125;
 					sel.y = 175 + 120 + 25;
+
 					nowPlayer = MARIO;
 					pSystem->playSound(FMOD_CHANNEL_REUSE, choiceSound, false, &pChannel[1]);
 
@@ -679,6 +775,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 					m.load(map_stage, rectView);
 					sel.x = 50 + 125;
 					sel.y = 175 + 120 + 25;
+					sel2.x = 50 + 125+900;
+					sel2.y = 175 + 120 + 25;
 					nowPlayer = MARIO;
 					pSystem->playSound(FMOD_CHANNEL_REUSE, choiceSound, false, &pChannel[1]);
 
@@ -723,7 +821,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 					m.mapSystem->playSound(FMOD_CHANNEL_REUSE, m.mapSound, false, &pChannel[0]);
 					//--------PLAYER SET--------//
 
-					nPlayer = 3; // 현재 플레이하는 플레이어는 1명. 
+					nPlayer = 4; // 현재 플레이하는 플레이어는 1명. 
 					BuildPlayer(nowPlayer, mode);
 					if (mode == 1)
 						cam.setPos(m_Player[0]->GetPosition().x);
@@ -769,7 +867,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 					m.mapSystem->playSound(FMOD_CHANNEL_REUSE, m.mapSound, false, &pChannel[0]);
 					//--------PLAYER SET--------//
 
-					nPlayer = 3; // 현재 플레이하는 플레이어는 1명. 
+					nPlayer = 4; // 현재 플레이하는 플레이어는 1명. 
 					BuildPlayer(nowPlayer, mode);
 
 					if (mode == 1)
@@ -808,7 +906,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 					m.mapSystem->playSound(FMOD_CHANNEL_REUSE, m.mapSound, false, &pChannel[0]);
 					//--------PLAYER SET--------//
 
-					nPlayer = 3; // 현재 플레이하는 플레이어는 1명. 
+					nPlayer = 4; // 현재 플레이하는 플레이어는 1명. 
 					BuildPlayer(nowPlayer, mode);
 
 					if (mode == 1)
@@ -990,17 +1088,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 
 			cam.add();
 			static int count = 0;
-		/*	if (count >= 2) {
+			if (count >= 3) {
 				setranking();
 				count = 0;
 				KillTimer(hWnd, 5);
 				break;
-			}*/
+			}
 			count = 0;
 			for (int i = 0; i < nPlayer; ++i)
 			{
 				if (m_Player[i]->AI() == true) {
-					m_Player[i]->distance(m_Player, 3);
+					m_Player[i]->distance(m_Player,nPlayer);
 				}
 				m.collision(*m_Player[i]);
 				m_Player[i]->Playercollision(m_Player, nPlayer);
@@ -1031,8 +1129,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 			break;
 
 		case 0:
-			Timer();
-
+			for (int i = 0; i < nPlayer; ++i)
+				m_Player[i]->Timer();
 			break;
 		case 5: {
 			--PlayTime;
@@ -1050,11 +1148,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 			if (m_Player != nullptr) {
 				if (mode == 2) {
 					m_Player[2]->KeyState(cam, state, 2);
+					m_Player[3]->KeyState(cam, state, 2);
 				}
 				else
 				{
 					m_Player[1]->KeyState(cam, state, 2);
 					m_Player[2]->KeyState(cam, state, 2);
+					m_Player[3]->KeyState(cam, state, 2);
 				}
 			}
 		}
@@ -1086,10 +1186,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 			RECT rc2;
 			RECT selectRC;
 
-			selectRC.left = -80 + sel.x+100;
-			selectRC.top = -45 + sel.y;
-			selectRC.right = 80 + sel.x+100;
-			selectRC.bottom = 45 + sel.y;
+			selectRC.left = -80 + sel.x + 100-5;
+			selectRC.top = -45 + sel.y-5;
+			selectRC.right = 80 + sel.x + 100+5;
+			selectRC.bottom = 45 + sel.y+5;
 			Background.Draw(memDC, 0, 0);
 
 			rc2.left = -400;
@@ -1100,8 +1200,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 			rc.top = -45;
 			rc.right = 80;
 			rc.bottom = 45;
-
-			Rectangle(memDC, rectView.right / 2 + rc2.left, rectView.bottom / 2 + rc2.top - 100, rectView.right / 2 + rc2.right, rectView.bottom / 2 + rc2.bottom - 100);
+			SelectObject(memDC, hBrush);
+			Rectangle(memDC, selectRC.left, selectRC.top, selectRC.right, selectRC.bottom);
+			//Rectangle(memDC, rectView.right / 2 + rc2.left, rectView.bottom / 2 + rc2.top - 100, rectView.right / 2 + rc2.right, rectView.bottom / 2 + rc2.bottom - 100);
 			if (map_stage == 10) {
 				mapEX[stage_view].Draw(memDC, rectView.right / 2 + rc2.left, rectView.bottom / 2 + rc2.top - 100, 800, 450, 0, 0, 800, 450);
 			}
@@ -1109,69 +1210,68 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 				mapEX[map_stage - 1].Draw(memDC, rectView.right / 2 + rc2.left, rectView.bottom / 2 + rc2.top - 100, 800, 450, 0, 0, 800, 450);
 			for (int i = 0; i < 10; ++i) {
 				if (i % 2 == 0) {
-					Rectangle(memDC, (i/2)*(40 + 160) + rc.left + 80 + 60+100, 650 + rc.top - 100, (i/2) * (40 + 160) + rc.right + 80 + 60+100, 650 + rc.bottom-100);
-					mapEX[i].Draw(memDC, (i/2)*(40 + 160) + rc.left + 80 + 60+100, 650 + rc.top-100, 160, 90, 0, 0, 800, 450);
+					//Rectangle(memDC, (i / 2)*(40 + 160) + rc.left + 80 + 60 + 100, 650 + rc.top - 100, (i / 2) * (40 + 160) + rc.right + 80 + 60 + 100, 650 + rc.bottom - 100);
+					mapEX[i].Draw(memDC, (i / 2)*(40 + 160) + rc.left + 80 + 60 + 100, 650 + rc.top - 100, 160, 90, 0, 0, 800, 450);
 				}
 				else {
-					Rectangle(memDC, (i/2)*(40 + 160) + rc.left + 80 + 60+100, 650 + rc.top, (i/2) * (40 + 160) + rc.right + 80 + 60+100, 650 + rc.bottom);
-					mapEX[i].Draw(memDC, (i/2)*(40 + 160) + rc.left + 80 + 60+100, 650 + rc.top, 160, 90, 0, 0, 800, 450);
+					//Rectangle(memDC, (i / 2)*(40 + 160) + rc.left + 80 + 60 + 100, 650 + rc.top, (i / 2) * (40 + 160) + rc.right + 80 + 60 + 100, 650 + rc.bottom);
+					mapEX[i].Draw(memDC, (i / 2)*(40 + 160) + rc.left + 80 + 60 + 100, 650 + rc.top, 160, 90, 0, 0, 800, 450);
 				}
 			}
-			FrameRect(memDC, &selectRC, hBrush);
 			break; }
 		case cho_cha: {
 			RECT selectRC;
 			Background.Draw(memDC, 0, 0);
+			SelectObject(memDC, hBrush);
+			selectRC.left = -125 + sel.x-10;
+			selectRC.top = -200 + sel.y-10;
+			selectRC.right = 125 + sel.x+10;
+			selectRC.bottom = 200 + sel.y+10;
+			Rectangle(memDC, selectRC.left, selectRC.top, selectRC.right, selectRC.bottom);
+			if (mode == 2) {
+				RECT selectRC2;
+				selectRC2.left = -125 + sel2.x-10;
+				selectRC2.top = -200 + sel2.y-10;
+				selectRC2.right = 125 + sel2.x+10;
+				selectRC2.bottom = 200 + sel2.y+10;
+				SelectObject(memDC, hBrush2);
+				Rectangle(memDC, selectRC2.left, selectRC2.top, selectRC2.right, selectRC2.bottom);
+			}
 			for (int i = 0; i < 4; ++i) {
 				Choice_cha[i].Draw(memDC, 50 + i*(250 + 50), 120, 250, 400);
 			}
-			selectRC.left = -125 + sel.x;
-			selectRC.top = -200 + sel.y;
-			selectRC.right = 125 + sel.x;
-			selectRC.bottom = 200 + sel.y;
-			if (mode == 2) {
-				RECT selectRC2;
-				selectRC2.left = -125 + sel2.x;
-				selectRC2.top = -200 + sel2.y;
-				selectRC2.right = 125 + sel2.x;
-				selectRC2.bottom = 200 + sel2.y;
-				FrameRect(memDC, &selectRC2, hBrush2);
-			}
-			FrameRect(memDC, &selectRC, hBrush);
 			break;
 		}
 		case play:
 			m.draw(memDC, rectView, cam, map_stage);
 			SelectObject(memDC, UIFont);
-			m_Player[0]->DrawSprite(memDC,
-				m_Player[0]->m_ppTexture[m_Player[0]->m_State].nSpriteCurrent, cam);
-		/*	for (int i = 0; i < nPlayer; ++i)
+			for (int i = 0; i < nPlayer; ++i)
 			{
 
 				m_Player[i]->DrawSprite(memDC,
 					m_Player[i]->m_ppTexture[m_Player[i]->m_State].nSpriteCurrent, cam);
-				m_Player[i]->UI.TransparentBlt(memDC, 280 + i * 350, 660, 50, 50, 0, 0, 30, 30, RGB(255, 255, 255));
-				demage_UI.TransparentBlt(memDC, 340 + i * 350, 620, 150, 150, 0, 0, 170, 170, RGB(255, 255, 255));
+				m_Player[i]->UI.TransparentBlt(memDC, 80 + i * 300, 660, 50, 50, 0, 0, 30, 30, RGB(255, 255, 255));
+				demage_UI.TransparentBlt(memDC, 140 + i * 300, 620, 150, 150, 0, 0, 170, 170, RGB(255, 255, 255));
 				SetBkMode(memDC, TRANSPARENT);
-				TextOut(memDC, 400 + i * 350 - 10, 690, TEXT(m_Player[i]->getDamege()), strlen(m_Player[i]->getDamege()));
+				TextOut(memDC, 200 + i * 300 - 10, 690, TEXT(m_Player[i]->getDamege()), strlen(m_Player[i]->getDamege()));
 			}
 
 
 			SelectObject(memDC, TimeFont);
 			SetBkMode(memDC, TRANSPARENT);
-			TextOut(memDC, 650, 20, TEXT(Playtime_t), strlen(Playtime_t));*/
+			TextOut(memDC, 650, 20, TEXT(Playtime_t), strlen(Playtime_t));
 			break;
 		case ranking:
 			Rankstate.Draw(memDC, 0, 0, rectView.right, rectView.bottom);
-			for (int i = 0; i < 3; i++) {
-				m_Player[i]->rank_state.Draw(memDC, 100, 50 + 230 * i, 1080, 200, 0, 0, 550, 115);
-				m_Player[i]->DrawSprite(memDC, m_Player[i]->m_ppTexture[m_Player[i]->m_State].nSpriteCurrent, 150, 100 + 230 * i);
+			for (int i = 0; i < nPlayer; ++i) {
+				m_Player[i]->rank_state.Draw(memDC, 100,  180 * i, 1080, 200, 0, 0, 550, 115);
+				m_Player[i]->DrawSprite(memDC, m_Player[i]->m_ppTexture[m_Player[i]->m_State].nSpriteCurrent, 150, 50 + 180 * i);
 				SetTextColor(memDC, RGB(255, 255, 255));
 				SetBkMode(memDC, TRANSPARENT);
-				TextOut(memDC, 300, 100 + 245 * i, TEXT(m_Player[i]->damage), strlen(m_Player[i]->damage));
-				TextOut(memDC, 600, 100 + 245 * i, TEXT(m_Player[i]->PlayTime), strlen(m_Player[i]->PlayTime));
-				TextOut(memDC, 820, 100 + 245 * i, TEXT(m_Player[i]->total_score), strlen(m_Player[i]->total_score));
-				TextOut(memDC, 1100, 100 + 245 * i, TEXT(m_Player[i]->ranking), strlen(m_Player[i]->ranking));
+				TextOut(memDC, 300, 50 + 195 * i, TEXT(m_Player[i]->damage), strlen(m_Player[i]->damage));
+				TextOut(memDC, 600, 50 + 195 * i, TEXT(m_Player[i]->PlayTime), strlen(m_Player[i]->PlayTime));
+				TextOut(memDC, 820, 50 + 195 * i, TEXT(m_Player[i]->total_score), strlen(m_Player[i]->total_score));
+				TextOut(memDC, 1100, 50 + 195 * i, TEXT(m_Player[i]->ranking), strlen(m_Player[i]->ranking));
 			}
 			SetTextColor(memDC, RGB(0, 0, 0));
 			break;
@@ -1199,73 +1299,4 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 		return 0;
 	}
 	return DefWindowProc(hWnd, iMsg, wParam, lParam);
-}
-
-void Timer(void)//플레이어 클래스 안에 종속 시키기
-{
-	// 스프라이트는 1/60초 마다 갱신하여 약 1.1초 주기로 반복된다.
-	for (int i = 0; i < nPlayer; ++i)
-	{
-		if (m_Player[i]->m_State == DEFENSE_LEFT || m_Player[i]->m_State == DEFENSE_RIGHT)
-		{
-			if (m_Player[i]->sma)
-				m_Player[i]->m_ppTexture[m_Player[i]->m_State].nSpriteCurrent = 1;
-			else
-				m_Player[i]->m_ppTexture[m_Player[i]->m_State].nSpriteCurrent = 0;
-			m_Player[i]->FrameEnd = 1;
-		}
-
-		else
-		{
-			m_Player[i]->m_ppTexture[m_Player[i]->m_State].nSpriteCurrent += 1;
-
-			//움직이는것은 스프라이트가 계속 돌아가도록. 
-			if (m_Player[i]->m_State == BASIC_RIGHT || m_Player[i]->m_State == BASIC_LEFT
-				|| m_Player[i]->m_State == MOVE_RIGHT || m_Player[i]->m_State == MOVE_LEFT
-				|| m_Player[i]->m_State == JUMP_RIGHT || m_Player[i]->m_State == JUMP_LEFT
-				|| m_Player[i]->m_State == FLY_RIGHT || m_Player[i]->m_State == FLY_LEFT
-				|| m_Player[i]->m_State == WIN || m_Player[i]->m_State == LOSE)
-			{
-				(m_Player[i]->m_ppTexture[m_Player[i]->m_State].nSpriteCurrent)
-					%= m_Player[i]->m_ppTexture[m_Player[i]->m_State].nSpriteCount;
-			}
-
-			//나머지는 스프라이트 1번만 돌아가도록하고, 끝나면 상태가 바뀌도록 해주기. 
-			else
-			{
-				if (m_Player[i]->m_ppTexture[m_Player[i]->m_State].nSpriteCurrent >=
-					m_Player[i]->m_ppTexture[m_Player[i]->m_State].nSpriteCount)
-				{
-					m_Player[i]->m_ppTexture[m_Player[i]->m_State].nSpriteCurrent = 0;
-
-					//---------2번 누르면 Attack2가 나오도록 하기--------//
-					if (m_Player[i]->n_AttackCount > 1 && m_Player[i]->m_State == ATTACK1_RIGHT)
-					{
-						m_Player[i]->SetStatus(ATTACK2_RIGHT);
-						m_Player[i]->n_AttackCount = 1;
-					}
-					else if (m_Player[i]->n_AttackCount > 1 && m_Player[i]->m_State == ATTACK1_LEFT)
-					{
-						m_Player[i]->SetStatus(ATTACK2_LEFT);
-						m_Player[i]->n_AttackCount = 1;
-					}
-					//-------------다운 상태에서 일어난 후 복귀하기---------------//
-					else if (m_Player[i]->GetStatus() == DYE_RIGHT) {
-						m_Player[i]->SetStatus(UP_RIGHT);
-						m_Player[i]->hit = false;
-					}
-					else if (m_Player[i]->GetStatus() == DYE_LEFT) {
-						m_Player[i]->SetStatus(UP_LEFT);
-						m_Player[i]->hit = false;
-					}
-					//------------여까지-------------------//
-					else
-					{
-						m_Player[i]->SetBasic(m_Player[i]->m_State);
-					}
-				}
-			}
-		}
-
-	}
 }

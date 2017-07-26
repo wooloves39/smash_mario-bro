@@ -6,7 +6,7 @@ void Tile::setobject(int num) {
 	object_pos = new POINT[object_num];
 	object_realpos = new RECT[object_num];
 }
-void Tile:: draw(HDC hdc, CCamera cam) {
+void Tile::draw(HDC hdc, CCamera cam) {
 	int pitch = tileimage.GetWidth();
 	int height = tileimage.GetHeight();
 	for (int i = 0; i < object_num; ++i) {
@@ -16,8 +16,8 @@ void Tile:: draw(HDC hdc, CCamera cam) {
 		object_realpos[i].top = object_pos[i].y - realsize.y + downbalance;
 		object_realpos[i].right = object_pos[i].x + realsize.x;
 		object_realpos[i].bottom = object_pos[i].y + realsize.y + downbalance;
-		Rectangle(hdc, object_realpos[i].left-cam.getPos().x, object_realpos[i].top, object_realpos[i].right - cam.getPos().x, object_realpos[i].bottom);
-		}
+		//Rectangle(hdc, object_realpos[i].left - cam.getPos().x, object_realpos[i].top, object_realpos[i].right - cam.getPos().x, object_realpos[i].bottom);
+	}
 }
 map::map()
 {
@@ -199,29 +199,33 @@ void map::load(int stage, RECT rectView) {
 		mapSystem->createSound("sound\\map4.mp3", FMOD_HARDWARE | FMOD_LOOP_NORMAL, NULL, &mapSound);
 		break;
 	case 8:
-		obnum = 4;
-		tiles = new Tile[4];
+		obnum = 2;
+		tiles =new Tile[2];
 		background.Load(TEXT("map\\map8\\background.bmp"));
-		tiles[0].load(TEXT("map\\map8\\image1.bmp"));
-		tiles[0].setobject(1);
-		tiles[0].setPos(-350, rectView.bottom - 350, 0);
-		tiles[0].setsize(400, 450);
-		tiles[0].setRealsize(380, 20, 150);
-		tiles[1].load(TEXT("map\\map8\\image2.bmp"));
-		tiles[1].setobject(1);
-		tiles[1].setPos(250, rectView.bottom - 150, 0);
-		tiles[1].setsize(100, 40);
-		tiles[1].setRealsize(90, 20, 10);
-		tiles[2].load(TEXT("map\\map8\\image3.bmp"));
-		tiles[2].setobject(1);
-		tiles[2].setPos(700, rectView.bottom - 150, 0);
-		tiles[2].setsize(300, 80);
-		tiles[2].setRealsize(290, 30, -40);
-		tiles[3].load(TEXT("map\\map8\\image4.bmp"));
-		tiles[3].setobject(1);
-		tiles[3].setPos(-900, rectView.bottom - 150, 0);
-		tiles[3].setsize(100, 20);
-		tiles[3].setRealsize(95, 20, 20);
+		tiles[0].load(TEXT("map\\map8\\image2.bmp"));
+	
+		tiles[0].setobject(6);
+		tiles[0].setPos(-240, rectView.bottom - 100, 0);
+		tiles[0].setPos(240, rectView.bottom - 100, 1);
+		tiles[0].setPos(-460, rectView.bottom - 300, 2);
+		tiles[0].setPos(460, rectView.bottom - 300, 3);
+		tiles[0].setPos(200, rectView.bottom - 500, 4);
+		tiles[0].setPos(-200, rectView.bottom - 500, 5);
+		tiles[0].setsize(30, 130);
+		tiles[0].setRealsize(0, 0, 0);
+		tiles[1].load(TEXT("map\\map8\\image1.bmp"));
+		tiles[1].setobject(9);
+		tiles[1].setPos(-140, rectView.bottom - 50, 0);
+		tiles[1].setPos(140, rectView.bottom - 50, 1);
+		tiles[1].setPos(-450, rectView.bottom - 200, 2);
+		tiles[1].setPos(450, rectView.bottom - 200, 3);
+		tiles[1].setPos(-300, rectView.bottom - 400, 4);
+		tiles[1].setPos(300, rectView.bottom - 400, 5);
+		tiles[1].setPos(0, rectView.bottom - 600, 6);
+		tiles[1].setPos(-550, rectView.bottom - 600, 7);
+		tiles[1].setPos(550, rectView.bottom - 600, 8);
+		tiles[1].setsize(200, 30);
+		tiles[1].setRealsize(200, 20, -10);
 		mapSystem->createSound("sound\\map2.mp3", FMOD_HARDWARE | FMOD_LOOP_NORMAL, NULL, &mapSound);
 		break;
 	case 9:
@@ -231,16 +235,16 @@ void map::load(int stage, RECT rectView) {
 		tiles[0].load(TEXT("map\\map9\\image1.bmp"));
 		tiles[0].setobject(1);
 		tiles[0].setPos(0, rectView.bottom - 50, 0);
-		tiles[0].setsize(450, 250);
-		tiles[0].setRealsize(430, 20, -180);
+		tiles[0].setsize(750, 350);
+		tiles[0].setRealsize(740, 20, -180);
 		tiles[1].load(TEXT("map\\map9\\image2.bmp"));
 		tiles[1].setobject(4);
-		tiles[1].setPos(-250, rectView.bottom - 300, 0);
-		tiles[1].setPos(250, rectView.bottom - 300, 1);
-		tiles[1].setPos(0, rectView.bottom - 500, 2);
-		tiles[1].setPos(0, rectView.bottom - 500, 3);
-		tiles[1].setsize(100, 50);
-		tiles[1].setRealsize(90, 20, -50);
+		tiles[1].setPos(-350, rectView.bottom - 400, 0);
+		tiles[1].setPos(350, rectView.bottom - 400, 1);
+		tiles[1].setPos(0, rectView.bottom - 550, 2);
+		tiles[1].setPos(0, rectView.bottom - 550, 3);
+		tiles[1].setsize(150, 30);
+		tiles[1].setRealsize(140, 20, -20);
 		mapSystem->createSound("sound\\map5.mp3", FMOD_HARDWARE | FMOD_LOOP_NORMAL, NULL, &mapSound);
 		break;
 	default:

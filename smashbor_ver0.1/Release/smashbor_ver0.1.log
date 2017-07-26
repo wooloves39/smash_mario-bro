@@ -1,0 +1,46 @@
+﻿  Camera.cpp
+  main.cpp
+c:\users\현우\desktop\smashbor_ver0.1_6-21\smashbor_ver0.1\Player.h(12): warning C4091: 'typedef ': 변수를 선언하지 않으면 'Image' 왼쪽은 무시됩니다.
+c:\users\현우\desktop\smashbor_ver0.1_6-21\smashbor_ver0.1\Player.h(56): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\현우\desktop\smashbor_ver0.1_6-21\smashbor_ver0.1\Player.h(64): warning C4244: '=': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\현우\desktop\smashbor_ver0.1_6-21\smashbor_ver0.1\Player.h(66): warning C4244: '=': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+main.cpp(496): warning C4060: switch문에 'case' 또는 'default' 레이블이 없습니다.
+  map.cpp
+c:\users\현우\desktop\smashbor_ver0.1_6-21\smashbor_ver0.1\Player.h(12): warning C4091: 'typedef ': 변수를 선언하지 않으면 'Image' 왼쪽은 무시됩니다.
+c:\users\현우\desktop\smashbor_ver0.1_6-21\smashbor_ver0.1\Player.h(56): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\현우\desktop\smashbor_ver0.1_6-21\smashbor_ver0.1\Player.h(64): warning C4244: '=': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\현우\desktop\smashbor_ver0.1_6-21\smashbor_ver0.1\Player.h(66): warning C4244: '=': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+map.cpp(263): warning C4244: '인수': 'LONG'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Player.cpp
+c:\users\현우\desktop\smashbor_ver0.1_6-21\smashbor_ver0.1\Player.h(12): warning C4091: 'typedef ': 변수를 선언하지 않으면 'Image' 왼쪽은 무시됩니다.
+c:\users\현우\desktop\smashbor_ver0.1_6-21\smashbor_ver0.1\Player.h(56): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\현우\desktop\smashbor_ver0.1_6-21\smashbor_ver0.1\Player.h(64): warning C4244: '=': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\현우\desktop\smashbor_ver0.1_6-21\smashbor_ver0.1\Player.h(66): warning C4244: '=': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Player.cpp(8): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Player.cpp(9): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Player.cpp(11): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Player.cpp(12): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Player.cpp(31): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+Player.cpp(92): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Player.cpp(93): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Player.cpp(97): warning C4244: '+=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Player.cpp(101): warning C4244: '-=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Player.cpp(143): warning C4244: '+=': 'const float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Player.cpp(205): warning C4244: '=': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Player.cpp(207): warning C4244: '=': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Player.cpp(209): warning C4244: '=': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Player.cpp(231): warning C4244: '=': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Player.cpp(233): warning C4244: '=': 'double'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Player.cpp(980): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Player.cpp(981): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Player.cpp(983): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Player.cpp(984): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Player.cpp(1003): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+Player.cpp(1191): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+Player.cpp(1192): warning C4244: '+=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  stdafx.cpp
+  코드를 생성하고 있습니다.
+  All 308 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  코드를 생성했습니다.
+  smashbor_ver0.1.vcxproj -> C:\Users\현우\Desktop\smashbor_ver0.1_6-21\Release\1.exe
+  smashbor_ver0.1.vcxproj -> C:\Users\현우\Desktop\smashbor_ver0.1_6-21\Release\1.pdb (Full PDB)

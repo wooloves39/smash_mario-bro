@@ -552,7 +552,7 @@ void CPlayer::KeyState(CCamera& cam, int state, int mode, int player) {
 				{
 					if (jump == false) {
 
-						if (GetStatus() == DEFENSE_LEFT || GetStatus() == DEFENSE_RIGHT||
+						if (GetStatus() == DEFENSE_LEFT || GetStatus() == DEFENSE_RIGHT ||
 							GetStatus() == ATTACK1_LEFT || GetStatus() == ATTACK2_LEFT ||
 							GetStatus() == ATTACK1_RIGHT || GetStatus() == ATTACK2_RIGHT)
 							return;
@@ -709,7 +709,7 @@ void CPlayer::KeyState(CCamera& cam, int state, int mode, int player) {
 					{
 						if (jump == false) {
 
-							if (GetStatus() == DEFENSE_LEFT || GetStatus() == DEFENSE_RIGHT|| 
+							if (GetStatus() == DEFENSE_LEFT || GetStatus() == DEFENSE_RIGHT ||
 								GetStatus() == ATTACK1_LEFT || GetStatus() == ATTACK2_LEFT ||
 								GetStatus() == ATTACK1_RIGHT || GetStatus() == ATTACK2_RIGHT)
 								return;
@@ -864,7 +864,7 @@ void CPlayer::KeyState(CCamera& cam, int state, int mode, int player) {
 					if (GetAsyncKeyState(VK_NUMPAD6))
 					{
 						if (jump == false) {
-							if (GetStatus() == DEFENSE_LEFT || GetStatus() == DEFENSE_RIGHT||
+							if (GetStatus() == DEFENSE_LEFT || GetStatus() == DEFENSE_RIGHT ||
 								GetStatus() == ATTACK1_LEFT || GetStatus() == ATTACK2_LEFT ||
 								GetStatus() == ATTACK1_RIGHT || GetStatus() == ATTACK2_RIGHT)
 								return;
@@ -973,6 +973,69 @@ void CPlayer::KeyState(CCamera& cam, int state, int mode, int player) {
 	}
 }
 
+void CPlayer::Timer() {
+	if (m_State == DEFENSE_LEFT || m_State == DEFENSE_RIGHT)
+	{
+		if (sma)
+			m_ppTexture[m_State].nSpriteCurrent = 1;
+		else
+			m_ppTexture[m_State].nSpriteCurrent = 0;
+		FrameEnd = 1;
+	}
+
+	else
+	{
+		m_ppTexture[m_State].nSpriteCurrent += 1;
+
+		//움직이는것은 스프라이트가 계속 돌아가도록. 
+		if (m_State == BASIC_RIGHT || m_State == BASIC_LEFT
+			|| m_State == MOVE_RIGHT || m_State == MOVE_LEFT
+			|| m_State == JUMP_RIGHT || m_State == JUMP_LEFT
+			|| m_State == FLY_RIGHT || m_State == FLY_LEFT
+			|| m_State == WIN || m_State == LOSE)
+		{
+			(m_ppTexture[m_State].nSpriteCurrent)
+				%= m_ppTexture[m_State].nSpriteCount;
+		}
+
+		//나머지는 스프라이트 1번만 돌아가도록하고, 끝나면 상태가 바뀌도록 해주기. 
+		else
+		{
+			if (m_ppTexture[m_State].nSpriteCurrent >=
+				m_ppTexture[m_State].nSpriteCount)
+			{
+				m_ppTexture[m_State].nSpriteCurrent = 0;
+
+				//---------2번 누르면 Attack2가 나오도록 하기--------//
+				if (n_AttackCount > 1 && m_State == ATTACK1_RIGHT)
+				{
+					SetStatus(ATTACK2_RIGHT);
+					n_AttackCount = 1;
+				}
+				else if (n_AttackCount > 1 && m_State == ATTACK1_LEFT)
+				{
+					SetStatus(ATTACK2_LEFT);
+					n_AttackCount = 1;
+				}
+				//-------------다운 상태에서 일어난 후 복귀하기---------------//
+				else if (GetStatus() == DYE_RIGHT) {
+					SetStatus(UP_RIGHT);
+					hit = false;
+				}
+				else if (GetStatus() == DYE_LEFT) {
+					SetStatus(UP_LEFT);
+					hit = false;
+				}
+				//------------여까지-------------------//
+				else
+				{
+					SetBasic(m_State);
+				}
+			}
+		}
+	}
+
+}
 CAIPlayer::CAIPlayer(int nStatus) :CPlayer(nStatus) {
 	nTexture = nStatus; // 현재 상태의 개수 
 	m_ppTexture = new Image[nTexture];
@@ -1021,7 +1084,7 @@ void CAIPlayer::KeyState(CCamera& cam, int state, int mode, int player) {
 					DIR = 1;
 					//dwDirection |= DIR_LEFT;
 					dwDirection = DIR_LEFT;
-					if (GetStatus() == DEFENSE_LEFT || GetStatus() == DEFENSE_RIGHT|| GetStatus() == ATTACK1_LEFT || GetStatus() == ATTACK2_LEFT ||
+					if (GetStatus() == DEFENSE_LEFT || GetStatus() == DEFENSE_RIGHT || GetStatus() == ATTACK1_LEFT || GetStatus() == ATTACK2_LEFT ||
 						GetStatus() == ATTACK1_RIGHT || GetStatus() == ATTACK2_RIGHT ||
 						GetStatus() == HATTACK_RIGHT || GetStatus() == HATTACK_LEFT);
 					else
@@ -1041,7 +1104,7 @@ void CAIPlayer::KeyState(CCamera& cam, int state, int mode, int player) {
 					DIR = 2;
 					///dwDirection |= DIR_RIGHT
 					dwDirection = DIR_RIGHT;
-					if (GetStatus() == DEFENSE_LEFT || GetStatus() == DEFENSE_RIGHT|| GetStatus() == ATTACK1_LEFT || GetStatus() == ATTACK2_LEFT ||
+					if (GetStatus() == DEFENSE_LEFT || GetStatus() == DEFENSE_RIGHT || GetStatus() == ATTACK1_LEFT || GetStatus() == ATTACK2_LEFT ||
 						GetStatus() == ATTACK1_RIGHT || GetStatus() == ATTACK2_RIGHT ||
 						GetStatus() == HATTACK_RIGHT || GetStatus() == HATTACK_LEFT);
 					else
@@ -1180,32 +1243,43 @@ void CAIPlayer::KeyState(CCamera& cam, int state, int mode, int player) {
 		}
 	}
 }
-void CAIPlayer::distance(CPlayer **other, int player_num) {
-	int num = 0;
-	int player[2];
-	int score[2] = { 0, 0 };
+void CAIPlayer::distance(CPlayer **other, int player_num) {//문제있음
 
+	int num = 0;
+	int player[3];
+	int score[3] = { 0, 0,0 };
+	float Distance[3];
 	for (int i = 0; i < player_num; ++i) {
 		if (other[i] == this);
 		else {
 			Distance[num] = sqrt((pow(m_Position.x - other[i]->GetPosition().x, 2) + pow(m_Position.y - other[i]->GetPosition().y, 2)));
-			score[num] += other[i]->getDamege_num() - Distance[num];
+			score[num] = Distance[num] + other[i]->getDamege_num();
 			player[num] = i;
 			++num;
 		}
 	}
-	if (Distance[0] < Distance[1] && other[player[0]]->mapobject_collsion == true)
+	target = other[player[0]];
+	for (int i = 0; i < 3; i++) {
+		for (int j = i + 1; j < 3; j++) {
+			if (score[i] < score[j] && other[player[j]]->mapobject_collsion == true)
+				target = other[player[j]];
+		}
+	}
+	/*if (Distance[0] < Distance[1] && other[player[0]]->mapobject_collsion == true)
 		target = other[player[0]];
-	else if(Distance[0] > Distance[1]&& other[player[1]]->mapobject_collsion == true)
+	else if (Distance[0] > Distance[1] && other[player[1]]->mapobject_collsion == true)
 		target = other[player[1]];
 	else {
 		targeting = false;
 		return;
-	}
-	if (mapobject_collsion == false) {
-		if (other[player[0]]->mapobject_collsion == true)target = other[player[0]];
-		else if (other[player[1]]->mapobject_collsion == true)target = other[player[1]];
-		else {
+	}*/
+	if (target->mapobject_collsion == false) {
+		if (mapobject_collsion == false) {
+			for (int i = 0; i < 3; i++) {
+				if (other[player[i]]->mapobject_collsion == true)target = other[player[i]];
+			}
+		}
+		else if (mapobject_collsion == true) {
 			targeting = false;
 			return;
 		}

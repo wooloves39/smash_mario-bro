@@ -138,12 +138,14 @@ public:
 		return false;
 	}
 	virtual void distance(CPlayer **other, int player_num) {}
+	void Timer(void);
+	
 };
 class CAIPlayer
 	:public CPlayer
 {
 public:
-	float Distance[2];
+
 	bool test=false;
 	CPlayer* target;
 	bool targeting = false;
