@@ -44,7 +44,7 @@ public:
 	Channel* pChannel;
 	Sound* charSound[6];
 	int JumpCount = 0;
-
+	bool fly = false;
 public:
 	CPlayer(int nStatus);
 	~CPlayer();

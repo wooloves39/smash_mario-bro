@@ -299,6 +299,7 @@ void CPlayer::defance(CPlayer **other, int player_num)
 						}
 						else {
 							sma = true;
+							fly = true;
 							SetStatus(FLY_LEFT);
 						}
 					}
@@ -314,6 +315,7 @@ void CPlayer::defance(CPlayer **other, int player_num)
 						}
 						else {
 							sma = true;
+							fly = true;
 							SetStatus(FLY_RIGHT);
 						}
 					}
@@ -1247,42 +1249,30 @@ void CAIPlayer::distance(CPlayer **other, int player_num) {//문제있음
 
 	int num = 0;
 	int player[3];
-	int score[3] = { 0, 0,0 };
+	float score[3] = { 0, 0,0 };
 	float Distance[3];
+	float target_score=9000;
+	int target_num;
 	for (int i = 0; i < player_num; ++i) {
 		if (other[i] == this);
 		else {
 			Distance[num] = sqrt((pow(m_Position.x - other[i]->GetPosition().x, 2) + pow(m_Position.y - other[i]->GetPosition().y, 2)));
 			score[num] = Distance[num] + other[i]->getDamege_num();
+			if (other[i]->fly == true|other[i]->live==false)score[num] = 9000;
 			player[num] = i;
 			++num;
 		}
 	}
-	target = other[player[0]];
+	targeting = false;
 	for (int i = 0; i < 3; i++) {
-		for (int j = i + 1; j < 3; j++) {
-			if (score[i] < score[j] && other[player[j]]->mapobject_collsion == true)
-				target = other[player[j]];
+		if (target_score > score[i]) {
+			target_score = score[i];
+			target_num = player[i];
 		}
 	}
-	/*if (Distance[0] < Distance[1] && other[player[0]]->mapobject_collsion == true)
-		target = other[player[0]];
-	else if (Distance[0] > Distance[1] && other[player[1]]->mapobject_collsion == true)
-		target = other[player[1]];
+	if (target_score == 9000)return;
 	else {
-		targeting = false;
-		return;
-	}*/
-	if (target->mapobject_collsion == false) {
-		if (mapobject_collsion == false) {
-			for (int i = 0; i < 3; i++) {
-				if (other[player[i]]->mapobject_collsion == true)target = other[player[i]];
-			}
-		}
-		else if (mapobject_collsion == true) {
-			targeting = false;
-			return;
-		}
+		target = other[target_num];
+		targeting = true;
 	}
-	targeting = true;
 }

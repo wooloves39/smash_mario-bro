@@ -265,7 +265,8 @@ void map::collision(CPlayer& player) {
 					player.GetStatus() == FLY_LEFT || player.GetStatus() == FLY_RIGHT) {
 					player.SetStatus(player.GetStatus() % 2 + BASIC_RIGHT);
 				}
-				player.mapobject_collsion = true;//맵에 안붙어있을때
+				player.mapobject_collsion = true;//맵에 붙어 있을때
+				player.fly = false;
 				player.m_bJump = false;
 				return;
 			}

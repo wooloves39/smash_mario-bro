@@ -1110,7 +1110,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 				else if (m_Player[i]->GetStatus() == DYE_RIGHT || m_Player[i]->GetStatus() == DYE_LEFT)
 					m_Player[i]->smashing(m_Player[m_Player[i]->getAttacker()]->getDamege_num(), 10, false);
 
-				if (m_Player[i]->GetPosition().y > 900 && m_Player[i]->live == true) {
+				if (m_Player[i]->GetPosition().y > 1000 && m_Player[i]->live == true) {
 					m_Player[i]->live = false;
 					m_Player[i]->charSystem->playSound(FMOD_CHANNEL_REUSE, m_Player[i]->charSound[3], false, &m_Player[i]->pChannel);
 					m_Player[i]->PlayTime_num = 99 - PlayTime;
