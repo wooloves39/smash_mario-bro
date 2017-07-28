@@ -1,8 +1,8 @@
-#ifdef UNICODE
-#pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console")
-#else 
-#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
-#endif
+//#ifdef UNICODE
+//#pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console")
+//#else 
+//#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
+//#endif
 #pragma comment(lib, "Msimg32.lib")
 
 #define RAD 3.141592/180 
@@ -65,6 +65,7 @@
 #include <tchar.h>
 #include<algorithm>
 #include "fmod.hpp"
+
 #pragma	comment (lib, "fmodex_vc.lib")
 using namespace FMOD;
 using namespace std;

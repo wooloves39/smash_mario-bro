@@ -2,12 +2,7 @@
 #include "Camera.h"
 #include "Player.h"
 #include"map.h"
-
-//06/17  맵 카메라 H 전체 교체 필요 점수 판 만들어 놨고 이미지 할당해놔야함.
-//임팩트 이미지를 편집하지 못함.. 부탁드림
-//캐릭터 선택 할수 있게 부탁
-//전체 state가 rank가 되면 win,lose로  캐릭터 스프라이트 할당할껀데 basic으로 안돌아가게 구현 부탁
-//
+#include"resource.h"
 int state = 0;
 enum state { title, cho_map, cho_cha, play, ranking, ending };//스테이트 순서 변경
 enum DIRECTION_P
@@ -72,13 +67,13 @@ void createSound() {
 	System_Create(&pSystem);
 	pSystem->init(6, FMOD_INIT_NORMAL, NULL);
 
-	/*pSystem->createSound("sound\\opening.mp3", FMOD_HARDWARE | FMOD_LOOP_NORMAL, NULL, &stateSound[title]);
+	pSystem->createSound("sound\\opening.mp3", FMOD_HARDWARE | FMOD_LOOP_NORMAL, NULL, &stateSound[title]);
 	pSystem->createSound("sound\\choice.mp3", FMOD_HARDWARE | FMOD_LOOP_NORMAL, NULL, &stateSound[cho_map]);
 
 	pSystem->createSound("sound\\ranking.mp3", FMOD_HARDWARE | FMOD_LOOP_NORMAL, NULL, &stateSound[ranking-2]);
 	pSystem->createSound("sound\\ending.mp3", FMOD_HARDWARE | FMOD_LOOP_NORMAL, NULL, &stateSound[ending-2]);
 	pSystem->createSound("sound\\imfact\\choice.wav", FMOD_HARDWARE | FMOD_LOOP_OFF, NULL, &choiceSound);
-	pSystem->createSound("sound\\imfact\\change.wav", FMOD_HARDWARE | FMOD_LOOP_OFF, NULL, &changeSound);*/
+	pSystem->createSound("sound\\imfact\\change.wav", FMOD_HARDWARE | FMOD_LOOP_OFF, NULL, &changeSound);
 }
 
 void reset() {
@@ -108,7 +103,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdPa
 	WndClass.cbWndExtra = 0;
 	WndClass.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
 	WndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
-	WndClass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+	WndClass.hIcon = LoadIcon(g_hInst, MAKEINTRESOURCE(IDI_ICON1));
 	WndClass.hInstance = hInstance;
 	WndClass.lpfnWndProc = (WNDPROC)WndProc;
 	WndClass.lpszClassName = TEXT("Smash Mario Brothers!");
@@ -657,10 +652,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 					else
 						KillTimer(hWnd, 1);
 					break;
-				case'W':
-					cout << map_stage << endl;
-					cout << sel.y << endl;
-					break;
 				case VK_UP:
 					pSystem->playSound(FMOD_CHANNEL_REUSE, changeSound, false, &pChannel[1]);
 					sel.y -= 100;
@@ -1073,10 +1064,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 	}
 	InvalidateRect(hWnd, NULL, FALSE);
 	break;
-	case WM_LBUTTONDOWN:
-	{cout << LOWORD(lParam) << endl;
-	cout << HIWORD(lParam) << endl;
-	}
 	case WM_TIMER:
 	{
 		if (state == play)

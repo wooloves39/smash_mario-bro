@@ -170,7 +170,7 @@ void map::load(int stage, RECT rectView) {
 		tiles[1].setPos(0, rectView.bottom - 500, 2);
 		tiles[1].setsize(200, 20);
 		tiles[1].setRealsize(190, 20, -10);
-		mapSystem->createSound("sound\\map5.mp3", FMOD_HARDWARE | FMOD_LOOP_NORMAL, NULL, &mapSound);
+		mapSystem->createSound("sound\\map6.mp3", FMOD_HARDWARE | FMOD_LOOP_NORMAL, NULL, &mapSound);
 		break;
 	case 7:
 		obnum = 3;
@@ -196,7 +196,7 @@ void map::load(int stage, RECT rectView) {
 		tiles[2].setPos(300, rectView.bottom - 400, 2);
 		tiles[2].setsize(150, 30);
 		tiles[2].setRealsize(145, 20, 0);
-		mapSystem->createSound("sound\\map4.mp3", FMOD_HARDWARE | FMOD_LOOP_NORMAL, NULL, &mapSound);
+		mapSystem->createSound("sound\\map7.mp3", FMOD_HARDWARE | FMOD_LOOP_NORMAL, NULL, &mapSound);
 		break;
 	case 8:
 		obnum = 2;
@@ -226,7 +226,7 @@ void map::load(int stage, RECT rectView) {
 		tiles[1].setPos(550, rectView.bottom - 600, 8);
 		tiles[1].setsize(200, 30);
 		tiles[1].setRealsize(200, 20, -10);
-		mapSystem->createSound("sound\\map2.mp3", FMOD_HARDWARE | FMOD_LOOP_NORMAL, NULL, &mapSound);
+		mapSystem->createSound("sound\\map8.mp3", FMOD_HARDWARE | FMOD_LOOP_NORMAL, NULL, &mapSound);
 		break;
 	case 9:
 		obnum = 2;
@@ -245,7 +245,7 @@ void map::load(int stage, RECT rectView) {
 		tiles[1].setPos(0, rectView.bottom - 550, 3);
 		tiles[1].setsize(150, 30);
 		tiles[1].setRealsize(140, 20, -20);
-		mapSystem->createSound("sound\\map5.mp3", FMOD_HARDWARE | FMOD_LOOP_NORMAL, NULL, &mapSound);
+		mapSystem->createSound("sound\\map9.wma", FMOD_HARDWARE | FMOD_LOOP_NORMAL, NULL, &mapSound);
 		break;
 	default:
 		break;
