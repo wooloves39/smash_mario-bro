@@ -563,10 +563,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 		GetClientRect(hWnd, &rectView);
 		Title.Load(TEXT("sub_image\\titleUI.bmp"));
 
-		Choice_cha[0].Load(TEXT("sub_image\\choice1.bmp"));
-		Choice_cha[1].Load(TEXT("sub_image\\choice2.bmp"));
-		Choice_cha[2].Load(TEXT("sub_image\\choice3.bmp"));
-		Choice_cha[3].Load(TEXT("sub_image\\choice4.bmp"));
+		Choice_cha[0].Load(TEXT("sub_image\\choice1.png"));
+		Choice_cha[1].Load(TEXT("sub_image\\choice2.png"));
+		Choice_cha[2].Load(TEXT("sub_image\\choice3.png"));
+		Choice_cha[3].Load(TEXT("sub_image\\choice4.png"));
 		Ending.Load(TEXT("sub_image\\end.bmp"));
 		Background.Load(TEXT("sub_image\\background.bmp"));
 		mapEX[0].Load(TEXT("map\\map1\\map1.bmp"));

@@ -9,3 +9,10 @@ SMASHBROTHER(2015)/.vs/SMASHBROTHERS0621/v14/.suo
 *.obj
 *.log
 *.idb
+*.exe
+*.ilk
+*.pdb
+*.obj
+*.tlog
+*.log
+*.idb
