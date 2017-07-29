@@ -1,2 +1,11 @@
 
 *.opendb
+*.tlog
+SMASHBROTHER(2015)/.vs/SMASHBROTHERS0621/v14/.suo
+*.exe
+*.ilk
+*.pdb
+*.db
+*.obj
+*.log
+*.idb

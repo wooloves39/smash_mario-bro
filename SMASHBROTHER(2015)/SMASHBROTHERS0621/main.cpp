@@ -221,7 +221,7 @@ void BuildPlayer(int nMyPlayer, int mode)
 	Mario->SetTexture(WIN,
 		_T("character\\MARIO\\MARIO_VICTORY.png"), 4);
 	Mario->rank_state.Load("character\\MARIO\\marioUI.png");
-	Mario->UI.Load("character\\MARIO\\mario_UI.bmp");
+	Mario->UI.Load("character\\MARIO\\mario_UI.png");
 
 
 	//2. Wario
@@ -295,7 +295,7 @@ void BuildPlayer(int nMyPlayer, int mode)
 		_T("character\\WARIO\\WARIO_VICTORY.png"), 4);
 
 	Wario->rank_state.Load("character\\WARIO\\warioUI.png");
-	Wario->UI.Load("character\\WARIO\\wario_UI.bmp");
+	Wario->UI.Load("character\\WARIO\\wario_UI.png");
 
 	//3. LUIZY
 	CPlayer *Luizy = new CPlayer(26);
@@ -367,7 +367,7 @@ void BuildPlayer(int nMyPlayer, int mode)
 	Luizy->SetTexture(WIN,
 		_T("character\\LUIZY\\LUIZY_VICTORY.png"), 4);
 	Luizy->rank_state.Load("character\\LUIZY\\luizyUI.png");
-	Luizy->UI.Load("character\\LUIZY\\luizy_UI.bmp");
+	Luizy->UI.Load("character\\LUIZY\\luizy_UI.png");
 
 	CPlayer *Waluizy = new CPlayer(26);
 	//BASIC
@@ -438,7 +438,7 @@ void BuildPlayer(int nMyPlayer, int mode)
 	Waluizy->SetTexture(WIN,
 		_T("character\\WALUIZY\\waluizy_VICTORY.png"), 4);
 	Waluizy->rank_state.Load("character\\WALUIZY\\waluizyUI.png");
-	Waluizy->UI.Load("character\\WALUIZY\\waluizy_UI.bmp");
+	Waluizy->UI.Load("character\\WALUIZY\\waluizy_UI.png");
 
 	m_Player = new CPlayer*[4];
 	//1. Mario

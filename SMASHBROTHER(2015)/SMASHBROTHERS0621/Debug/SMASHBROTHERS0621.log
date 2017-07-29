@@ -1,44 +1,8 @@
-﻿  stdafx.cpp
-  Player.cpp
+﻿  main.cpp
 c:\users\leinster\documents\github\smash_mario-bro\smashbrother(2015)\smashbrothers0621\player.h(12): warning C4091: 'typedef ': ignored on left of 'Image' when no variable is declared
 c:\users\leinster\documents\github\smash_mario-bro\smashbrother(2015)\smashbrothers0621\player.h(56): warning C4244: '=': conversion from 'float' to 'LONG', possible loss of data
 c:\users\leinster\documents\github\smash_mario-bro\smashbrother(2015)\smashbrothers0621\player.h(64): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
 c:\users\leinster\documents\github\smash_mario-bro\smashbrother(2015)\smashbrothers0621\player.h(66): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
-c:\users\leinster\documents\github\smash_mario-bro\smashbrother(2015)\smashbrothers0621\player.cpp(8): warning C4244: '=': conversion from 'float' to 'LONG', possible loss of data
-c:\users\leinster\documents\github\smash_mario-bro\smashbrother(2015)\smashbrothers0621\player.cpp(9): warning C4244: '=': conversion from 'float' to 'LONG', possible loss of data
-c:\users\leinster\documents\github\smash_mario-bro\smashbrother(2015)\smashbrothers0621\player.cpp(11): warning C4244: '=': conversion from 'float' to 'LONG', possible loss of data
-c:\users\leinster\documents\github\smash_mario-bro\smashbrother(2015)\smashbrothers0621\player.cpp(12): warning C4244: '=': conversion from 'float' to 'LONG', possible loss of data
-c:\users\leinster\documents\github\smash_mario-bro\smashbrother(2015)\smashbrothers0621\player.cpp(31): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\leinster\documents\github\smash_mario-bro\smashbrother(2015)\smashbrothers0621\player.cpp(92): warning C4244: '=': conversion from 'float' to 'LONG', possible loss of data
-c:\users\leinster\documents\github\smash_mario-bro\smashbrother(2015)\smashbrothers0621\player.cpp(93): warning C4244: '=': conversion from 'float' to 'LONG', possible loss of data
-c:\users\leinster\documents\github\smash_mario-bro\smashbrother(2015)\smashbrothers0621\player.cpp(97): warning C4244: '+=': conversion from 'float' to 'LONG', possible loss of data
-c:\users\leinster\documents\github\smash_mario-bro\smashbrother(2015)\smashbrothers0621\player.cpp(101): warning C4244: '-=': conversion from 'float' to 'LONG', possible loss of data
-c:\users\leinster\documents\github\smash_mario-bro\smashbrother(2015)\smashbrothers0621\player.cpp(143): warning C4244: '+=': conversion from 'const float' to 'LONG', possible loss of data
-c:\users\leinster\documents\github\smash_mario-bro\smashbrother(2015)\smashbrothers0621\player.cpp(205): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
-c:\users\leinster\documents\github\smash_mario-bro\smashbrother(2015)\smashbrothers0621\player.cpp(207): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
-c:\users\leinster\documents\github\smash_mario-bro\smashbrother(2015)\smashbrothers0621\player.cpp(209): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
-c:\users\leinster\documents\github\smash_mario-bro\smashbrother(2015)\smashbrothers0621\player.cpp(231): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
-c:\users\leinster\documents\github\smash_mario-bro\smashbrother(2015)\smashbrothers0621\player.cpp(233): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
-c:\users\leinster\documents\github\smash_mario-bro\smashbrother(2015)\smashbrothers0621\player.cpp(1045): warning C4244: '=': conversion from 'float' to 'LONG', possible loss of data
-c:\users\leinster\documents\github\smash_mario-bro\smashbrother(2015)\smashbrothers0621\player.cpp(1046): warning C4244: '=': conversion from 'float' to 'LONG', possible loss of data
-c:\users\leinster\documents\github\smash_mario-bro\smashbrother(2015)\smashbrothers0621\player.cpp(1048): warning C4244: '=': conversion from 'float' to 'LONG', possible loss of data
-c:\users\leinster\documents\github\smash_mario-bro\smashbrother(2015)\smashbrothers0621\player.cpp(1049): warning C4244: '=': conversion from 'float' to 'LONG', possible loss of data
-c:\users\leinster\documents\github\smash_mario-bro\smashbrother(2015)\smashbrothers0621\player.cpp(1068): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\leinster\documents\github\smash_mario-bro\smashbrother(2015)\smashbrothers0621\player.cpp(1259): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\leinster\documents\github\smash_mario-bro\smashbrother(2015)\smashbrothers0621\player.cpp(1261): warning C4554: '|': check operator precedence for possible error; use parentheses to clarify precedence
-  map.cpp
-c:\users\leinster\documents\github\smash_mario-bro\smashbrother(2015)\smashbrothers0621\player.h(12): warning C4091: 'typedef ': ignored on left of 'Image' when no variable is declared
-c:\users\leinster\documents\github\smash_mario-bro\smashbrother(2015)\smashbrothers0621\player.h(56): warning C4244: '=': conversion from 'float' to 'LONG', possible loss of data
-c:\users\leinster\documents\github\smash_mario-bro\smashbrother(2015)\smashbrothers0621\player.h(64): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
-c:\users\leinster\documents\github\smash_mario-bro\smashbrother(2015)\smashbrothers0621\player.h(66): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
-c:\users\leinster\documents\github\smash_mario-bro\smashbrother(2015)\smashbrothers0621\map.cpp(263): warning C4244: 'argument': conversion from 'LONG' to 'float', possible loss of data
-  main.cpp
-c:\users\leinster\documents\github\smash_mario-bro\smashbrother(2015)\smashbrothers0621\player.h(12): warning C4091: 'typedef ': ignored on left of 'Image' when no variable is declared
-c:\users\leinster\documents\github\smash_mario-bro\smashbrother(2015)\smashbrothers0621\player.h(56): warning C4244: '=': conversion from 'float' to 'LONG', possible loss of data
-c:\users\leinster\documents\github\smash_mario-bro\smashbrother(2015)\smashbrothers0621\player.h(64): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
-c:\users\leinster\documents\github\smash_mario-bro\smashbrother(2015)\smashbrothers0621\player.h(66): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
-  Camera.cpp
-  Generating Code...
   LINK : C:\Users\leinster\Documents\GitHub\smash_mario-bro\SMASHBROTHER(2015)\Debug\SMASHBROTHERS0621.exe not found or not built by the last incremental link; performing full link
   SMASHBROTHERS0621.vcxproj -> C:\Users\leinster\Documents\GitHub\smash_mario-bro\SMASHBROTHER(2015)\Debug\SMASHBROTHERS0621.exe
   SMASHBROTHERS0621.vcxproj -> C:\Users\leinster\Documents\GitHub\smash_mario-bro\SMASHBROTHER(2015)\Debug\SMASHBROTHERS0621.pdb (Full PDB)
