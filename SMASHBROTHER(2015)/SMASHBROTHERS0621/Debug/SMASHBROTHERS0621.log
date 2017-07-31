@@ -1,0 +1,7 @@
+﻿  main.cpp
+c:\users\leinster\documents\github\smash_mario-bro\smashbrother(2015)\smashbrothers0621\player.h(12): warning C4091: 'typedef ': ignored on left of 'Image' when no variable is declared
+c:\users\leinster\documents\github\smash_mario-bro\smashbrother(2015)\smashbrothers0621\player.h(56): warning C4244: '=': conversion from 'float' to 'LONG', possible loss of data
+c:\users\leinster\documents\github\smash_mario-bro\smashbrother(2015)\smashbrothers0621\player.h(64): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
+c:\users\leinster\documents\github\smash_mario-bro\smashbrother(2015)\smashbrothers0621\player.h(66): warning C4244: '=': conversion from 'double' to 'LONG', possible loss of data
+  SMASHBROTHERS0621.vcxproj -> C:\Users\leinster\Documents\GitHub\smash_mario-bro\SMASHBROTHER(2015)\Debug\SMASHBROTHERS0621.exe
+  SMASHBROTHERS0621.vcxproj -> C:\Users\leinster\Documents\GitHub\smash_mario-bro\SMASHBROTHER(2015)\Debug\SMASHBROTHERS0621.pdb (Full PDB)
