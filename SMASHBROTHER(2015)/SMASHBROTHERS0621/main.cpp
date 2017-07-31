@@ -66,22 +66,22 @@ void setranking() {
 		m_Player[i]->text_rank();
 	}
 
-}
+}//전체 랭킹을 정리하고 셋팅한다.
 
 void createSound() {
 	System_Create(&pSystem);
 	pSystem->init(6, FMOD_INIT_NORMAL, NULL);
 
-	/*pSystem->createSound("sound\\opening.mp3", FMOD_HARDWARE | FMOD_LOOP_NORMAL, NULL, &stateSound[title]);
+	pSystem->createSound("sound\\opening.mp3", FMOD_HARDWARE | FMOD_LOOP_NORMAL, NULL, &stateSound[title]);
 	pSystem->createSound("sound\\choice.mp3", FMOD_HARDWARE | FMOD_LOOP_NORMAL, NULL, &stateSound[cho_map]);
 
 	pSystem->createSound("sound\\ranking.mp3", FMOD_HARDWARE | FMOD_LOOP_NORMAL, NULL, &stateSound[ranking-2]);
 	pSystem->createSound("sound\\ending.mp3", FMOD_HARDWARE | FMOD_LOOP_NORMAL, NULL, &stateSound[ending-2]);
 	pSystem->createSound("sound\\imfact\\choice.wav", FMOD_HARDWARE | FMOD_LOOP_OFF, NULL, &choiceSound);
-	pSystem->createSound("sound\\imfact\\change.wav", FMOD_HARDWARE | FMOD_LOOP_OFF, NULL, &changeSound);*/
-}
+	pSystem->createSound("sound\\imfact\\change.wav", FMOD_HARDWARE | FMOD_LOOP_OFF, NULL, &changeSound);
+}//플레이전 설정에서 사용되는 사운드들
 
-void reset() {
+void reset() {//리플레이시 값들을 초기화
 	pChannel[0]->stop();
 	pChannel[1]->stop();
 	m.release();
@@ -542,7 +542,7 @@ void BuildPlayer(int nMyPlayer, int mode)
 	default:
 		break;
 	}
-}
+}// 캐릭터 스프라이트를 전부 읽어 들인후 해당 캐릭터로 배정
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {

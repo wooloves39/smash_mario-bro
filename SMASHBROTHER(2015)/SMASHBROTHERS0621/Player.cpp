@@ -1134,13 +1134,13 @@ void CAIPlayer::KeyState(CCamera& cam, int state, int mode, int player) {
 						SetStatus(MOVE_LEFT);
 					}
 					if (m_Position.x > 550 || m_Position.x < -550) {
-						test = true;
+						road_algo = true;
 					}
 				}
 				else
-					test = false;
+					road_algo = false;
 			}
-			if (test == true) {
+			if (road_algo == true) {
 				if (DIR == 2)DIR = 1;
 				else DIR = 2;
 				if (dwDirection == DIR_RIGHT)dwDirection = DIR_LEFT;
