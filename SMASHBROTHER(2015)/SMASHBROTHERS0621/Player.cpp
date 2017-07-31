@@ -1187,11 +1187,11 @@ void CAIPlayer::KeyState(CCamera& cam, int state, int mode, int player) {
 							if (smash == false && GetStatus() != HATTACK_LEFT&& GetStatus() != HATTACK_RIGHT) {
 								if (getSmashpoint() > 0)
 								{
-									if (GetStatus() % 2 == 0)
+									if (target->GetPosition().x > m_Position.x)
 									{
 										SetStatus(HATTACK_RIGHT);
 									}
-									if (GetStatus() % 2 == 1)
+									if (target->GetPosition().x < m_Position.x)
 									{
 										SetStatus(HATTACK_LEFT);
 									}
@@ -1205,11 +1205,18 @@ void CAIPlayer::KeyState(CCamera& cam, int state, int mode, int player) {
 							if (attack == false) {
 								if (GetStatus() == BASIC_RIGHT || GetStatus() == MOVE_RIGHT)
 								{
-									SetStatus(ATTACK1_RIGHT);
+									if (target->GetPosition().x > m_Position.x)
+										SetStatus(ATTACK1_RIGHT);
+									else if (target->GetPosition().x < m_Position.x)
+										SetStatus(ATTACK1_LEFT);
+
 								}
 								else if (GetStatus() == BASIC_LEFT || GetStatus() == MOVE_LEFT)
 								{
-									SetStatus(ATTACK1_LEFT);
+									if (target->GetPosition().x > m_Position.x)
+										SetStatus(ATTACK1_RIGHT);
+									else if (target->GetPosition().x < m_Position.x)
+										SetStatus(ATTACK1_LEFT);
 								}
 
 								else if (m_State == ATTACK1_RIGHT)
@@ -1223,11 +1230,17 @@ void CAIPlayer::KeyState(CCamera& cam, int state, int mode, int player) {
 								//점프중 공격시 발차기 
 								else if (GetStatus() == JUMP_LEFT)
 								{
-									SetStatus(KICK_LEFT);
+									if (target->GetPosition().x > m_Position.x)
+										SetStatus(KICK_RIGHT);
+									else if (target->GetPosition().x < m_Position.x)
+										SetStatus(KICK_LEFT);
 								}
 								else if (GetStatus() == JUMP_RIGHT)
 								{
-									SetStatus(KICK_RIGHT);
+									if (target->GetPosition().x > m_Position.x)
+										SetStatus(KICK_RIGHT);
+									else if (target->GetPosition().x < m_Position.x)
+										SetStatus(KICK_LEFT);
 								}
 								attack = true;
 							}

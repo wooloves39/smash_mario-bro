@@ -65,6 +65,9 @@
     <ClInclude Include="fmod_memoryinfo.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="fmod.dll">
@@ -81,10 +84,18 @@
     <Image Include="explosion_01.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="star.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Library Include="fmodex_vc.lib">
       <Filter>Resource Files</Filter>
     </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SMASHBROTHERS0621.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

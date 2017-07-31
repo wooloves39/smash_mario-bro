@@ -284,9 +284,9 @@ void BuildPlayer(int nMyPlayer, int mode)
 		_T("character\\WARIO\\WARIO_RIGHTUP.png"), 2);
 	//DYE
 	Wario->SetTexture(DYE_LEFT,
-		_T("character\\WARIO\\WARIO_LEFTDYE.png"), 3);
+		_T("character\\WARIO\\WARIO_LEFTDIE.png"), 3);
 	Wario->SetTexture(DYE_RIGHT,
-		_T("character\\WARIO\\WARIO_RIGHTDYE.png"), 3);
+		_T("character\\WARIO\\WARIO_RIGHTDIE.png"), 3);
 	//LOSE
 	Wario->SetTexture(LOSE,
 		_T("character\\WARIO\\WARIO_LOSE.png"), 2);
@@ -447,16 +447,16 @@ void BuildPlayer(int nMyPlayer, int mode)
 		m_Player[0]->SetPosition(-200, 300);
 		m_Player[0]->SetStatus(BASIC_RIGHT);	//현재상태 셋팅 
 
-		m_Player[1] = new CPlayer(26);
+		m_Player[1] = new CAIPlayer(26);
 		m_Player[1]->SetPosition(200, 300);
 		m_Player[1]->SetStatus(BASIC_LEFT);	//현재상태 셋팅 
 
 
-		m_Player[2] = new CPlayer(26);
+		m_Player[2] = new CAIPlayer(26);
 		m_Player[2]->SetPosition(0, 300);
 		m_Player[2]->SetStatus(BASIC_LEFT);	//현재상태 셋팅 
 
-		m_Player[3] = new CPlayer(26);
+		m_Player[3] = new CAIPlayer(26);
 		m_Player[3]->SetPosition(100, 300);
 		m_Player[3]->SetStatus(BASIC_LEFT);	//현재상태 셋팅 
 	}
