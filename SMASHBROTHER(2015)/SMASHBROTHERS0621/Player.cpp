@@ -125,7 +125,7 @@ void  CPlayer::JumpTimer(void)//벡터로 바꾸기
 void CPlayer::MoveX(const POINT& d3dxvShift)
 {
 
-	if (m_Velocity.x <= 5 && m_Velocity.x >= -5)
+	if (m_Velocity.x <= Player_option.velocityX_max && m_Velocity.x >= -Player_option.velocityX_max)
 		m_Velocity.x += d3dxvShift.x;
 	m_Position.x += m_Velocity.x;
 
@@ -288,8 +288,8 @@ void CPlayer::defance(CPlayer **other, int player_num)
 				switch (other[i]->GetStatus())
 				{
 				case HATTACK_RIGHT:
-					if (m_Position.x - 100 < other_POS.x&&m_Position.x > other_POS.x) {
-						gage += 4;
+					if (m_Position.x - (other[i]->Player_option.collsion_Length+20) < other_POS.x&&m_Position.x > other_POS.x) {
+						gage += 3;
 						attacker_num = i;
 						attack_SpriteCount = other[attacker_num]->Get_SPcount();
 
@@ -305,9 +305,9 @@ void CPlayer::defance(CPlayer **other, int player_num)
 					}
 					break;
 				case HATTACK_LEFT:
-					if (m_Position.x + 100 > other_POS.x&&m_Position.x < other_POS.x) {
+					if (m_Position.x + (other[i]->Player_option.collsion_Length + 20) > other_POS.x&&m_Position.x < other_POS.x) {
 						attacker_num = i;
-						gage += 4;
+						gage += 3;
 						attack_SpriteCount = other[attacker_num]->Get_SPcount();
 						impact_de = true;
 						if (GetStatus() == 14) {
@@ -321,9 +321,9 @@ void CPlayer::defance(CPlayer **other, int player_num)
 					}
 					break;
 				case ATTACK1_RIGHT:
-					if (m_Position.x - 80 < other_POS.x&&m_Position.x > other_POS.x) {
+					if (m_Position.x - (other[i]->Player_option.collsion_Length) < other_POS.x&&m_Position.x > other_POS.x) {
 						attacker_num = i;
-						gage += 2;
+						gage += 1;
 						attack_SpriteCount = other[attacker_num]->Get_SPcount();
 						impact_de = true;
 						if (GetStatus() == 15) {
@@ -336,9 +336,9 @@ void CPlayer::defance(CPlayer **other, int player_num)
 					}
 					break;
 				case ATTACK1_LEFT:
-					if (m_Position.x + 80 > other_POS.x&&m_Position.x < other_POS.x) {
+					if (m_Position.x + (other[i]->Player_option.collsion_Length ) > other_POS.x&&m_Position.x < other_POS.x) {
 						attacker_num = i;
-						gage += 2;
+						gage += 1;
 						attack_SpriteCount = other[attacker_num]->Get_SPcount();
 						impact_de = true;
 						if (GetStatus() == 14) {
@@ -351,9 +351,9 @@ void CPlayer::defance(CPlayer **other, int player_num)
 					}
 					break;
 				case KICK_RIGHT:
-					if (m_Position.x - 90 < other_POS.x&&m_Position.x > other_POS.x) {
+					if (m_Position.x - (other[i]->Player_option.collsion_Length + 10) < other_POS.x&&m_Position.x > other_POS.x) {
 						attacker_num = i;
-						gage += 2;
+						gage += 1;
 						attack_SpriteCount = other[attacker_num]->Get_SPcount();
 						impact_de = true;
 						if (GetStatus() == 15) {
@@ -366,9 +366,9 @@ void CPlayer::defance(CPlayer **other, int player_num)
 					}
 					break;
 				case KICK_LEFT:
-					if (m_Position.x + 90 > other_POS.x&&m_Position.x < other_POS.x) {
+					if (m_Position.x + (other[i]->Player_option.collsion_Length + 10) > other_POS.x&&m_Position.x < other_POS.x) {
 						attacker_num = i;
-						gage += 2;
+						gage += 1;
 						attack_SpriteCount = other[attacker_num]->Get_SPcount();
 						impact_de = true;
 						if (GetStatus() == 14) {
@@ -402,7 +402,7 @@ void CPlayer::attack(CPlayer **other, int player_num) {
 				switch (m_State)
 				{
 				case HATTACK_RIGHT:
-					if (m_Position.x + 100 > other_POS.x&&m_Position.x < other_POS.x) {
+					if (m_Position.x + (Player_option.collsion_Length+10)> other_POS.x&&m_Position.x < other_POS.x) {
 						other[i]->attacker_num = myindex;
 						other[i]->impact = true;
 						if (other[i]->GetStatus() == DEFENSE_LEFT || other[i]->GetStatus() == DEFENSE_LEFT)
@@ -412,7 +412,7 @@ void CPlayer::attack(CPlayer **other, int player_num) {
 					}
 					break;
 				case HATTACK_LEFT:
-					if (m_Position.x - 100 < other_POS.x&&m_Position.x > other_POS.x) {
+					if (m_Position.x - (Player_option.collsion_Length+10)< other_POS.x&&m_Position.x > other_POS.x) {
 						other[i]->attacker_num = myindex;
 						other[i]->impact = true;
 						if (other[i]->GetStatus() == DEFENSE_RIGHT || other[i]->GetStatus() == DEFENSE_LEFT)
@@ -422,7 +422,7 @@ void CPlayer::attack(CPlayer **other, int player_num) {
 					}
 					break;
 				case ATTACK1_RIGHT:
-					if (m_Position.x + 80 > other_POS.x&&m_Position.x < other_POS.x) {
+					if (m_Position.x + Player_option.collsion_Length > other_POS.x&&m_Position.x < other_POS.x) {
 						other[i]->attacker_num = myindex;
 						other[i]->impact = true;
 						if (other[i]->GetStatus() == DEFENSE_LEFT || other[i]->GetStatus() == DEFENSE_RIGHT) {
@@ -431,44 +431,44 @@ void CPlayer::attack(CPlayer **other, int player_num) {
 						}
 						else
 							damage_num += 8;
-						gage += 4;
+						gage += 3;
 
 
 					}
 					break;
 				case ATTACK1_LEFT:
-					if (m_Position.x - 80 < other_POS.x&&m_Position.x > other_POS.x) {
+					if (m_Position.x - (Player_option.collsion_Length) < other_POS.x&&m_Position.x > other_POS.x) {
 						other[i]->attacker_num = myindex;
 						other[i]->impact = true;
 						if (other[i]->GetStatus() == DEFENSE_LEFT || other[i]->GetStatus() == DEFENSE_RIGHT)
 							damage_num += 3;
 						else
 							damage_num += 8;
-						gage += 4;
+						gage += 3;
 
 					}
 					break;
 				case KICK_RIGHT:
-					if (m_Position.x + 90 > other_POS.x&&m_Position.x < other_POS.x) {
+					if (m_Position.x + (Player_option.collsion_Length+10) > other_POS.x&&m_Position.x < other_POS.x) {
 						other[i]->attacker_num = myindex;
 						other[i]->impact = true;
 						if (other[i]->GetStatus() == DEFENSE_LEFT || other[i]->GetStatus() == DEFENSE_RIGHT)
 							damage_num += 3;
 						else
 							damage_num += 8;
-						gage += 4;
+						gage += 3;
 
 					}
 					break;
 				case KICK_LEFT:
-					if (m_Position.x - 90 < other_POS.x&&m_Position.x > other_POS.x) {
+					if (m_Position.x - (Player_option.collsion_Length+10) < other_POS.x&&m_Position.x > other_POS.x) {
 						other[i]->attacker_num = myindex;
 						other[i]->impact = true;
 						if (other[i]->GetStatus() == DEFENSE_LEFT || other[i]->GetStatus() == DEFENSE_RIGHT)
 							damage_num += 3;
 						else
 							damage_num += 8;
-						gage += 4;
+						gage += 3;
 
 					}
 					break;
@@ -563,7 +563,7 @@ void CPlayer::KeyState(CCamera& cam, int state, int mode, int player) {
 
 							if (m_bJump == false)
 							{
-								if (JumpCount != 2) {
+								if (JumpCount != Player_option.JumpCount) {
 									charSystem->playSound(FMOD_CHANNEL_REUSE, charSound[1], false, &pChannel);
 									m_bJump = true;
 
@@ -719,7 +719,7 @@ void CPlayer::KeyState(CCamera& cam, int state, int mode, int player) {
 							{
 								if (m_bJump == false)
 								{
-									if (JumpCount != 2) {
+									if (JumpCount != Player_option.JumpCount) {
 										charSystem->playSound(FMOD_CHANNEL_REUSE, charSound[1], false, &pChannel);
 										m_bJump = true;
 
@@ -875,7 +875,7 @@ void CPlayer::KeyState(CCamera& cam, int state, int mode, int player) {
 
 								if (m_bJump == false)
 								{
-									if (JumpCount != 2) {
+									if (JumpCount != Player_option.JumpCount) {
 										charSystem->playSound(FMOD_CHANNEL_REUSE, charSound[1], false, &pChannel);
 										m_bJump = true;
 										JumpTimer();
@@ -964,8 +964,7 @@ void CPlayer::KeyState(CCamera& cam, int state, int mode, int player) {
 					}
 					if (dwDirection)
 					{
-						Move(dwDirection, 3.0f);
-
+						Move(dwDirection, Player_option.speed);
 					}
 
 					FrameEnd = false;

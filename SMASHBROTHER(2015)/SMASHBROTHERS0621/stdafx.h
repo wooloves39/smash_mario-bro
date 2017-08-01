@@ -48,8 +48,11 @@
 //------------CHAR DEFINE---------------//
 #define MARIO					0;
 #define WARIO					1;
-#define RUISY					2;
+#define LUISY					2;
+#define WALUISY					3;
 
+//0801
+#define ONE_PLAYER					-1
 
 //------------DEFINE HEADER-------------//
 #include <Windows.h>

@@ -10,7 +10,48 @@ typedef struct Image
 	UINT	g_nSpriteX;			// 스프라이트 가로
 	UINT	g_nSpriteY;			// 스프라이트 세로
 };
-
+typedef struct player_options {
+	float speed;
+	float velocityX_max;
+	int JumpCount;
+	int smash_count;
+	float collsion_Length;
+	void setting(int character) {
+		switch (character)
+		{
+		case 0:
+			speed = 5.0f;
+			velocityX_max = 10;
+			JumpCount = 2;
+			smash_count = 3;
+			collsion_Length = 80;
+			break;
+		case 1:
+			speed = 3.0f;
+			velocityX_max = 5;
+			JumpCount = 2;
+			smash_count = 4;
+			collsion_Length = 80;
+			break;
+		case 2:
+			speed = 3.0f;
+			velocityX_max = 5;
+			JumpCount = 3;
+			smash_count = 3;
+			collsion_Length = 80;
+			break;
+		case 3:
+			speed = 3.0f;
+			velocityX_max = 5;
+			JumpCount = 2;
+			smash_count = 3;
+			collsion_Length = 100;
+			break;
+		default:
+			break;
+		}
+	}
+};
 class CPlayer
 {
 public:
@@ -18,7 +59,7 @@ public:
 	POINT m_Velocity;//가속도
 
 	POINT m_dirRight;//플레이어의 방향
-
+	player_options Player_option;
 	int nTexture;//스프라이트의 개수
 	//강한 공격 게이지 및 수치
 	int smash_point = 3;
@@ -121,7 +162,7 @@ public:
 	void smashsub() { if (smash_point > 0)--smash_point; }//강한 공격으로 스매시 포인터 1개씩감소
 	void smashadd() {
 		if (gage >= 10) {
-			if (smash_point < 3)
+			if (smash_point < Player_option.smash_count)
 				++smash_point;
 			gage = 0;
 		}
@@ -132,6 +173,7 @@ public:
 		delete[] m_ppTexture;
 		rank_state.Destroy();
 		UI.Destroy();
+		charSystem->release(); // 해제
 	}
 	virtual bool AI() {//AI인지 플레이어인지 판별하는 함수
 		return false;

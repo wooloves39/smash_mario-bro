@@ -2,12 +2,6 @@
 #include "Camera.h"
 #include "Player.h"
 #include"map.h"
-
-//06/17  맵 카메라 H 전체 교체 필요 점수 판 만들어 놨고 이미지 할당해놔야함.
-//임팩트 이미지를 편집하지 못함.. 부탁드림
-//캐릭터 선택 할수 있게 부탁
-//전체 state가 rank가 되면 win,lose로  캐릭터 스프라이트 할당할껀데 basic으로 안돌아가게 구현 부탁
-//
 int state = 0;
 enum state { title, cho_map, cho_cha, play, ranking, ending };//스테이트 순서 변경
 enum DIRECTION_P
@@ -35,9 +29,15 @@ static UCHAR pKeyBuffer[256];
 int mode;//1피냐 2피냐
 int PlayTime = 99;//플레이 타임
 char Playtime_t[3];
-//-----Player추가 
-int		  nowPlayer;	//현재 내가 움직이고있는 플레이어
+
+int		  nowPlayer[2] = { 0, 3 };	//현재 내가 움직이고있는 플레이어
 int		  nPlayer;		//현재 플레이하는 모든 플레이어의 수
+bool Player1 = false;
+bool Player2 = false;
+
+
+//-----Player추가 
+
 CPlayer** m_Player;
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -45,8 +45,16 @@ map m;
 CCamera cam;
 int map_stage;
 CImage demage_UI;
+
+//SET PLAYER를위해 캐릭터를 전역변수로선언
+CPlayer *Mario;
+CPlayer *Wario;
+CPlayer *Luizy;
+CPlayer *Waluizy;
+
+
 void setranking() {
-	pChannel[0]->stop();
+	//pChannel[0]->stop();
 	pSystem->playSound(FMOD_CHANNEL_REUSE, stateSound[ranking - 2], false, &pChannel[0]);
 	state = ranking;
 	for (int i = 0; i < nPlayer; i++) {
@@ -75,8 +83,8 @@ void createSound() {
 	pSystem->createSound("sound\\opening.mp3", FMOD_HARDWARE | FMOD_LOOP_NORMAL, NULL, &stateSound[title]);
 	pSystem->createSound("sound\\choice.mp3", FMOD_HARDWARE | FMOD_LOOP_NORMAL, NULL, &stateSound[cho_map]);
 
-	pSystem->createSound("sound\\ranking.mp3", FMOD_HARDWARE | FMOD_LOOP_NORMAL, NULL, &stateSound[ranking-2]);
-	pSystem->createSound("sound\\ending.mp3", FMOD_HARDWARE | FMOD_LOOP_NORMAL, NULL, &stateSound[ending-2]);
+	pSystem->createSound("sound\\ranking.mp3", FMOD_HARDWARE | FMOD_LOOP_NORMAL, NULL, &stateSound[ranking - 2]);
+	pSystem->createSound("sound\\ending.mp3", FMOD_HARDWARE | FMOD_LOOP_NORMAL, NULL, &stateSound[ending - 2]);
 	pSystem->createSound("sound\\imfact\\choice.wav", FMOD_HARDWARE | FMOD_LOOP_OFF, NULL, &choiceSound);
 	pSystem->createSound("sound\\imfact\\change.wav", FMOD_HARDWARE | FMOD_LOOP_OFF, NULL, &changeSound);
 }//플레이전 설정에서 사용되는 사운드들
@@ -94,7 +102,7 @@ void reset() {//리플레이시 값들을 초기화
 	sel2.y = 175 + 120 + 25;
 	sel2.x = 300 * 3 + 50 + 125;
 	PlayTime = 99;
-	pSystem->playSound(FMOD_CHANNEL_REUSE, stateSound[cho_map], false, &pChannel[0]);
+
 };
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdParam, int nCmdShow)
 {
@@ -148,10 +156,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdPa
 
 //-----------------------------------------------------------//
 
-void BuildPlayer(int nMyPlayer, int mode)
+void BuildPlayer()
 {
 
-	CPlayer *Mario = new CPlayer(26);
+	Mario = new CPlayer(26);
 	//BASIC 
 	Mario->SetTexture(BASIC_RIGHT,
 		_T("character\\MARIO\\MARIO_RIGHTBASIC.png"), 4);
@@ -225,7 +233,7 @@ void BuildPlayer(int nMyPlayer, int mode)
 
 
 	//2. Wario
-	CPlayer *Wario = new CPlayer(26);
+	Wario = new CPlayer(26);
 	//BASIC
 	Wario->SetTexture(BASIC_RIGHT,
 		_T("character\\WARIO\\WARIO_RIGHTBASIC.png"), 4);
@@ -298,7 +306,7 @@ void BuildPlayer(int nMyPlayer, int mode)
 	Wario->UI.Load("character\\WARIO\\wario_UI.png");
 
 	//3. LUIZY
-	CPlayer *Luizy = new CPlayer(26);
+	Luizy = new CPlayer(26);
 	//BASIC
 	Luizy->SetTexture(BASIC_RIGHT,
 		_T("character\\LUIZY\\LUIZY_RIGHTBASIC.png"), 4);
@@ -369,7 +377,7 @@ void BuildPlayer(int nMyPlayer, int mode)
 	Luizy->rank_state.Load("character\\LUIZY\\luizyUI.png");
 	Luizy->UI.Load("character\\LUIZY\\luizy_UI.png");
 
-	CPlayer *Waluizy = new CPlayer(26);
+	Waluizy = new CPlayer(26);
 	//BASIC
 	Waluizy->SetTexture(BASIC_RIGHT,
 		_T("character\\WALUIZY\\WALUIZY_RIGHTBASIC.png"), 4);
@@ -440,9 +448,17 @@ void BuildPlayer(int nMyPlayer, int mode)
 	Waluizy->rank_state.Load("character\\WALUIZY\\waluizyUI.png");
 	Waluizy->UI.Load("character\\WALUIZY\\waluizy_UI.png");
 
+}// 캐릭터 스프라이트를 전부 읽어 들인후 해당 캐릭터로 배정
+void SetPlayerChar(int Player1, int Player2)
+{
 	m_Player = new CPlayer*[4];
+
+	// -1이면 1p mode 
+	if (Player2 == ONE_PLAYER) mode = 1;
+
 	//1. Mario
-	if (mode == 1) {
+	if (mode == 1)
+	{
 		m_Player[0] = new CPlayer(26);
 		m_Player[0]->SetPosition(-200, 300);
 		m_Player[0]->SetStatus(BASIC_RIGHT);	//현재상태 셋팅 
@@ -459,8 +475,91 @@ void BuildPlayer(int nMyPlayer, int mode)
 		m_Player[3] = new CAIPlayer(26);
 		m_Player[3]->SetPosition(100, 300);
 		m_Player[3]->SetStatus(BASIC_LEFT);	//현재상태 셋팅 
+
+		switch (Player1)
+		{
+		case 0:
+			m_Player[0]->SetImage(Mario->GetImage());
+			m_Player[0]->rank_state = Mario->rank_state;
+			m_Player[0]->UI = Mario->UI;
+			m_Player[0]->Player_option.setting(0);
+			m_Player[1]->SetImage(Wario->GetImage());
+			m_Player[1]->rank_state = Wario->rank_state;
+			m_Player[1]->UI = Wario->UI;
+			m_Player[1]->Player_option.setting(1);
+			m_Player[2]->SetImage(Luizy->GetImage());
+			m_Player[2]->rank_state = Luizy->rank_state;
+			m_Player[2]->UI = Luizy->UI;
+			m_Player[2]->Player_option.setting(2);
+			m_Player[3]->SetImage(Waluizy->GetImage());
+			m_Player[3]->rank_state = Waluizy->rank_state;
+			m_Player[3]->UI = Waluizy->UI;
+			m_Player[3]->Player_option.setting(3);
+			break;
+		case 1:
+			m_Player[1]->SetImage(Mario->GetImage());
+			m_Player[1]->rank_state = Mario->rank_state;
+			m_Player[1]->UI = Mario->UI;
+			m_Player[1]->Player_option.setting(0);
+			m_Player[2]->SetImage(Wario->GetImage());
+			m_Player[2]->rank_state = Wario->rank_state;
+			m_Player[2]->UI = Wario->UI;
+			m_Player[2]->Player_option.setting(1);
+			m_Player[0]->SetImage(Luizy->GetImage());
+			m_Player[0]->rank_state = Luizy->rank_state;
+			m_Player[0]->UI = Luizy->UI;
+			m_Player[0]->Player_option.setting(2);
+			m_Player[3]->SetImage(Waluizy->GetImage());
+			m_Player[3]->rank_state = Waluizy->rank_state;
+			m_Player[3]->UI = Waluizy->UI;
+			m_Player[3]->Player_option.setting(3);
+			break;
+		case 2:
+			m_Player[1]->SetImage(Mario->GetImage());
+			m_Player[1]->rank_state = Mario->rank_state;
+			m_Player[1]->UI = Mario->UI;
+			m_Player[1]->Player_option.setting(0);
+			m_Player[0]->SetImage(Wario->GetImage());
+			m_Player[0]->rank_state = Wario->rank_state;
+			m_Player[0]->UI = Wario->UI;
+			m_Player[0]->Player_option.setting(1);
+			m_Player[2]->SetImage(Luizy->GetImage());
+			m_Player[2]->rank_state = Luizy->rank_state;
+			m_Player[2]->UI = Luizy->UI;
+			m_Player[2]->Player_option.setting(2);
+			m_Player[3]->SetImage(Waluizy->GetImage());
+			m_Player[3]->rank_state = Waluizy->rank_state;
+			m_Player[3]->UI = Waluizy->UI;
+			m_Player[3]->Player_option.setting(3);
+			break;
+		case 3:
+			m_Player[0]->SetImage(Waluizy->GetImage());
+			m_Player[0]->rank_state = Waluizy->rank_state;
+			m_Player[0]->UI = Waluizy->UI;
+			m_Player[0]->Player_option.setting(3);
+
+			m_Player[1]->SetImage(Mario->GetImage());
+			m_Player[1]->rank_state = Mario->rank_state;
+			m_Player[1]->UI = Mario->UI;
+			m_Player[1]->Player_option.setting(0);
+
+			m_Player[3]->SetImage(Wario->GetImage());
+			m_Player[3]->rank_state = Wario->rank_state;
+			m_Player[3]->UI = Wario->UI;
+			m_Player[3]->Player_option.setting(1);
+
+			m_Player[2]->SetImage(Luizy->GetImage());
+			m_Player[2]->rank_state = Luizy->rank_state;
+			m_Player[2]->UI = Luizy->UI;
+			m_Player[2]->Player_option.setting(2);
+			break;
+		default:
+			break;
+		}
+
 	}
-	if (mode == 2) {
+	if (mode == 2)
+	{
 		m_Player[0] = new CPlayer(26);
 		m_Player[0]->SetPosition(-200, 300);
 		m_Player[0]->SetStatus(BASIC_RIGHT);	//현재상태 셋팅 
@@ -477,73 +576,92 @@ void BuildPlayer(int nMyPlayer, int mode)
 		m_Player[3] = new CAIPlayer(26);
 		m_Player[3]->SetPosition(100, 300);
 		m_Player[3]->SetStatus(BASIC_LEFT);	//현재상태 셋팅 
+
+		bool bMario = false;
+		bool bWario = false;
+		bool bLuizy = false;
+		bool bWaluizy = false;
+
+		//--------2P셋팅
+		for (int i = 0; i < 2; ++i)
+		{
+			if (nowPlayer[i] == 0)
+			{
+				m_Player[i]->SetImage(Mario->GetImage());
+				m_Player[i]->rank_state = Mario->rank_state;
+				m_Player[i]->UI = Mario->UI;
+				m_Player[i]->Player_option.setting(0);
+				bMario = true;
+			}
+
+			if (nowPlayer[i] == 1)
+			{
+				m_Player[i]->SetImage(Luizy->GetImage());
+				m_Player[i]->rank_state = Luizy->rank_state;
+				m_Player[i]->UI = Luizy->UI;
+				m_Player[i]->Player_option.setting(2);
+				bLuizy = true;
+
+			}
+			if (nowPlayer[i] == 2)
+			{
+				m_Player[i]->SetImage(Wario->GetImage());
+				m_Player[i]->rank_state = Wario->rank_state;
+				m_Player[i]->UI = Wario->UI;
+				m_Player[i]->Player_option.setting(1);
+				bWario = true;
+			}
+
+			if (nowPlayer[i] == 3)
+			{
+				m_Player[i]->SetImage(Waluizy->GetImage());
+				m_Player[i]->rank_state = Waluizy->rank_state;
+				m_Player[i]->UI = Waluizy->UI;
+				m_Player[i]->Player_option.setting(3);
+				bWaluizy = true;
+			}
+		}
+
+		//AI
+		for (int i = 2; i < 4; ++i)
+		{
+			if (!bMario)
+			{
+				m_Player[i]->SetImage(Mario->GetImage());
+				m_Player[i]->rank_state = Mario->rank_state;
+				m_Player[i]->UI = Mario->UI;
+				m_Player[i]->Player_option.setting(0);
+				bMario = true;
+			}
+
+			else if (!bWario)
+			{
+				m_Player[i]->SetImage(Wario->GetImage());
+				m_Player[i]->rank_state = Wario->rank_state;
+				m_Player[i]->UI = Wario->UI;
+				m_Player[i]->Player_option.setting(1);
+				bWario = true;
+			}
+			else if (!bLuizy)
+			{
+				m_Player[i]->SetImage(Luizy->GetImage());
+				m_Player[i]->rank_state = Luizy->rank_state;
+				m_Player[i]->UI = Luizy->UI;
+				m_Player[i]->Player_option.setting(2);
+				bLuizy = true;
+			}
+
+			else
+			{
+				m_Player[i]->SetImage(Waluizy->GetImage());
+				m_Player[i]->rank_state = Waluizy->rank_state;
+				m_Player[i]->UI = Waluizy->UI;
+				m_Player[i]->Player_option.setting(3);
+				bWaluizy = true;
+			}
+		}
 	}
-	switch (nMyPlayer)
-	{
-	case 0:
-		m_Player[0]->SetImage(Mario->GetImage());
-		m_Player[0]->rank_state = Mario->rank_state;
-		m_Player[0]->UI = Mario->UI;
-		m_Player[1]->SetImage(Wario->GetImage());
-		m_Player[1]->rank_state = Wario->rank_state;
-		m_Player[1]->UI = Wario->UI;
-		m_Player[2]->SetImage(Luizy->GetImage());
-		m_Player[2]->rank_state = Luizy->rank_state;
-		m_Player[2]->UI = Luizy->UI;
-		m_Player[3]->SetImage(Waluizy->GetImage());
-		m_Player[3]->rank_state = Waluizy->rank_state;
-		m_Player[3]->UI = Waluizy->UI;
-		break;
-	case 1:
-		m_Player[1]->SetImage(Mario->GetImage());
-		m_Player[1]->rank_state = Mario->rank_state;
-		m_Player[1]->UI = Mario->UI;
-		m_Player[2]->SetImage(Wario->GetImage());
-		m_Player[2]->rank_state = Wario->rank_state;
-		m_Player[2]->UI = Wario->UI;
-		m_Player[0]->SetImage(Luizy->GetImage());
-		m_Player[0]->rank_state = Luizy->rank_state;
-		m_Player[0]->UI = Luizy->UI;
-		m_Player[3]->SetImage(Waluizy->GetImage());
-		m_Player[3]->rank_state = Waluizy->rank_state;
-		m_Player[3]->UI = Waluizy->UI;
-		break;
-	case 2:
-		m_Player[1]->SetImage(Mario->GetImage());
-		m_Player[1]->rank_state = Mario->rank_state;
-		m_Player[1]->UI = Mario->UI;
-		m_Player[0]->SetImage(Wario->GetImage());
-		m_Player[0]->rank_state = Wario->rank_state;
-		m_Player[0]->UI = Wario->UI;
-		m_Player[2]->SetImage(Luizy->GetImage());
-		m_Player[2]->rank_state = Luizy->rank_state;
-		m_Player[2]->UI = Luizy->UI;
-		m_Player[3]->SetImage(Waluizy->GetImage());
-		m_Player[3]->rank_state = Waluizy->rank_state;
-		m_Player[3]->UI = Waluizy->UI;
-		break;
-	case 3:
-		m_Player[0]->SetImage(Waluizy->GetImage());
-		m_Player[0]->rank_state = Waluizy->rank_state;
-		m_Player[0]->UI = Waluizy->UI;
-
-		m_Player[1]->SetImage(Mario->GetImage());
-		m_Player[1]->rank_state = Mario->rank_state;
-		m_Player[1]->UI = Mario->UI;
-
-		m_Player[3]->SetImage(Wario->GetImage());
-		m_Player[3]->rank_state = Wario->rank_state;
-		m_Player[3]->UI = Wario->UI;
-
-		m_Player[2]->SetImage(Luizy->GetImage());
-		m_Player[2]->rank_state = Luizy->rank_state;
-		m_Player[2]->UI = Luizy->UI;
-		break;
-	default:
-		break;
-	}
-}// 캐릭터 스프라이트를 전부 읽어 들인후 해당 캐릭터로 배정
-
+}
 LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
 	static RECT rect;
@@ -700,7 +818,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 					sel.x = 50 + 125;
 					sel.y = 175 + 120 + 25;
 
-					nowPlayer = MARIO;
+					nowPlayer[0] = MARIO;
 					pSystem->playSound(FMOD_CHANNEL_REUSE, choiceSound, false, &pChannel[1]);
 
 					KillTimer(hWnd, 1);
@@ -777,7 +895,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 					sel.y = 175 + 120 + 25;
 					sel2.x = 50 + 125 + 900;
 					sel2.y = 175 + 120 + 25;
-					nowPlayer = MARIO;
+					nowPlayer[0] = MARIO;
 					pSystem->playSound(FMOD_CHANNEL_REUSE, choiceSound, false, &pChannel[1]);
 
 					KillTimer(hWnd, 1);
@@ -794,20 +912,20 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 				case VK_LEFT:
 					pSystem->playSound(FMOD_CHANNEL_REUSE, changeSound, false, &pChannel[1]);
 					sel.x -= 250 + 50;
-					--nowPlayer;
+					--nowPlayer[0];
 					if (sel.x < 0) {
 						sel.x = 300 * 3 + 50 + 125;
-						nowPlayer = 3;
+						nowPlayer[0] = 3;
 					}
 					break;
 
 				case VK_RIGHT:
 					pSystem->playSound(FMOD_CHANNEL_REUSE, changeSound, false, &pChannel[1]);
 					sel.x += 300;
-					++nowPlayer;
+					++nowPlayer[0];
 					if (sel.x > 1200) {
 						sel.x = 175;
-						nowPlayer = 0;
+						nowPlayer[0] = 0;
 					}
 					break;
 				case 'A':
@@ -822,11 +940,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 					//--------PLAYER SET--------//
 
 					nPlayer = 4; // 현재 플레이하는 플레이어는 1명. 
-					BuildPlayer(nowPlayer, mode);
-					if (mode == 1)
-						cam.setPos(m_Player[0]->GetPosition().x);
-					else if (mode == 2)
-						cam.setPos(m_Player[0]->GetPosition().x, m_Player[1]->GetPosition().x);
+					BuildPlayer();
+					SetPlayerChar(nowPlayer[0], ONE_PLAYER);
+					cam.setPos(m_Player[0]->GetPosition().x);
+
 					wsprintf(Playtime_t, TEXT("%d"), PlayTime);
 					SetTimer(hWnd, 0, 100, NULL);
 
@@ -838,86 +955,74 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 				switch (wParam)
 				{
 				case 'A':
-					pSystem->playSound(FMOD_CHANNEL_REUSE, changeSound, false, &pChannel[1]);
-					sel.x -= 250 + 50;
-					--nowPlayer;
-					if (sel.x < 0) {
-						sel.x = 300 * 3 + 50 + 125;
-						nowPlayer = 3;
+					if (Player1 == false) {
+						pSystem->playSound(FMOD_CHANNEL_REUSE, changeSound, false, &pChannel[1]);
+						sel.x -= 250 + 50;
+						--nowPlayer[0];
+						if (sel.x < 0) {
+							sel.x = 300 * 3 + 50 + 125;
+							nowPlayer[0] = 3;
+						}
 					}
 					break;
 
-				case 'D':
-					pSystem->playSound(FMOD_CHANNEL_REUSE, changeSound, false, &pChannel[1]);
-					sel.x += 300;
-					++nowPlayer;
-					if (sel.x > 1200) {
-						sel.x = 175;
-						nowPlayer = 0;
+				case 'D':	
+					if (Player1 == false) {
+						pSystem->playSound(FMOD_CHANNEL_REUSE, changeSound, false, &pChannel[1]);
+						sel.x += 300;
+						++nowPlayer[0];
+						if (sel.x > 1200) {
+							sel.x = 175;
+							nowPlayer[0] = 0;
+						}
 					}
 					break;
 				case 'F':
 					pSystem->playSound(FMOD_CHANNEL_REUSE, choiceSound, false, &pChannel[1]);
-					state = play;
-					sel.x = 100 + 125 + 50;
-					sel.y = 175 + 120 + 50;
-					SetTimer(hWnd, 5, 1000, NULL);
-					SetTimer(hWnd, 6, 200, NULL);
-					pChannel[0]->stop();
-					m.mapSystem->playSound(FMOD_CHANNEL_REUSE, m.mapSound, false, &pChannel[0]);
-					//--------PLAYER SET--------//
-
-					nPlayer = 4; // 현재 플레이하는 플레이어는 1명. 
-					BuildPlayer(nowPlayer, mode);
-
-					if (mode == 1)
-						cam.setPos(m_Player[0]->GetPosition().x);
-					else if (mode == 2)
-						cam.setPos(m_Player[0]->GetPosition().x, m_Player[1]->GetPosition().x);
-					wsprintf(Playtime_t, TEXT("%d"), PlayTime);
-					SetTimer(hWnd, 0, 100, NULL);
-
+					Player1 = true;
+					break;
 				case VK_LEFT:
-					pSystem->playSound(FMOD_CHANNEL_REUSE, changeSound, false, &pChannel[1]);
-					sel2.x -= 250 + 50;
-
-					if (sel2.x < 0) {
-						sel2.x = 300 * 3 + 50 + 125;
-
+					if (Player2 == false) {
+						pSystem->playSound(FMOD_CHANNEL_REUSE, changeSound, false, &pChannel[1]);
+						sel2.x -= 250 + 50;
+						--nowPlayer[1];
+						if (sel2.x < 0) {
+							sel2.x = 300 * 3 + 50 + 125;
+							nowPlayer[1] = 3;
+						}
 					}
 					break;
 				case VK_RIGHT:
-					pSystem->playSound(FMOD_CHANNEL_REUSE, changeSound, false, &pChannel[1]);
-					sel2.x += 300;
-
-					if (sel2.x > 1200) {
-						sel2.x = 175;
-
+					if (Player2 == false) {
+						pSystem->playSound(FMOD_CHANNEL_REUSE, changeSound, false, &pChannel[1]);
+						sel2.x += 300;
+						++nowPlayer[1];
+						if (sel2.x > 1200) {
+							sel2.x = 175;
+							nowPlayer[1] = 0;
+						}
 					}
 					break;
 				case VK_NUMPAD4:
 					pSystem->playSound(FMOD_CHANNEL_REUSE, choiceSound, false, &pChannel[1]);
-					state = play;
-					sel2.x = 100 + 125 + 50;
-					sel2.y = 175 + 120 + 50;
-					SetTimer(hWnd, 5, 1000, NULL);
-					SetTimer(hWnd, 6, 200, NULL);
+					Player2 = true;
+					break;
+				}
+				if (Player1==true&&Player2==true)
+				{
 					pChannel[0]->stop();
 					m.mapSystem->playSound(FMOD_CHANNEL_REUSE, m.mapSound, false, &pChannel[0]);
+
 					//--------PLAYER SET--------//
-
+					state = play;
+					SetTimer(hWnd, 5, 1000, NULL);
+					SetTimer(hWnd, 6, 200, NULL);
 					nPlayer = 4; // 현재 플레이하는 플레이어는 1명. 
-					BuildPlayer(nowPlayer, mode);
-
-					if (mode == 1)
-						cam.setPos(m_Player[0]->GetPosition().x);
-					else if (mode == 2)
-						cam.setPos(m_Player[0]->GetPosition().x, m_Player[1]->GetPosition().x);
+					BuildPlayer();
+					SetPlayerChar(nowPlayer[0], nowPlayer[1]);
+					cam.setPos(m_Player[0]->GetPosition().x, m_Player[1]->GetPosition().x);
 					wsprintf(Playtime_t, TEXT("%d"), PlayTime);
 					SetTimer(hWnd, 0, 100, NULL);
-
-					break;
-
 				}
 				break;
 			}
@@ -936,10 +1041,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 				switch (wParam) {
 				case 'A':
 					state = cho_map;
-					pSystem->playSound(FMOD_CHANNEL_REUSE, stateSound[state], false, &pChannel[0]);
 					reset();
 					KillTimer(hWnd, 0);
-
+					pSystem->playSound(FMOD_CHANNEL_REUSE, stateSound[cho_map], false, &pChannel[0]);
 					break;
 				case 'S': {
 					state = ending;
@@ -953,9 +1057,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 				case 'F':
 				case VK_NUMPAD4:
 					state = cho_map;
-					pSystem->playSound(FMOD_CHANNEL_REUSE, stateSound[state], false, &pChannel[0]);
 					reset();
 					KillTimer(hWnd, 0);
+					pSystem->playSound(FMOD_CHANNEL_REUSE, stateSound[cho_map], false, &pChannel[0]);
 					break;
 				case 'G':
 				case VK_NUMPAD5:
