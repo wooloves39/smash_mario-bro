@@ -650,7 +650,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 	switch (iMsg) {
 	case WM_CREATE:
 		GetClientRect(hWnd, &rectView);
-		Title.Load(TEXT("sub_image\\titleUI.bmp"));
+		Title.Load(TEXT("sub_image\\titleUI.png"));
 
 		Choice_cha[0].Load(TEXT("sub_image\\choice1.png"));
 		Choice_cha[1].Load(TEXT("sub_image\\choice2.png"));
