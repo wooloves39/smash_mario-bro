@@ -668,7 +668,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 		mapEX[7].Load(TEXT("map\\map8\\map8.bmp"));
 		mapEX[8].Load(TEXT("map\\map9\\map9.bmp"));
 		mapEX[9].Load(TEXT("sub_image\\random_map.bmp"));
-		demage_UI.Load(TEXT("sub_image\\demage_UI.bmp"));
+		demage_UI.Load(TEXT("sub_image\\demage_UI.png"));
 		createSound();
 		Rankstate.Load(TEXT("sub_image\\ranking.bmp"));//랭킹 배경 구현
 		pChannel[0]->setVolume(stateVolume);
