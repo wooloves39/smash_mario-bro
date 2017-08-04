@@ -35,7 +35,6 @@ int		  nPlayer;		//현재 플레이하는 모든 플레이어의 수
 bool Player1 = false;
 bool Player2 = false;
 
-
 //-----Player추가 
 
 CPlayer** m_Player;
@@ -235,8 +234,7 @@ void BuildPlayer()
 		_T("character\\MARIO\\MARIO_RIGHT_CEX.png"), 2);
 	Mario->SetTexture(CHANGE_EX_LEFT,
 		_T("character\\MARIO\\MARIO_LEFT_CEX.png"), 2);
-
-
+	Mario->Setpaticle(_T("character\\fly_impact.png"), 4);
 	//2. Wario
 	Wario = new CPlayer(28);
 	//BASIC
@@ -315,7 +313,7 @@ void BuildPlayer()
 
 	Wario->rank_state.Load("character\\WARIO\\warioUI.png");
 	Wario->UI.Load("character\\WARIO\\wario_UI.png");
-
+	Wario->Setpaticle(_T("character\\fly_impact.png"), 4);
 	//3. LUIZY
 	Luizy = new CPlayer(28);
 	//BASIC
@@ -392,7 +390,7 @@ void BuildPlayer()
 		_T("character\\LUIZY\\LUIZY_RIGHT_CEX.png"), 2);
 	Luizy->SetTexture(CHANGE_EX_LEFT,
 		_T("character\\LUIZY\\LUIZY_LEFT_CEX.png"), 2);
-
+	Luizy->Setpaticle(_T("character\\fly_impact.png"), 4);
 
 	Waluizy = new CPlayer(28);
 	//BASIC
@@ -469,7 +467,7 @@ void BuildPlayer()
 		_T("character\\WALUIZY\\WALUIZY_RIGHT_CEX.png"), 2);
 	Waluizy->SetTexture(CHANGE_EX_LEFT,
 		_T("character\\WALUIZY\\WALUIZY_LEFT_CEX.png"), 2);
-
+	Waluizy->Setpaticle(_T("character\\fly_impact.png"), 4);
 }// 캐릭터 스프라이트를 전부 읽어 들인후 해당 캐릭터로 배정
 void SetPlayerChar(int Player1, int Player2)
 {
@@ -502,78 +500,46 @@ void SetPlayerChar(int Player1, int Player2)
 		{
 		case 0:
 			m_Player[0]->SetImage(Mario->GetImage());
-			m_Player[0]->rank_state = Mario->rank_state;
-			m_Player[0]->UI = Mario->UI;
-			m_Player[0]->Player_option.setting(0);
+			m_Player[0]->setting(Mario, 0);
 			m_Player[1]->SetImage(Wario->GetImage());
-			m_Player[1]->rank_state = Wario->rank_state;
-			m_Player[1]->UI = Wario->UI;
-			m_Player[1]->Player_option.setting(1);
+			m_Player[1]->setting(Wario, 1);
 			m_Player[2]->SetImage(Luizy->GetImage());
-			m_Player[2]->rank_state = Luizy->rank_state;
-			m_Player[2]->UI = Luizy->UI;
-			m_Player[2]->Player_option.setting(2);
+			m_Player[2]->setting(Luizy, 2);
 			m_Player[3]->SetImage(Waluizy->GetImage());
-			m_Player[3]->rank_state = Waluizy->rank_state;
-			m_Player[3]->UI = Waluizy->UI;
-			m_Player[3]->Player_option.setting(3);
+			m_Player[3]->setting(Waluizy, 3);
 			break;
 		case 1:
 			m_Player[1]->SetImage(Mario->GetImage());
-			m_Player[1]->rank_state = Mario->rank_state;
-			m_Player[1]->UI = Mario->UI;
-			m_Player[1]->Player_option.setting(0);
+			m_Player[1]->setting(Mario, 0);
 			m_Player[2]->SetImage(Wario->GetImage());
-			m_Player[2]->rank_state = Wario->rank_state;
-			m_Player[2]->UI = Wario->UI;
-			m_Player[2]->Player_option.setting(1);
+			m_Player[2]->setting(Wario, 1);
 			m_Player[0]->SetImage(Luizy->GetImage());
-			m_Player[0]->rank_state = Luizy->rank_state;
-			m_Player[0]->UI = Luizy->UI;
-			m_Player[0]->Player_option.setting(2);
+			m_Player[0]->setting(Luizy, 2);
 			m_Player[3]->SetImage(Waluizy->GetImage());
-			m_Player[3]->rank_state = Waluizy->rank_state;
-			m_Player[3]->UI = Waluizy->UI;
-			m_Player[3]->Player_option.setting(3);
+			m_Player[3]->setting(Waluizy, 3);
 			break;
 		case 2:
 			m_Player[1]->SetImage(Mario->GetImage());
-			m_Player[1]->rank_state = Mario->rank_state;
-			m_Player[1]->UI = Mario->UI;
-			m_Player[1]->Player_option.setting(0);
+			m_Player[1]->setting(Mario, 0);
 			m_Player[0]->SetImage(Wario->GetImage());
-			m_Player[0]->rank_state = Wario->rank_state;
-			m_Player[0]->UI = Wario->UI;
-			m_Player[0]->Player_option.setting(1);
+			m_Player[0]->setting(Wario, 1);
 			m_Player[2]->SetImage(Luizy->GetImage());
-			m_Player[2]->rank_state = Luizy->rank_state;
-			m_Player[2]->UI = Luizy->UI;
-			m_Player[2]->Player_option.setting(2);
+			m_Player[2]->setting(Luizy, 2);
 			m_Player[3]->SetImage(Waluizy->GetImage());
-			m_Player[3]->rank_state = Waluizy->rank_state;
-			m_Player[3]->UI = Waluizy->UI;
-			m_Player[3]->Player_option.setting(3);
+			m_Player[3]->setting(Waluizy, 3);
 			break;
 		case 3:
 			m_Player[0]->SetImage(Waluizy->GetImage());
-			m_Player[0]->rank_state = Waluizy->rank_state;
-			m_Player[0]->UI = Waluizy->UI;
-			m_Player[0]->Player_option.setting(3);
+			m_Player[0]->setting(Waluizy, 3);
 
 			m_Player[1]->SetImage(Mario->GetImage());
-			m_Player[1]->rank_state = Mario->rank_state;
-			m_Player[1]->UI = Mario->UI;
-			m_Player[1]->Player_option.setting(0);
+			m_Player[1]->setting(Mario, 0);
 
 			m_Player[3]->SetImage(Wario->GetImage());
-			m_Player[3]->rank_state = Wario->rank_state;
-			m_Player[3]->UI = Wario->UI;
-			m_Player[3]->Player_option.setting(1);
+			m_Player[3]->setting(Wario, 1);
 
 			m_Player[2]->SetImage(Luizy->GetImage());
-			m_Player[2]->rank_state = Luizy->rank_state;
-			m_Player[2]->UI = Luizy->UI;
-			m_Player[2]->Player_option.setting(2);
+			m_Player[2]->setting(Luizy, 2);
 			break;
 		default:
 			break;
@@ -607,40 +573,31 @@ void SetPlayerChar(int Player1, int Player2)
 		//--------2P셋팅
 		for (int i = 0; i < 2; ++i)
 		{
-			if (nowPlayer[i] == 0)
+
+			switch (nowPlayer[i])
 			{
+			case 0:
 				m_Player[i]->SetImage(Mario->GetImage());
-				m_Player[i]->rank_state = Mario->rank_state;
-				m_Player[i]->UI = Mario->UI;
-				m_Player[i]->Player_option.setting(0);
+				m_Player[i]->setting(Mario, 0);
 				bMario = true;
-			}
-
-			if (nowPlayer[i] == 1)
-			{
+				break;
+			case 1:
 				m_Player[i]->SetImage(Luizy->GetImage());
-				m_Player[i]->rank_state = Luizy->rank_state;
-				m_Player[i]->UI = Luizy->UI;
-				m_Player[i]->Player_option.setting(2);
+				m_Player[i]->setting(Luizy, 2);
 				bLuizy = true;
-
-			}
-			if (nowPlayer[i] == 2)
-			{
+				break;
+			case 2:
 				m_Player[i]->SetImage(Wario->GetImage());
-				m_Player[i]->rank_state = Wario->rank_state;
-				m_Player[i]->UI = Wario->UI;
-				m_Player[i]->Player_option.setting(1);
+				m_Player[i]->setting(Wario, 1);
 				bWario = true;
-			}
-
-			if (nowPlayer[i] == 3)
-			{
+				break;
+			case 3:
 				m_Player[i]->SetImage(Waluizy->GetImage());
-				m_Player[i]->rank_state = Waluizy->rank_state;
-				m_Player[i]->UI = Waluizy->UI;
-				m_Player[i]->Player_option.setting(3);
+				m_Player[i]->setting(Waluizy, 3);
 				bWaluizy = true;
+				break;
+			default:
+				break;
 			}
 		}
 
@@ -650,35 +607,27 @@ void SetPlayerChar(int Player1, int Player2)
 			if (!bMario)
 			{
 				m_Player[i]->SetImage(Mario->GetImage());
-				m_Player[i]->rank_state = Mario->rank_state;
-				m_Player[i]->UI = Mario->UI;
-				m_Player[i]->Player_option.setting(0);
+				m_Player[i]->setting(Mario, 0);
 				bMario = true;
 			}
 
 			else if (!bWario)
 			{
 				m_Player[i]->SetImage(Wario->GetImage());
-				m_Player[i]->rank_state = Wario->rank_state;
-				m_Player[i]->UI = Wario->UI;
-				m_Player[i]->Player_option.setting(1);
+				m_Player[i]->setting(Wario, 1);
 				bWario = true;
 			}
 			else if (!bLuizy)
 			{
 				m_Player[i]->SetImage(Luizy->GetImage());
-				m_Player[i]->rank_state = Luizy->rank_state;
-				m_Player[i]->UI = Luizy->UI;
-				m_Player[i]->Player_option.setting(2);
+				m_Player[i]->setting(Luizy, 2);
 				bLuizy = true;
 			}
 
 			else
 			{
 				m_Player[i]->SetImage(Waluizy->GetImage());
-				m_Player[i]->rank_state = Waluizy->rank_state;
-				m_Player[i]->UI = Waluizy->UI;
-				m_Player[i]->Player_option.setting(3);
+				m_Player[i]->setting(Waluizy, 3);
 				bWaluizy = true;
 			}
 		}
@@ -1292,6 +1241,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 		switch (state)
 		{
 		case title:
+
 			Title.Draw(memDC, 0, 0, rectView.right, rectView.bottom);
 			RECT selectRC;
 
@@ -1300,6 +1250,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 			selectRC.right = 210 + sel.x;
 			selectRC.bottom = 40 + sel.y;
 			FrameRect(memDC, &selectRC, hBrush);
+
 			break;
 		case cho_map: {
 			RECT rc;
@@ -1367,6 +1318,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 
 				m_Player[i]->DrawSprite(memDC,
 					m_Player[i]->m_ppTexture[m_Player[i]->m_State].nSpriteCurrent, cam);
+				if (m_Player[i]->fly == true) m_Player[i]->DrawParticle(memDC, cam);
+
 				m_Player[i]->UI.TransparentBlt(memDC, 80 + i * 300, 660, 50, 50, 0, 0, 30, 30, RGB(255, 255, 255));
 				demage_UI.TransparentBlt(memDC, 140 + i * 300, 620, 150, 150, 0, 0, 170, 170, RGB(255, 255, 255));
 				SetBkMode(memDC, TRANSPARENT);

@@ -10,6 +10,13 @@ typedef struct Image
 	UINT	g_nSpriteX;			// 스프라이트 가로
 	UINT	g_nSpriteY;			// 스프라이트 세로
 };
+typedef struct Paticle {
+	CImage Texture;
+	UINT	nSpriteCount;		// 스프라이트 전체 인덱스
+	UINT	g_nSpriteX;			// 스프라이트 가로
+	UINT	g_nSpriteY;			// 스프라이트 세로
+	vector<pair<POINT,UINT>> Pos_and_Count;
+};
 typedef struct player_options {
 	float speed;
 	float velocityX_max;
@@ -87,6 +94,41 @@ public:
 	Sound* charSound[6];//fmod에 의거한 사운드와 채널 강한공격, 약한 공격, 점프, 강한공격을 맞을시, 약한공격을 맞을시, 죽을 시
 	int JumpCount = 0;//점프는 최대 2번 가능
 	bool fly = false;//강한공격을 맞아 날아가는 상태인지에 대한 변수
+	Paticle fly_paticle;
+	void fling_paticle() {
+		if (m_State == FLY_LEFT|| m_State == FLY_RIGHT) {
+			pair<POINT, UINT>pos = {m_Position, 0};
+			fly_paticle.Pos_and_Count.push_back(pos);
+		}
+	}
+	void Setpaticle(LPCTSTR pCImage, int nSpriteCount)
+	{
+		fly_paticle.Texture.Load(pCImage);
+		fly_paticle.g_nSpriteX = nSpriteCount;
+		fly_paticle.nSpriteCount = nSpriteCount;
+		fly_paticle.g_nSpriteY = 1;
+	}
+	void DrawParticle(HDC hDC, CCamera cam)
+	{
+		UINT nSpriteWidth = fly_paticle.Texture.GetWidth() / fly_paticle.nSpriteCount;
+		UINT nSpriteHeight = fly_paticle.Texture.GetHeight() / 1;
+		// 0605. 스프라이트 올려주는 타이머를 Player 클래스안에 넣을순없을까? 
+		for (int i = 0; i < fly_paticle.Pos_and_Count.size(); ++i) {
+			UINT xCoord = fly_paticle.Pos_and_Count[i].second%fly_paticle.g_nSpriteX;
+			UINT yCoord = fly_paticle.Pos_and_Count[i].second / fly_paticle.g_nSpriteX;
+			fly_paticle.Texture.TransparentBlt(hDC
+				,fly_paticle.Pos_and_Count[i].first.x - nSpriteWidth / 2 - cam.getPos().x, fly_paticle.Pos_and_Count[i].first.y - nSpriteHeight / 2 - cam.getPos().y*(1280 / 940) * 3, nSpriteWidth, nSpriteHeight
+				, xCoord * nSpriteWidth, yCoord * nSpriteHeight
+				, nSpriteWidth, nSpriteHeight,
+				RGB(0,0,0));
+		}
+	}
+	void setting(CPlayer* target,UINT target_name) {
+		rank_state = target->rank_state;
+		UI = target->UI;
+		Player_option.setting(target_name);
+		fly_paticle = target->fly_paticle;
+	}
 public:
 	CPlayer(int nStatus);//생성 및 초기화
 	~CPlayer();

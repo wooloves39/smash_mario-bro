@@ -70,6 +70,7 @@
 #include <memory.h>
 #include <tchar.h>
 #include<algorithm>
+#include<vector>
 #include "fmod.hpp"
 
 #pragma	comment (lib, "fmodex_vc.lib")

@@ -210,6 +210,7 @@ void CPlayer::smashing(int damage, int power, bool smash)
 			hit = true;
 		}
 		else {
+			fling_paticle();
 			if (m_State % 2 == 1)
 				HIT.x = 1;
 			else
@@ -218,6 +219,7 @@ void CPlayer::smashing(int damage, int power, bool smash)
 			if (m_Velocity.y > 2) {
 				hit = false;
 				sma = false;
+				fly_paticle.Pos_and_Count.clear();
 				if (m_State % 2 == 1)m_State = JUMP_LEFT;
 				else m_State = JUMP_RIGHT;
 				StateChangeX();
@@ -265,6 +267,7 @@ void CPlayer::gravity(void) {
 	}
 }
 //킥추가
+//0804 파티클 추가로 인해 코드 추가  HATTack부분
 void CPlayer::defance(CPlayer **other, int player_num)
 {
 	POINT other_POS;
@@ -1011,7 +1014,7 @@ void CPlayer::Timer() {
 			m_ppTexture[m_State].nSpriteCurrent = 0;
 		FrameEnd = 1;
 	}
-
+	
 	else
 	{
 		m_ppTexture[m_State].nSpriteCurrent += 1;
@@ -1063,7 +1066,14 @@ void CPlayer::Timer() {
 			}
 		}
 	}
-
+if(	m_State == FLY_LEFT || m_State == FLY_RIGHT){
+		
+		for (int i = 0; i < fly_paticle.Pos_and_Count.size(); ++i) {
+			++fly_paticle.Pos_and_Count[i].second;
+			if (fly_paticle.Pos_and_Count[i].second == 4)
+				fly_paticle.Pos_and_Count.erase(fly_paticle.Pos_and_Count.begin());
+		}
+	}
 }
 CAIPlayer::CAIPlayer(int nStatus) :CPlayer(nStatus) {
 	nTexture = nStatus; // 현재 상태의 개수 
