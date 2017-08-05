@@ -13,6 +13,7 @@ typedef struct Image
 typedef struct Paticle {
 	CImage Texture;
 	UINT	nSpriteCount;		// 스프라이트 전체 인덱스
+	UINT	nSpriteCurrent;		// 현재 스프라이트 인덱스
 	UINT	g_nSpriteX;			// 스프라이트 가로
 	UINT	g_nSpriteY;			// 스프라이트 세로
 	vector<pair<POINT,UINT>> Pos_and_Count;
@@ -81,6 +82,8 @@ public:
 	bool impact_de = false;//플레이어가 맞은 상태동안 해당 공격에 더 이상 충돌체크를 하지 않는 변수
 	CImage rank_state;//랭킹 UI
 	CImage UI;//플레이시 보이는 UI
+	Image Smash_Point;
+	int Point_sprite_index =0;
 	DWORD	m_State;			//현재상태 
 	DWORD	m_BeforeState;		//과거의상태 
 	int		DIR;	//키입력에 따른 방향
@@ -95,6 +98,7 @@ public:
 	int JumpCount = 0;//점프는 최대 2번 가능
 	bool fly = false;//강한공격을 맞아 날아가는 상태인지에 대한 변수
 	Paticle fly_paticle;
+	Paticle attack_paticle;
 	void fling_paticle() {
 		if (m_State == FLY_LEFT|| m_State == FLY_RIGHT) {
 			pair<POINT, UINT>pos = {m_Position, 0};
@@ -116,11 +120,10 @@ public:
 		for (int i = 0; i < fly_paticle.Pos_and_Count.size(); ++i) {
 			UINT xCoord = fly_paticle.Pos_and_Count[i].second%fly_paticle.g_nSpriteX;
 			UINT yCoord = fly_paticle.Pos_and_Count[i].second / fly_paticle.g_nSpriteX;
-			fly_paticle.Texture.TransparentBlt(hDC
-				,fly_paticle.Pos_and_Count[i].first.x - nSpriteWidth / 2 - cam.getPos().x, fly_paticle.Pos_and_Count[i].first.y - nSpriteHeight / 2 - cam.getPos().y*(1280 / 940) * 3, nSpriteWidth, nSpriteHeight
+			fly_paticle.Texture.Draw(hDC
+				,fly_paticle.Pos_and_Count[i].first.x - nSpriteWidth / 2 - cam.getPos().x+15, fly_paticle.Pos_and_Count[i].first.y - nSpriteHeight / 2 - cam.getPos().y*(1280 / 940) * 3+15, nSpriteWidth-15, nSpriteHeight-15
 				, xCoord * nSpriteWidth, yCoord * nSpriteHeight
-				, nSpriteWidth, nSpriteHeight,
-				RGB(0,0,0));
+				, nSpriteWidth, nSpriteHeight);
 		}
 	}
 	void setting(CPlayer* target,UINT target_name) {
@@ -128,6 +131,20 @@ public:
 		UI = target->UI;
 		Player_option.setting(target_name);
 		fly_paticle = target->fly_paticle;
+		Smash_Point = target->Smash_Point;
+	}
+	void SetSmash(LPCTSTR pCImage, int nSpriteCount) {
+		Smash_Point.Texture.Load(pCImage);
+		Smash_Point.g_nSpriteX = nSpriteCount;
+		Smash_Point.nSpriteCount = nSpriteCount;
+		Smash_Point.g_nSpriteY = 1;
+		Smash_Point.nSpriteCurrent = 0;
+	}
+	void DrawSmashPoint(HDC hDC, POINT char_pos) {
+		UINT nSpriteWidth = Smash_Point.Texture.GetWidth() / Smash_Point.nSpriteCount;
+		UINT nSpriteHeight = Smash_Point.Texture.GetHeight() / 1;
+		for (int i = 0; i < smash_point; ++i)
+			Smash_Point.Texture.Draw(hDC, char_pos.x+i*30, char_pos.y, 25, 25, Point_sprite_index * 50, 0, nSpriteWidth, nSpriteHeight);
 	}
 public:
 	CPlayer(int nStatus);//생성 및 초기화

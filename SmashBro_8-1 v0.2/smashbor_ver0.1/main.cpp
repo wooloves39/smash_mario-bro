@@ -235,6 +235,7 @@ void BuildPlayer()
 	Mario->SetTexture(CHANGE_EX_LEFT,
 		_T("character\\MARIO\\MARIO_LEFT_CEX.png"), 2);
 	Mario->Setpaticle(_T("character\\fly_impact.png"), 4);
+	Mario->SetSmash(_T("character\\rotateStar.png"),12 );
 	//2. Wario
 	Wario = new CPlayer(28);
 	//BASIC
@@ -314,6 +315,7 @@ void BuildPlayer()
 	Wario->rank_state.Load("character\\WARIO\\warioUI.png");
 	Wario->UI.Load("character\\WARIO\\wario_UI.png");
 	Wario->Setpaticle(_T("character\\fly_impact.png"), 4);
+	Wario->SetSmash(_T("character\\rotateStar.png"), 12);
 	//3. LUIZY
 	Luizy = new CPlayer(28);
 	//BASIC
@@ -391,7 +393,7 @@ void BuildPlayer()
 	Luizy->SetTexture(CHANGE_EX_LEFT,
 		_T("character\\LUIZY\\LUIZY_LEFT_CEX.png"), 2);
 	Luizy->Setpaticle(_T("character\\fly_impact.png"), 4);
-
+	Luizy->SetSmash(_T("character\\rotateStar.png"), 12);
 	Waluizy = new CPlayer(28);
 	//BASIC
 	Waluizy->SetTexture(BASIC_RIGHT,
@@ -468,6 +470,7 @@ void BuildPlayer()
 	Waluizy->SetTexture(CHANGE_EX_LEFT,
 		_T("character\\WALUIZY\\WALUIZY_LEFT_CEX.png"), 2);
 	Waluizy->Setpaticle(_T("character\\fly_impact.png"), 4);
+	Waluizy->SetSmash(_T("character\\rotateStar.png"), 12);
 }// 캐릭터 스프라이트를 전부 읽어 들인후 해당 캐릭터로 배정
 void SetPlayerChar(int Player1, int Player2)
 {
@@ -675,7 +678,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 		pSystem->playSound(FMOD_CHANNEL_REUSE, stateSound[title], false, &pChannel[0]);
 
 		pChannel[1]->setVolume(0.5);
-		sel.x = 330;
+		sel.x = 625;
 		sel.y = 530;
 
 		wsprintf(Playtime_t, TEXT("%d"), PlayTime);
@@ -999,6 +1002,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 			*pKeyBuffer = NULL;
 			dwDirection = 0;
 			GameReady = true;
+			switch (wParam) {
+			case 'Q':
+				break;
+			
+			}
 			if (GetKeyboardState(pKeyBuffer))
 			{
 				SetTimer(hWnd, 2, 16, NULL);//점프타이머
@@ -1245,9 +1253,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 			Title.Draw(memDC, 0, 0, rectView.right, rectView.bottom);
 			RECT selectRC;
 
-			selectRC.left = -210 + sel.x;
+			selectRC.left = -150 + sel.x;
 			selectRC.top = -40 + sel.y;
-			selectRC.right = 210 + sel.x;
+			selectRC.right = 150 + sel.x;
 			selectRC.bottom = 40 + sel.y;
 			FrameRect(memDC, &selectRC, hBrush);
 
@@ -1318,6 +1326,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 
 				m_Player[i]->DrawSprite(memDC,
 					m_Player[i]->m_ppTexture[m_Player[i]->m_State].nSpriteCurrent, cam);
+				POINT test;
+				test.x = 80 + i * 300;
+				test.y = 630;
+				m_Player[i]->DrawSmashPoint(memDC, test);
 				if (m_Player[i]->fly == true) m_Player[i]->DrawParticle(memDC, cam);
 
 				m_Player[i]->UI.TransparentBlt(memDC, 80 + i * 300, 660, 50, 50, 0, 0, 30, 30, RGB(255, 255, 255));

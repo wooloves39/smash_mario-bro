@@ -433,7 +433,7 @@ void CPlayer::attack(CPlayer **other, int player_num) {
 				switch (m_State)
 				{
 				case HATTACK_RIGHT:
-					if (m_Position.x + (Player_option.collsion_Length + 10)> other_POS.x&&m_Position.x < other_POS.x) {
+					if (m_Position.x + (Player_option.collsion_Length + 10) > other_POS.x&&m_Position.x < other_POS.x) {
 						other[i]->attacker_num = myindex;
 						other[i]->impact = true;
 						if (other[i]->GetStatus() == DEFENSE_LEFT || other[i]->GetStatus() == DEFENSE_LEFT)
@@ -443,7 +443,7 @@ void CPlayer::attack(CPlayer **other, int player_num) {
 					}
 					break;
 				case HATTACK_LEFT:
-					if (m_Position.x - (Player_option.collsion_Length + 10)< other_POS.x&&m_Position.x > other_POS.x) {
+					if (m_Position.x - (Player_option.collsion_Length + 10) < other_POS.x&&m_Position.x > other_POS.x) {
 						other[i]->attacker_num = myindex;
 						other[i]->impact = true;
 						if (other[i]->GetStatus() == DEFENSE_RIGHT || other[i]->GetStatus() == DEFENSE_LEFT)
@@ -539,6 +539,7 @@ void CPlayer::KeyState(CCamera& cam, int state, int mode, int player) {
 				static bool jump = false;
 
 				DWORD dwDirection = 0;
+
 				if (GetAsyncKeyState(VK_LEFT))
 				{
 					DIR = 1;
@@ -1014,7 +1015,7 @@ void CPlayer::Timer() {
 			m_ppTexture[m_State].nSpriteCurrent = 0;
 		FrameEnd = 1;
 	}
-	
+
 	else
 	{
 		m_ppTexture[m_State].nSpriteCurrent += 1;
@@ -1066,14 +1067,19 @@ void CPlayer::Timer() {
 			}
 		}
 	}
-if(	m_State == FLY_LEFT || m_State == FLY_RIGHT){
-		
+	if (m_State == FLY_LEFT || m_State == FLY_RIGHT) {
+
 		for (int i = 0; i < fly_paticle.Pos_and_Count.size(); ++i) {
 			++fly_paticle.Pos_and_Count[i].second;
 			if (fly_paticle.Pos_and_Count[i].second == 4)
 				fly_paticle.Pos_and_Count.erase(fly_paticle.Pos_and_Count.begin());
 		}
 	}
+	if (smash_point != 0) {
+		Point_sprite_index=(++Point_sprite_index) % 12;
+		cout << Point_sprite_index << endl;
+	}
+	else Point_sprite_index = 0;
 }
 CAIPlayer::CAIPlayer(int nStatus) :CPlayer(nStatus) {
 	nTexture = nStatus; // 현재 상태의 개수 
@@ -1105,7 +1111,7 @@ CAIPlayer::CAIPlayer(int nStatus) :CPlayer(nStatus) {
 	pChannel->setVolume(0.3);
 }
 void CAIPlayer::KeyState(CCamera& cam, int state, int mode, int player) {
-	if (state == 3) {
+	if (state == 3&&live==true) {
 		if (m_State == FLY_LEFT || m_State == FLY_RIGHT || m_State == DYE_LEFT || m_State == DYE_RIGHT || m_State == UP_LEFT || m_State == UP_RIGHT);
 		else
 		{
