@@ -304,6 +304,12 @@ void CPlayer::defance(CPlayer **other, int player_num)
 							sma = true;
 							fly = true;
 							SetStatus(FLY_LEFT);
+							POINT test2;
+							test2.x = (m_Position.x + other_POS.x) / 2;
+							test2.y = m_Position.y;
+							pair<POINT, UINT> test = { test2,0 };
+							other[i]->attack_paticle.Pos_and_Count.push_back(test);
+
 						}
 					}
 					break;
@@ -320,6 +326,12 @@ void CPlayer::defance(CPlayer **other, int player_num)
 							sma = true;
 							fly = true;
 							SetStatus(FLY_RIGHT);
+							POINT test2;
+							test2.x = (m_Position.x + other_POS.x) / 2;
+							test2.y = m_Position.y;
+							pair<POINT, UINT> test = { test2,0 };
+							other[i]->attack_paticle.Pos_and_Count.push_back(test);
+
 						}
 					}
 					break;
@@ -362,6 +374,11 @@ void CPlayer::defance(CPlayer **other, int player_num)
 						{
 							sma = true;
 							SetStatus(DYE_LEFT);
+							POINT test2;
+							test2.x = (m_Position.x + other_POS.x) / 2;
+							test2.y = m_Position.y;
+							pair<POINT, UINT> test = { test2,0 };
+							other[i]->attack_paticle.Pos_and_Count.push_back(test);
 						}
 					}
 					break;
@@ -378,6 +395,11 @@ void CPlayer::defance(CPlayer **other, int player_num)
 						else {
 							sma = true;
 							SetStatus(DYE_RIGHT);
+							POINT test2;
+							test2.x = (m_Position.x + other_POS.x) / 2;
+							test2.y = m_Position.y;
+							pair<POINT, UINT> test = { test2,0 };
+							other[i]->attack_paticle.Pos_and_Count.push_back(test);
 						}
 					}
 					//0801 수정 끝 
@@ -393,6 +415,11 @@ void CPlayer::defance(CPlayer **other, int player_num)
 						else {
 							sma = true;
 							SetStatus(DYE_LEFT);
+							POINT test2;
+							test2.x = (m_Position.x + other_POS.x) / 2;
+							test2.y = m_Position.y;
+							pair<POINT, UINT> test = { test2,0 };
+							other[i]->attack_paticle.Pos_and_Count.push_back(test);
 						}
 					}
 					break;
@@ -408,6 +435,11 @@ void CPlayer::defance(CPlayer **other, int player_num)
 						else {
 							sma = true;
 							SetStatus(DYE_RIGHT);
+							POINT test2;
+							test2.x = (m_Position.x + other_POS.x) / 2;
+							test2.y = m_Position.y;
+							pair<POINT, UINT> test = { test2,0 };
+							other[i]->attack_paticle.Pos_and_Count.push_back(test);
 						}
 					}
 					break;
@@ -434,22 +466,25 @@ void CPlayer::attack(CPlayer **other, int player_num) {
 				{
 				case HATTACK_RIGHT:
 					if (m_Position.x + (Player_option.collsion_Length + 10) > other_POS.x&&m_Position.x < other_POS.x) {
-						other[i]->attacker_num = myindex;
+					other[i]->attacker_num = myindex;
 						other[i]->impact = true;
 						if (other[i]->GetStatus() == DEFENSE_LEFT || other[i]->GetStatus() == DEFENSE_LEFT)
 							damage_num += 5;
 						else
 							damage_num += 12;
+						
 					}
 					break;
 				case HATTACK_LEFT:
 					if (m_Position.x - (Player_option.collsion_Length + 10) < other_POS.x&&m_Position.x > other_POS.x) {
-						other[i]->attacker_num = myindex;
+					other[i]->attacker_num = myindex;
 						other[i]->impact = true;
 						if (other[i]->GetStatus() == DEFENSE_RIGHT || other[i]->GetStatus() == DEFENSE_LEFT)
 							damage_num += 5;
 						else
 							damage_num += 12;
+						
+						
 					}
 					break;
 				case ATTACK1_RIGHT:
@@ -1080,6 +1115,10 @@ void CPlayer::Timer() {
 		cout << Point_sprite_index << endl;
 	}
 	else Point_sprite_index = 0;
+	if (attack_paticle.Pos_and_Count.size()) {
+		if (++attack_paticle.Pos_and_Count[0].second == 4)
+			attack_paticle.Pos_and_Count.clear();
+	}
 }
 CAIPlayer::CAIPlayer(int nStatus) :CPlayer(nStatus) {
 	nTexture = nStatus; // 현재 상태의 개수 

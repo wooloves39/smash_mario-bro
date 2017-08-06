@@ -13,10 +13,9 @@ typedef struct Image
 typedef struct Paticle {
 	CImage Texture;
 	UINT	nSpriteCount;		// 스프라이트 전체 인덱스
-	UINT	nSpriteCurrent;		// 현재 스프라이트 인덱스
 	UINT	g_nSpriteX;			// 스프라이트 가로
 	UINT	g_nSpriteY;			// 스프라이트 세로
-	vector<pair<POINT,UINT>> Pos_and_Count;
+	vector<pair<POINT, UINT>> Pos_and_Count;
 };
 typedef struct player_options {
 	float speed;
@@ -83,7 +82,7 @@ public:
 	CImage rank_state;//랭킹 UI
 	CImage UI;//플레이시 보이는 UI
 	Image Smash_Point;
-	int Point_sprite_index =0;
+	int Point_sprite_index = 0;
 	DWORD	m_State;			//현재상태 
 	DWORD	m_BeforeState;		//과거의상태 
 	int		DIR;	//키입력에 따른 방향
@@ -100,17 +99,25 @@ public:
 	Paticle fly_paticle;
 	Paticle attack_paticle;
 	void fling_paticle() {
-		if (m_State == FLY_LEFT|| m_State == FLY_RIGHT) {
-			pair<POINT, UINT>pos = {m_Position, 0};
+		if (m_State == FLY_LEFT || m_State == FLY_RIGHT) {
+			pair<POINT, UINT>pos = { m_Position, 0 };
 			fly_paticle.Pos_and_Count.push_back(pos);
 		}
 	}
-	void Setpaticle(LPCTSTR pCImage, int nSpriteCount)
+	void Setpaticle(LPCTSTR pCImage, int nSpriteCount, int mode)
 	{
-		fly_paticle.Texture.Load(pCImage);
-		fly_paticle.g_nSpriteX = nSpriteCount;
-		fly_paticle.nSpriteCount = nSpriteCount;
-		fly_paticle.g_nSpriteY = 1;
+		if (mode == 1) {
+			fly_paticle.Texture.Load(pCImage);
+			fly_paticle.g_nSpriteX = nSpriteCount;
+			fly_paticle.nSpriteCount = nSpriteCount;
+			fly_paticle.g_nSpriteY = 1;
+		}
+		else if (mode == 2) {
+			attack_paticle.Texture.Load(pCImage);
+			attack_paticle.g_nSpriteX = nSpriteCount;
+			attack_paticle.nSpriteCount = nSpriteCount;
+			attack_paticle.g_nSpriteY = 1;
+		}
 	}
 	void DrawParticle(HDC hDC, CCamera cam)
 	{
@@ -121,17 +128,30 @@ public:
 			UINT xCoord = fly_paticle.Pos_and_Count[i].second%fly_paticle.g_nSpriteX;
 			UINT yCoord = fly_paticle.Pos_and_Count[i].second / fly_paticle.g_nSpriteX;
 			fly_paticle.Texture.Draw(hDC
-				,fly_paticle.Pos_and_Count[i].first.x - nSpriteWidth / 2 - cam.getPos().x+15, fly_paticle.Pos_and_Count[i].first.y - nSpriteHeight / 2 - cam.getPos().y*(1280 / 940) * 3+15, nSpriteWidth-15, nSpriteHeight-15
+				, fly_paticle.Pos_and_Count[i].first.x - nSpriteWidth / 2 - cam.getPos().x + 15, fly_paticle.Pos_and_Count[i].first.y - nSpriteHeight / 2 - cam.getPos().y*(1280 / 940) * 3 + 15, nSpriteWidth - 15, nSpriteHeight - 15
 				, xCoord * nSpriteWidth, yCoord * nSpriteHeight
 				, nSpriteWidth, nSpriteHeight);
 		}
 	}
-	void setting(CPlayer* target,UINT target_name) {
+	void DrawAttackPaticle(HDC hDC, CCamera cam) {
+		UINT nSpriteWidth = attack_paticle.Texture.GetWidth() / attack_paticle.nSpriteCount;
+		UINT nSpriteHeight = attack_paticle.Texture.GetHeight() / 1;
+		// 0605. 스프라이트 올려주는 타이머를 Player 클래스안에 넣을순없을까? 
+		UINT xCoord = attack_paticle.Pos_and_Count[0].second%attack_paticle.g_nSpriteX;
+		UINT yCoord = attack_paticle.Pos_and_Count[0].second / attack_paticle.g_nSpriteX;
+		attack_paticle.Texture.Draw(hDC
+			, attack_paticle.Pos_and_Count[0].first.x - nSpriteWidth / 2 - cam.getPos().x-20, attack_paticle.Pos_and_Count[0].first.y - nSpriteHeight / 2 - cam.getPos().y*(1280 / 940) * 3 -20, nSpriteWidth+20, nSpriteHeight+20
+			, xCoord * nSpriteWidth, yCoord * nSpriteHeight
+			, nSpriteWidth, nSpriteHeight);
+	
+	}
+	void setting(CPlayer* target, UINT target_name) {
 		rank_state = target->rank_state;
 		UI = target->UI;
 		Player_option.setting(target_name);
 		fly_paticle = target->fly_paticle;
 		Smash_Point = target->Smash_Point;
+		attack_paticle = target->attack_paticle;
 	}
 	void SetSmash(LPCTSTR pCImage, int nSpriteCount) {
 		Smash_Point.Texture.Load(pCImage);
@@ -144,7 +164,7 @@ public:
 		UINT nSpriteWidth = Smash_Point.Texture.GetWidth() / Smash_Point.nSpriteCount;
 		UINT nSpriteHeight = Smash_Point.Texture.GetHeight() / 1;
 		for (int i = 0; i < smash_point; ++i)
-			Smash_Point.Texture.Draw(hDC, char_pos.x+i*30, char_pos.y, 25, 25, Point_sprite_index * 50, 0, nSpriteWidth, nSpriteHeight);
+			Smash_Point.Texture.Draw(hDC, char_pos.x + i * 30-25, char_pos.y, 25, 25, Point_sprite_index * 50, 0, nSpriteWidth, nSpriteHeight);
 	}
 public:
 	CPlayer(int nStatus);//생성 및 초기화

@@ -234,7 +234,8 @@ void BuildPlayer()
 		_T("character\\MARIO\\MARIO_RIGHT_CEX.png"), 2);
 	Mario->SetTexture(CHANGE_EX_LEFT,
 		_T("character\\MARIO\\MARIO_LEFT_CEX.png"), 2);
-	Mario->Setpaticle(_T("character\\fly_impact.png"), 4);
+	Mario->Setpaticle(_T("character\\fly_impact.png"), 4,1);
+	Mario->Setpaticle(_T("character\\MARIO\\export_damagedEffect.png"), 4, 2);
 	Mario->SetSmash(_T("character\\rotateStar.png"),12 );
 	//2. Wario
 	Wario = new CPlayer(28);
@@ -314,7 +315,8 @@ void BuildPlayer()
 
 	Wario->rank_state.Load("character\\WARIO\\warioUI.png");
 	Wario->UI.Load("character\\WARIO\\wario_UI.png");
-	Wario->Setpaticle(_T("character\\fly_impact.png"), 4);
+	Wario->Setpaticle(_T("character\\fly_impact.png"), 4,1);
+	Wario->Setpaticle(_T("character\\WARIO\\export_damagedEffect.png"), 4, 2);
 	Wario->SetSmash(_T("character\\rotateStar.png"), 12);
 	//3. LUIZY
 	Luizy = new CPlayer(28);
@@ -392,7 +394,8 @@ void BuildPlayer()
 		_T("character\\LUIZY\\LUIZY_RIGHT_CEX.png"), 2);
 	Luizy->SetTexture(CHANGE_EX_LEFT,
 		_T("character\\LUIZY\\LUIZY_LEFT_CEX.png"), 2);
-	Luizy->Setpaticle(_T("character\\fly_impact.png"), 4);
+	Luizy->Setpaticle(_T("character\\fly_impact.png"), 4,1);
+	Luizy->Setpaticle(_T("character\\LUIZY\\export_damagedEffect.png"), 4, 2);
 	Luizy->SetSmash(_T("character\\rotateStar.png"), 12);
 	Waluizy = new CPlayer(28);
 	//BASIC
@@ -469,7 +472,8 @@ void BuildPlayer()
 		_T("character\\WALUIZY\\WALUIZY_RIGHT_CEX.png"), 2);
 	Waluizy->SetTexture(CHANGE_EX_LEFT,
 		_T("character\\WALUIZY\\WALUIZY_LEFT_CEX.png"), 2);
-	Waluizy->Setpaticle(_T("character\\fly_impact.png"), 4);
+	Waluizy->Setpaticle(_T("character\\fly_impact.png"), 4,1);
+	Waluizy->Setpaticle(_T("character\\WALUIZY\\export_damagedEffect.png"), 4, 2);
 	Waluizy->SetSmash(_T("character\\rotateStar.png"), 12);
 }// 캐릭터 스프라이트를 전부 읽어 들인후 해당 캐릭터로 배정
 void SetPlayerChar(int Player1, int Player2)
@@ -1331,7 +1335,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 				test.y = 630;
 				m_Player[i]->DrawSmashPoint(memDC, test);
 				if (m_Player[i]->fly == true) m_Player[i]->DrawParticle(memDC, cam);
-
+				if (m_Player[i]->attack_paticle.Pos_and_Count.size())
+					m_Player[i]->DrawAttackPaticle(memDC, cam);
 				m_Player[i]->UI.TransparentBlt(memDC, 80 + i * 300, 660, 50, 50, 0, 0, 30, 30, RGB(255, 255, 255));
 				demage_UI.TransparentBlt(memDC, 140 + i * 300, 620, 150, 150, 0, 0, 170, 170, RGB(255, 255, 255));
 				SetBkMode(memDC, TRANSPARENT);
