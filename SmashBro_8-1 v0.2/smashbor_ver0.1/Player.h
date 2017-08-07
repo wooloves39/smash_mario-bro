@@ -9,12 +9,6 @@ typedef struct Image
 	UINT	nSpriteCurrent;		// 현재 스프라이트 인덱스
 	UINT	g_nSpriteX;			// 스프라이트 가로
 	UINT	g_nSpriteY;			// 스프라이트 세로
-};
-typedef struct Paticle {
-	CImage Texture;
-	UINT	nSpriteCount;		// 스프라이트 전체 인덱스
-	UINT	g_nSpriteX;			// 스프라이트 가로
-	UINT	g_nSpriteY;			// 스프라이트 세로
 	vector<pair<POINT, UINT>> Pos_and_Count;
 };
 typedef struct player_options {
@@ -81,7 +75,7 @@ public:
 	bool impact_de = false;//플레이어가 맞은 상태동안 해당 공격에 더 이상 충돌체크를 하지 않는 변수
 	CImage rank_state;//랭킹 UI
 	CImage UI;//플레이시 보이는 UI
-	Image Smash_Point;
+
 	int Point_sprite_index = 0;
 	DWORD	m_State;			//현재상태 
 	DWORD	m_BeforeState;		//과거의상태 
@@ -96,55 +90,48 @@ public:
 	Sound* charSound[6];//fmod에 의거한 사운드와 채널 강한공격, 약한 공격, 점프, 강한공격을 맞을시, 약한공격을 맞을시, 죽을 시
 	int JumpCount = 0;//점프는 최대 2번 가능
 	bool fly = false;//강한공격을 맞아 날아가는 상태인지에 대한 변수
-	Paticle fly_paticle;
-	Paticle attack_paticle;
+	Image Smash_Point;
+	Image fly_paticle;
+	Image attack_paticle;
 	void fling_paticle() {
 		if (m_State == FLY_LEFT || m_State == FLY_RIGHT) {
 			pair<POINT, UINT>pos = { m_Position, 0 };
 			fly_paticle.Pos_and_Count.push_back(pos);
 		}
 	}
-	void Setpaticle(LPCTSTR pCImage, int nSpriteCount, int mode)
+	void SetSprite(LPCTSTR pCImage,Image&type, int nSpriteCount)
 	{
-		if (mode == 1) {
-			fly_paticle.Texture.Load(pCImage);
-			fly_paticle.g_nSpriteX = nSpriteCount;
-			fly_paticle.nSpriteCount = nSpriteCount;
-			fly_paticle.g_nSpriteY = 1;
-		}
-		else if (mode == 2) {
-			attack_paticle.Texture.Load(pCImage);
-			attack_paticle.g_nSpriteX = nSpriteCount;
-			attack_paticle.nSpriteCount = nSpriteCount;
-			attack_paticle.g_nSpriteY = 1;
-		}
+			type.Texture.Load(pCImage);
+			type.g_nSpriteX = nSpriteCount;
+			type.nSpriteCount = nSpriteCount;
+			type.g_nSpriteY = 1;
+			type.nSpriteCurrent = 0;
 	}
-	void DrawParticle(HDC hDC, CCamera cam)
+	void DrawParticle(HDC hDC, CCamera cam,Image&type,int size)
 	{
-		UINT nSpriteWidth = fly_paticle.Texture.GetWidth() / fly_paticle.nSpriteCount;
-		UINT nSpriteHeight = fly_paticle.Texture.GetHeight() / 1;
+		UINT nSpriteWidth = type.Texture.GetWidth() / fly_paticle.nSpriteCount;
+		UINT nSpriteHeight = type.Texture.GetHeight() / 1;
 		// 0605. 스프라이트 올려주는 타이머를 Player 클래스안에 넣을순없을까? 
-		for (int i = 0; i < fly_paticle.Pos_and_Count.size(); ++i) {
-			UINT xCoord = fly_paticle.Pos_and_Count[i].second%fly_paticle.g_nSpriteX;
-			UINT yCoord = fly_paticle.Pos_and_Count[i].second / fly_paticle.g_nSpriteX;
-			fly_paticle.Texture.Draw(hDC
-				, fly_paticle.Pos_and_Count[i].first.x - nSpriteWidth / 2 - cam.getPos().x + 15, fly_paticle.Pos_and_Count[i].first.y - nSpriteHeight / 2 - cam.getPos().y*(1280 / 940) * 3 + 15, nSpriteWidth - 15, nSpriteHeight - 15
+		for (int i = 0; i < type.Pos_and_Count.size(); ++i) {
+			UINT xCoord = type.Pos_and_Count[i].second%type.g_nSpriteX;
+			UINT yCoord = type.Pos_and_Count[i].second / type.g_nSpriteX;
+			type.Texture.Draw(hDC
+				, type.Pos_and_Count[i].first.x - nSpriteWidth / 2 - cam.getPos().x -size, type.Pos_and_Count[i].first.y - nSpriteHeight / 2 - cam.getPos().y*(1280 / 940) * 3 -size, nSpriteWidth +size, nSpriteHeight +size
 				, xCoord * nSpriteWidth, yCoord * nSpriteHeight
 				, nSpriteWidth, nSpriteHeight);
 		}
 	}
-	void DrawAttackPaticle(HDC hDC, CCamera cam) {
-		UINT nSpriteWidth = attack_paticle.Texture.GetWidth() / attack_paticle.nSpriteCount;
-		UINT nSpriteHeight = attack_paticle.Texture.GetHeight() / 1;
-		// 0605. 스프라이트 올려주는 타이머를 Player 클래스안에 넣을순없을까? 
-		UINT xCoord = attack_paticle.Pos_and_Count[0].second%attack_paticle.g_nSpriteX;
-		UINT yCoord = attack_paticle.Pos_and_Count[0].second / attack_paticle.g_nSpriteX;
-		attack_paticle.Texture.Draw(hDC
-			, attack_paticle.Pos_and_Count[0].first.x - nSpriteWidth / 2 - cam.getPos().x-20, attack_paticle.Pos_and_Count[0].first.y - nSpriteHeight / 2 - cam.getPos().y*(1280 / 940) * 3 -20, nSpriteWidth+20, nSpriteHeight+20
-			, xCoord * nSpriteWidth, yCoord * nSpriteHeight
-			, nSpriteWidth, nSpriteHeight);
-	
+	void Draw_Impact(HDC hDC, CCamera cam) {
+		if (fly == true)DrawParticle(hDC, cam, fly_paticle, -15);
+		if (attack_paticle.Pos_and_Count.size())DrawParticle(hDC, cam, attack_paticle, 20);
 	}
+	void DrawSmashPoint(HDC hDC, POINT char_pos) {
+		UINT nSpriteWidth = Smash_Point.Texture.GetWidth() / Smash_Point.nSpriteCount;
+		UINT nSpriteHeight = Smash_Point.Texture.GetHeight() / 1;
+		for (int i = 0; i < smash_point; ++i)
+			Smash_Point.Texture.Draw(hDC, char_pos.x + i * 30 - 25, char_pos.y, 25, 25, Point_sprite_index * 50, 0, nSpriteWidth, nSpriteHeight);
+	}
+	
 	void setting(CPlayer* target, UINT target_name) {
 		rank_state = target->rank_state;
 		UI = target->UI;
@@ -153,18 +140,10 @@ public:
 		Smash_Point = target->Smash_Point;
 		attack_paticle = target->attack_paticle;
 	}
-	void SetSmash(LPCTSTR pCImage, int nSpriteCount) {
-		Smash_Point.Texture.Load(pCImage);
-		Smash_Point.g_nSpriteX = nSpriteCount;
-		Smash_Point.nSpriteCount = nSpriteCount;
-		Smash_Point.g_nSpriteY = 1;
-		Smash_Point.nSpriteCurrent = 0;
-	}
-	void DrawSmashPoint(HDC hDC, POINT char_pos) {
-		UINT nSpriteWidth = Smash_Point.Texture.GetWidth() / Smash_Point.nSpriteCount;
-		UINT nSpriteHeight = Smash_Point.Texture.GetHeight() / 1;
-		for (int i = 0; i < smash_point; ++i)
-			Smash_Point.Texture.Draw(hDC, char_pos.x + i * 30-25, char_pos.y, 25, 25, Point_sprite_index * 50, 0, nSpriteWidth, nSpriteHeight);
+	void DrawUI(HDC hDC, int Player_index) {
+		POINT Smash_Pos = { 80 + Player_index * 300,630 };
+		DrawSmashPoint(hDC, Smash_Pos);
+		UI.TransparentBlt(hDC, 80 + Player_index * 300, 660, 50, 50, 0, 0, 30, 30, RGB(255, 255, 255));
 	}
 public:
 	CPlayer(int nStatus);//생성 및 초기화
@@ -252,7 +231,7 @@ public:
 		delete[] m_ppTexture;
 		rank_state.Destroy();
 		UI.Destroy();
-		charSystem->release(); // 해제
+		
 	}
 	virtual bool AI() {//AI인지 플레이어인지 판별하는 함수
 		return false;

@@ -34,7 +34,6 @@ int		  nowPlayer[2] = { 0, 3 };	//현재 내가 움직이고있는 플레이어
 int		  nPlayer;		//현재 플레이하는 모든 플레이어의 수
 bool Player1 = false;
 bool Player2 = false;
-
 //-----Player추가 
 
 CPlayer** m_Player;
@@ -157,7 +156,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdPa
 
 void BuildPlayer()
 {
-
+	
 	Mario = new CPlayer(28);
 	//BASIC 
 	Mario->SetTexture(BASIC_RIGHT,
@@ -234,9 +233,9 @@ void BuildPlayer()
 		_T("character\\MARIO\\MARIO_RIGHT_CEX.png"), 2);
 	Mario->SetTexture(CHANGE_EX_LEFT,
 		_T("character\\MARIO\\MARIO_LEFT_CEX.png"), 2);
-	Mario->Setpaticle(_T("character\\fly_impact.png"), 4,1);
-	Mario->Setpaticle(_T("character\\MARIO\\export_damagedEffect.png"), 4, 2);
-	Mario->SetSmash(_T("character\\rotateStar.png"),12 );
+	Mario->SetSprite(_T("character\\fly_impact.png"), Mario->fly_paticle, 4);
+	Mario->SetSprite(_T("character\\MARIO\\export_damagedEffect.png"), Mario->attack_paticle, 4);
+	Mario->SetSprite(_T("character\\rotateStar.png"),Mario->Smash_Point,12 );
 	//2. Wario
 	Wario = new CPlayer(28);
 	//BASIC
@@ -315,9 +314,9 @@ void BuildPlayer()
 
 	Wario->rank_state.Load("character\\WARIO\\warioUI.png");
 	Wario->UI.Load("character\\WARIO\\wario_UI.png");
-	Wario->Setpaticle(_T("character\\fly_impact.png"), 4,1);
-	Wario->Setpaticle(_T("character\\WARIO\\export_damagedEffect.png"), 4, 2);
-	Wario->SetSmash(_T("character\\rotateStar.png"), 12);
+	Wario->SetSprite(_T("character\\fly_impact.png"), Wario->fly_paticle,4);
+	Wario->SetSprite(_T("character\\WARIO\\export_damagedEffect.png"),Wario->attack_paticle, 4);
+	Wario->SetSprite(_T("character\\rotateStar.png"),Wario->Smash_Point, 12);
 	//3. LUIZY
 	Luizy = new CPlayer(28);
 	//BASIC
@@ -394,9 +393,9 @@ void BuildPlayer()
 		_T("character\\LUIZY\\LUIZY_RIGHT_CEX.png"), 2);
 	Luizy->SetTexture(CHANGE_EX_LEFT,
 		_T("character\\LUIZY\\LUIZY_LEFT_CEX.png"), 2);
-	Luizy->Setpaticle(_T("character\\fly_impact.png"), 4,1);
-	Luizy->Setpaticle(_T("character\\LUIZY\\export_damagedEffect.png"), 4, 2);
-	Luizy->SetSmash(_T("character\\rotateStar.png"), 12);
+	Luizy->SetSprite(_T("character\\fly_impact.png"),Luizy->fly_paticle, 4);
+	Luizy->SetSprite(_T("character\\LUIZY\\export_damagedEffect.png"), Luizy->attack_paticle,4);
+	Luizy->SetSprite(_T("character\\rotateStar.png"), Luizy->Smash_Point,12);
 	Waluizy = new CPlayer(28);
 	//BASIC
 	Waluizy->SetTexture(BASIC_RIGHT,
@@ -472,9 +471,9 @@ void BuildPlayer()
 		_T("character\\WALUIZY\\WALUIZY_RIGHT_CEX.png"), 2);
 	Waluizy->SetTexture(CHANGE_EX_LEFT,
 		_T("character\\WALUIZY\\WALUIZY_LEFT_CEX.png"), 2);
-	Waluizy->Setpaticle(_T("character\\fly_impact.png"), 4,1);
-	Waluizy->Setpaticle(_T("character\\WALUIZY\\export_damagedEffect.png"), 4, 2);
-	Waluizy->SetSmash(_T("character\\rotateStar.png"), 12);
+	Waluizy->SetSprite(_T("character\\fly_impact.png"),Waluizy->fly_paticle, 4);
+	Waluizy->SetSprite(_T("character\\WALUIZY\\export_damagedEffect.png"),Waluizy->attack_paticle, 4);
+	Waluizy->SetSprite(_T("character\\rotateStar.png"),Waluizy->Smash_Point, 12);
 }// 캐릭터 스프라이트를 전부 읽어 들인후 해당 캐릭터로 배정
 void SetPlayerChar(int Player1, int Player2)
 {
@@ -916,6 +915,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 					//--------PLAYER SET--------//
 
 					nPlayer = 4; // 현재 플레이하는 플레이어는 1명. 
+					
 					BuildPlayer();
 					SetPlayerChar(nowPlayer[0], ONE_PLAYER);
 					cam.setPos(m_Player[0]->GetPosition().x);
@@ -993,7 +993,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 					state = play;
 					SetTimer(hWnd, 5, 1000, NULL);
 					SetTimer(hWnd, 6, 200, NULL);
-					nPlayer = 4; // 현재 플레이하는 플레이어는 1명. 
+					nPlayer = 4; // 현재 플레이하는 플레이어는 1명.
 					BuildPlayer();
 					SetPlayerChar(nowPlayer[0], nowPlayer[1]);
 					cam.setPos(m_Player[0]->GetPosition().x, m_Player[1]->GetPosition().x);
@@ -1330,14 +1330,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 
 				m_Player[i]->DrawSprite(memDC,
 					m_Player[i]->m_ppTexture[m_Player[i]->m_State].nSpriteCurrent, cam);
-				POINT test;
-				test.x = 80 + i * 300;
-				test.y = 630;
-				m_Player[i]->DrawSmashPoint(memDC, test);
-				if (m_Player[i]->fly == true) m_Player[i]->DrawParticle(memDC, cam);
-				if (m_Player[i]->attack_paticle.Pos_and_Count.size())
-					m_Player[i]->DrawAttackPaticle(memDC, cam);
-				m_Player[i]->UI.TransparentBlt(memDC, 80 + i * 300, 660, 50, 50, 0, 0, 30, 30, RGB(255, 255, 255));
+				
+			
+				m_Player[i]->Draw_Impact(memDC, cam);
+				m_Player[i]->DrawUI(memDC, i);
 				demage_UI.TransparentBlt(memDC, 140 + i * 300, 620, 150, 150, 0, 0, 170, 170, RGB(255, 255, 255));
 				SetBkMode(memDC, TRANSPARENT);
 				TextOut(memDC, 200 + i * 300 - 10, 690, TEXT(m_Player[i]->getDamege()), strlen(m_Player[i]->getDamege()));
