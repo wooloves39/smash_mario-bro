@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.mario_project.myapplication"
+    android:versionCode="1"
+    android:versionName="1.0"
+    android:installLocation="preferExternal">
+    <application
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name">
+        //android:debuggable="true"
+        <activity android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="landscape"
+            android:configChanges="keyboard|keyboardHidden|orientation">
+        <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:label="Life Cycle Test"
+            android:name=".LifeCycleTest"
+            android:configChanges="keyboard|keyboardHidden|orientation"/>
+        <activity android:label="Touch Test"
+            android:name=".SingleTouchTest"
+            android:configChanges="keyboard|keyboardHidden|orientation"/>
+        <activity android:label="Multi Touch Test"
+            android:name=".MultiTouchTest"
+            android:configChanges="keyboard|keyboardHidden|orientation"/>
+        <activity android:label="Key Test"
+            android:name=".KeyTest"
+            android:configChanges="keyboard|keyboardHidden|orientation"/>
+    </application>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-sdk android:minSdkVersion="3" android:targetSdkVersion="9"/>
+</manifest>
