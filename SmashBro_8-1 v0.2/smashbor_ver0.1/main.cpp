@@ -228,6 +228,8 @@ void BuildPlayer()
 		_T("character\\MARIO\\MARIO_VICTORY.png"), 4);
 	Mario->rank_state.Load("character\\MARIO\\marioUI.png");
 	Mario->UI.Load("character\\MARIO\\mario_UI.png");
+	Mario->GageUI.Load("character\\smashOngage.png");
+	Mario->GageBackUI.Load("character\\smashgage.png");
 	//ADD CHANGE_EX
 	Mario->SetTexture(CHANGE_EX_RIGHT,
 		_T("character\\MARIO\\MARIO_RIGHT_CEX.png"), 2);
@@ -314,6 +316,8 @@ void BuildPlayer()
 
 	Wario->rank_state.Load("character\\WARIO\\warioUI.png");
 	Wario->UI.Load("character\\WARIO\\wario_UI.png");
+	Wario->GageUI.Load("character\\smashOngage.png");
+	Wario->GageBackUI.Load("character\\smashgage.png");
 	Wario->SetSprite(_T("character\\fly_impact.png"), Wario->fly_paticle,4);
 	Wario->SetSprite(_T("character\\WARIO\\export_damagedEffect.png"),Wario->attack_paticle, 4);
 	Wario->SetSprite(_T("character\\rotateStar.png"),Wario->Smash_Point, 12);
@@ -388,6 +392,8 @@ void BuildPlayer()
 		_T("character\\LUIZY\\LUIZY_VICTORY.png"), 4);
 	Luizy->rank_state.Load("character\\LUIZY\\luizyUI.png");
 	Luizy->UI.Load("character\\LUIZY\\luizy_UI.png");
+	Luizy->GageUI.Load("character\\smashOngage.png");
+	Luizy->GageBackUI.Load("character\\smashgage.png");
 	//ADD CHANGE_EX
 	Luizy->SetTexture(CHANGE_EX_RIGHT,
 		_T("character\\LUIZY\\LUIZY_RIGHT_CEX.png"), 2);
@@ -466,6 +472,8 @@ void BuildPlayer()
 		_T("character\\WALUIZY\\waluizy_VICTORY.png"), 4);
 	Waluizy->rank_state.Load("character\\WALUIZY\\waluizyUI.png");
 	Waluizy->UI.Load("character\\WALUIZY\\waluizy_UI.png");
+	Waluizy->GageUI.Load("character\\smashOngage.png");
+	Waluizy->GageBackUI.Load("character\\smashgage.png");
 	//ADD CHANGE_EX
 	Waluizy->SetTexture(CHANGE_EX_RIGHT,
 		_T("character\\WALUIZY\\WALUIZY_RIGHT_CEX.png"), 2);
@@ -805,7 +813,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 			else {
 				switch (wParam)
 				{
-				case 'A':
+				case 'F':
 					pSystem->playSound(FMOD_CHANNEL_REUSE, changeSound, false, &pChannel[1]);
 					sel.x -= 200;
 					if (sel.x < 0)
@@ -818,7 +826,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 					else
 						KillTimer(hWnd, 1);
 					break;
-				case 'D':
+				case 'H':
 					pSystem->playSound(FMOD_CHANNEL_REUSE, changeSound, false, &pChannel[1]);
 					sel.x += 200;
 					if (sel.x > 140 + 200 * 4)
@@ -832,7 +840,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 					else
 						KillTimer(hWnd, 1);
 					break;
-				case 'W':
+				case 'T':
 					pSystem->playSound(FMOD_CHANNEL_REUSE, changeSound, false, &pChannel[1]);
 					sel.y -= 100;
 					if (sel.y < 500)
@@ -845,7 +853,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 					else
 						KillTimer(hWnd, 1);
 					break;
-				case 'S':
+				case 'G':
 					pSystem->playSound(FMOD_CHANNEL_REUSE, changeSound, false, &pChannel[1]);
 					sel.y += 100;
 					if (sel.y > 700)
@@ -858,7 +866,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 					else
 						KillTimer(hWnd, 1);
 					break;
-				case 'F':
+				case 'A':
 					state = cho_cha;
 					map_stage = ((sel.x - 140) / 100) + 1;
 					if (sel.y == 650)
@@ -930,7 +938,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 			else {
 				switch (wParam)
 				{
-				case 'A':
+				case 'F':
 					if (Player1 == false) {
 						pSystem->playSound(FMOD_CHANNEL_REUSE, changeSound, false, &pChannel[1]);
 						sel.x -= 250 + 50;
@@ -942,7 +950,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 					}
 					break;
 
-				case 'D':
+				case 'H':
 					if (Player1 == false) {
 						pSystem->playSound(FMOD_CHANNEL_REUSE, changeSound, false, &pChannel[1]);
 						sel.x += 300;
@@ -953,7 +961,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 						}
 					}
 					break;
-				case 'F':
+				case 'A':
 					pSystem->playSound(FMOD_CHANNEL_REUSE, choiceSound, false, &pChannel[1]);
 					Player1 = true;
 					break;
@@ -1008,6 +1016,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 			GameReady = true;
 			switch (wParam) {
 			case 'Q':
+				if (mode == 1)m_Player[0]->Hidden();
+				else {
+					m_Player[0]->Hidden();
+					m_Player[1]->Hidden();
+				}
 				break;
 			
 			}
@@ -1098,9 +1111,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 				case 'A':
 				case 'D':
 				case 'F':
-				case 'G':
+				case 'S':
 				case 'H':
-				case 'T':
+				case 'W':
 					if (m_Player[0]->GetStatus() == MOVE_RIGHT)
 					{
 						m_Player[0]->SetStatus(BASIC_RIGHT);

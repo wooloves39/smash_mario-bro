@@ -271,7 +271,7 @@ void CPlayer::gravity(void) {
 void CPlayer::defance(CPlayer **other, int player_num)
 {
 	POINT other_POS;
-
+	if(hidden==false){
 	if (impact_de == true) {
 		attack_SpriteCurrent = other[attacker_num]->Get_SPcurrent();
 
@@ -448,7 +448,7 @@ void CPlayer::defance(CPlayer **other, int player_num)
 				}
 			}
 		}
-
+	}
 	}
 
 }
@@ -704,14 +704,15 @@ void CPlayer::KeyState(CCamera& cam, int state, int mode, int player) {
 				//막기
 				if (GetAsyncKeyState('W'))
 				{
-					if (GetStatus() == BASIC_RIGHT || GetStatus() == MOVE_RIGHT || GetStatus() == DEFENSE_RIGHT)
+					if (GetStatus() == BASIC_RIGHT || GetStatus() == MOVE_RIGHT || GetStatus() == DEFENSE_RIGHT|| GetStatus() == ATTACK1_RIGHT|| GetStatus() == ATTACK2_RIGHT)
 					{
 						SetStatus(DEFENSE_RIGHT);
 					}
-					else if (GetStatus() == BASIC_LEFT || GetStatus() == MOVE_LEFT || GetStatus() == DEFENSE_LEFT)
+					else if (GetStatus() == BASIC_LEFT || GetStatus() == MOVE_LEFT || GetStatus() == DEFENSE_LEFT|| GetStatus() == ATTACK1_LEFT || GetStatus() == ATTACK2_LEFT)
 					{
 						SetStatus(DEFENSE_LEFT);
 					}
+					if(m_State==DEFENSE_RIGHT|| m_State == DEFENSE_LEFT)
 					m_ppTexture[GetStatus()].nSpriteCurrent = 0;
 				}
 				if (dwDirection)
@@ -729,7 +730,7 @@ void CPlayer::KeyState(CCamera& cam, int state, int mode, int player) {
 					static bool jump = false;
 
 					DWORD dwDirection = 0;
-					if (GetAsyncKeyState('A'))
+					if (GetAsyncKeyState('F'))
 					{
 						DIR = 1;
 						dwDirection |= DIR_LEFT;
@@ -750,7 +751,7 @@ void CPlayer::KeyState(CCamera& cam, int state, int mode, int player) {
 
 
 					}
-					if (GetAsyncKeyState('D'))
+					if (GetAsyncKeyState('H'))
 					{
 						DIR = 2;
 						dwDirection |= DIR_RIGHT;
@@ -774,7 +775,7 @@ void CPlayer::KeyState(CCamera& cam, int state, int mode, int player) {
 
 					//	//점프시 
 
-					if (GetAsyncKeyState('H'))
+					if (GetAsyncKeyState('D'))
 					{
 						if (jump == false) {
 
@@ -805,7 +806,7 @@ void CPlayer::KeyState(CCamera& cam, int state, int mode, int player) {
 					}
 					else
 						jump = false;
-					if (GetAsyncKeyState('G'))
+					if (GetAsyncKeyState('S'))
 					{
 						if (smash == false && GetStatus() != HATTACK_LEFT&& GetStatus() != HATTACK_RIGHT) {
 							if (getSmashpoint() > 0)
@@ -825,7 +826,7 @@ void CPlayer::KeyState(CCamera& cam, int state, int mode, int player) {
 						smash = true;
 					}
 					else smash = false;
-					if (GetAsyncKeyState('F'))
+					if (GetAsyncKeyState('A'))
 					{
 						if (attack == false) {
 							if (GetStatus() == BASIC_RIGHT || GetStatus() == MOVE_RIGHT)
@@ -860,7 +861,7 @@ void CPlayer::KeyState(CCamera& cam, int state, int mode, int player) {
 					}
 					else attack = false;
 					//막기
-					if (GetAsyncKeyState('T'))
+					if (GetAsyncKeyState('W'))
 					{
 						if (GetStatus() == BASIC_RIGHT || GetStatus() == MOVE_RIGHT || GetStatus() == DEFENSE_RIGHT)
 						{
@@ -1112,7 +1113,6 @@ void CPlayer::Timer() {
 	}
 	if (smash_point != 0) {
 		Point_sprite_index=(++Point_sprite_index) % 12;
-		cout << Point_sprite_index << endl;
 	}
 	else Point_sprite_index = 0;
 	if (attack_paticle.Pos_and_Count.size()) {

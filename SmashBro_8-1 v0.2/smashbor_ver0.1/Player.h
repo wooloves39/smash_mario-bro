@@ -46,7 +46,7 @@ typedef struct player_options {
 			velocityX_max = 5;
 			JumpCount = 2;
 			smash_count = 3;
-			collsion_Length = 100;
+			collsion_Length = 110;
 			break;
 		default:
 			break;
@@ -63,7 +63,7 @@ public:
 	player_options Player_option;
 	int nTexture;//스프라이트의 개수
 				 //강한 공격 게이지 및 수치
-	int smash_point = 3;
+	int smash_point = 2;
 	int gage = 0;
 	//강한공격은 막기나 일반공격에 의해 게이지가 채워지고 게이지가 10이 넘으면 스매시 포인터가 1개 생긴다. 최대 개수 3개
 public:
@@ -75,7 +75,8 @@ public:
 	bool impact_de = false;//플레이어가 맞은 상태동안 해당 공격에 더 이상 충돌체크를 하지 않는 변수
 	CImage rank_state;//랭킹 UI
 	CImage UI;//플레이시 보이는 UI
-
+	CImage GageUI;
+	CImage GageBackUI;
 	int Point_sprite_index = 0;
 	DWORD	m_State;			//현재상태 
 	DWORD	m_BeforeState;		//과거의상태 
@@ -93,6 +94,7 @@ public:
 	Image Smash_Point;
 	Image fly_paticle;
 	Image attack_paticle;
+	bool hidden = false;
 	void fling_paticle() {
 		if (m_State == FLY_LEFT || m_State == FLY_RIGHT) {
 			pair<POINT, UINT>pos = { m_Position, 0 };
@@ -139,11 +141,24 @@ public:
 		fly_paticle = target->fly_paticle;
 		Smash_Point = target->Smash_Point;
 		attack_paticle = target->attack_paticle;
+		GageUI = target->GageUI;
+		GageBackUI = target->GageBackUI;
 	}
 	void DrawUI(HDC hDC, int Player_index) {
+		static float gageBar = 0;
 		POINT Smash_Pos = { 80 + Player_index * 300,630 };
 		DrawSmashPoint(hDC, Smash_Pos);
 		UI.TransparentBlt(hDC, 80 + Player_index * 300, 660, 50, 50, 0, 0, 30, 30, RGB(255, 255, 255));
+		GageBackUI.Draw(hDC, 220 + Player_index*300,620, 100, 30);
+		if (gage > 0) {
+			if(gage>gageBar)
+			gageBar += 0.1;
+			GageUI.Draw(hDC, 220 + Player_index * 300, 620, gageBar * 10, 30);
+		}
+	}
+	void Hidden() {
+		hidden = !hidden;
+		//damage_num = 500;
 	}
 public:
 	CPlayer(int nStatus);//생성 및 초기화
