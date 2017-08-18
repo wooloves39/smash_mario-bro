@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="fill_parent"
@@ -7,10 +8,19 @@
 
     tools:context="com.example.parkjaeha.supermario.MainActivity">
 
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@android:drawable/ic_media_pause"
+        android:layout_alignParentRight="true"
+        android:id="@+id/img_menu" />
+
+
     <com.example.parkjaeha.supermario.MainView
         android:id="@+id/main_view"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         />
 
-</LinearLayout>
+</RelativeLayout>

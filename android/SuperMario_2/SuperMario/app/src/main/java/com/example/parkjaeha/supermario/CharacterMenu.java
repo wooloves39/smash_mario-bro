@@ -13,7 +13,7 @@ import android.widget.ImageView;
  */
 
 public class CharacterMenu extends AppCompatActivity implements View.OnClickListener {
-
+//캐릭터 선택 메뉴
     ImageView img_ch1,img_ch2,img_ch3,img_ch4;
     int ch_num = 0 ;
     static  int map_num=0;
@@ -42,7 +42,7 @@ public class CharacterMenu extends AppCompatActivity implements View.OnClickList
 
 
     }
-
+//캐릭터 선택 시
     @Override
     public void onClick(View v) {
 

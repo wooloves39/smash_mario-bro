@@ -19,11 +19,13 @@ import java.util.ArrayList;
 /**
  * Created by parkjaeha on 2017-07-28.
  */
-
+//사용안함 참고용
 public class MainView extends SurfaceView implements SurfaceHolder.Callback {
 //플레이화면
 
     Info image = new Info();
+    private Bitmap XImage, XBackImage;
+
 
     public  static int RUN = 1;
     public  static int PAUSE = 2;
@@ -146,7 +148,9 @@ public class MainView extends SurfaceView implements SurfaceHolder.Callback {
     // ---------------------------------
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
+
         mThread.start();
+
     }
 
     // ---------------------------------

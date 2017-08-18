@@ -1,148 +1,253 @@
 package com.example.parkjaeha.supermario;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Window;
-import android.view.WindowManager;
+import android.support.v7.app.ActionBarActivity;
+import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import static com.example.parkjaeha.supermario.R.id.volume;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends ActionBarActivity {
+    //extends activtiy
 // 플레이 화면 불러오기
-   MainView mainView;
+    GamePanel gamePanel;
     static int ch_num=0;
+    View pauseButton;
+    View pauseMenu;
+    View a_Button;
+    View b_Button;
+    View c_Button;
+    View d_Button;
+    View control_Button;
+    public static Toast mToast;
+    RelativeLayout relativeLayout ;
+    //GameSurface gameSurface;
+
+    //continue 클릭시 플레이 계속
+    View.OnClickListener Continue_list = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+            pauseMenu.setVisibility(View.GONE);
+            pauseButton.setVisibility(View.VISIBLE);
+            gamePanel.Pause_game = false;
+            //continue
+        }
+    };
+    //mainmenu 클릭시 메인메뉴 화면으로 이동
+    View.OnClickListener Main_menu_list = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            gamePanel.thread.setRunning(false);
+            MainActivity.this.finish();
+            Intent i = new Intent(MainActivity.this,MainMenu.class);
+            startActivity(i);
+        }
+    };
+    // 스탑버튼 클릭시 continue,main 선택용 보기가 나오고 게임 일시 정지
+    View.OnClickListener pause_click = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+             pauseButton.setVisibility(View.GONE);
+            pauseMenu.setVisibility(View.VISIBLE);
+
+            gamePanel.Pause_game = true;
+            // pause start
+            //mainMenu
+        }
+    };
+    //A btn
+    View.OnClickListener a_btn_click =  new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Toast.makeText(getApplicationContext(),"A",Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    //B btn
+    View.OnClickListener b_btn_click =  new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Toast.makeText(getApplicationContext(),"B",Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    //C btn
+    View.OnClickListener c_btn_click =  new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Toast.makeText(getApplicationContext(),"C",Toast.LENGTH_SHORT).show();
+        }
+    };
+    //D btn
+    View.OnClickListener d_btn_click =  new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Toast.makeText(getApplicationContext(),"D",Toast.LENGTH_SHORT).show();
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
+        //캐릭터 정보 가져오기
         Intent i = getIntent();
-            ch_num = i.getExtras().getInt("character");
+        ch_num = i.getExtras().getInt("character");
 
-            mainView = new MainView(this);
-            setContentView(mainView);
+        setContentView(R.layout.game);
+        //화면 사이즈
+        DisplayMetrics ds = new DisplayMetrics();
+        this.getWindowManager().getDefaultDisplay().getMetrics(ds);
 
-        }
+        final int heights = ds.heightPixels;
+        final int widths = ds.widthPixels;
 
+        // 화면사이즈에 맞게 맵&extra 생성
+        relativeLayout = (RelativeLayout) findViewById(R.id.re_main_game);
+        gamePanel = new GamePanel(getApplicationContext(), this, widths, heights);
+        relativeLayout.addView(gamePanel);
+
+        ////////////////////////////////////////////////////////////
+
+        //layout button 추가
+        LayoutInflater myInflater = (LayoutInflater) getApplicationContext().getSystemService(getApplicationContext().LAYOUT_INFLATER_SERVICE);
+        pauseButton = myInflater.inflate(R.layout.pause, null, false);
+        pauseButton.setX(widths - 150);
+        pauseButton.setY(0);
+        relativeLayout.addView(pauseButton);
+
+        //스탑 버튼 oncliklistener, size지정
+        pauseButton.setOnClickListener(pause_click);
+        pauseButton.getLayoutParams().height = 150;
+        pauseButton.getLayoutParams().width = 150;
+
+        //////////////////////////////////////////////////////////////////////////////
+        //선택 메뉴 화면 layout
+        pauseMenu = myInflater.inflate(R.layout.pause_menu, null, false);
+        relativeLayout.addView(pauseMenu);
+        pauseMenu.setVisibility(View.GONE);
+
+        TextView cont = (TextView) pauseMenu.findViewById(R.id.textView);
+        TextView menu = (TextView) pauseMenu.findViewById(R.id.textView2);
+
+        //보기 버튼 클릭시
+        cont.setOnClickListener(Continue_list);
+        menu.setOnClickListener(Main_menu_list);
+
+        ///////////////////////////////////////////////////////////////////
+
+        //a_btn  A
+        LayoutInflater abtnInflater = (LayoutInflater) getApplicationContext().getSystemService(getApplicationContext().LAYOUT_INFLATER_SERVICE);
+        a_Button = abtnInflater.inflate(R.layout.a_button, null, false);
+        a_Button.setX(widths - 600);
+        a_Button.setY(heights - 400);
+        a_Button.setRotation(315.0f);
+        relativeLayout.addView(a_Button);
+
+        a_Button.setOnClickListener(a_btn_click);
+        a_Button.getLayoutParams().height = 200;
+        a_Button.getLayoutParams().width = 200;
+
+        //b_btn B
+        LayoutInflater bbtnInflater = (LayoutInflater) getApplicationContext().getSystemService(getApplicationContext().LAYOUT_INFLATER_SERVICE);
+        b_Button = bbtnInflater.inflate(R.layout.a_button, null, false);
+        b_Button.setX(widths - 300);
+        b_Button.setY(heights - 400);
+        b_Button.setRotation(135.0f);
+        relativeLayout.addView(b_Button);
+
+        b_Button.setOnClickListener(b_btn_click);
+        b_Button.getLayoutParams().height = 200;
+        b_Button.getLayoutParams().width = 200;
+
+        //b_btn C
+        LayoutInflater cbtnInflater = (LayoutInflater) getApplicationContext().getSystemService(getApplicationContext().LAYOUT_INFLATER_SERVICE);
+        c_Button = cbtnInflater.inflate(R.layout.a_button, null, false);
+        c_Button.setX(widths - 450);
+        c_Button.setY(heights - 550);
+        c_Button.setRotation(135.0f);
+        relativeLayout.addView(c_Button);
+
+        c_Button.setOnClickListener(c_btn_click);
+        c_Button.getLayoutParams().height = 200;
+        c_Button.getLayoutParams().width = 200;
+
+        //b_btn D
+        LayoutInflater dbtnInflater = (LayoutInflater) getApplicationContext().getSystemService(getApplicationContext().LAYOUT_INFLATER_SERVICE);
+        d_Button = dbtnInflater.inflate(R.layout.a_button, null, false);
+        d_Button.setX(widths - 450);
+        d_Button.setY(heights - 250);
+        d_Button.setRotation(135.0f);
+        relativeLayout.addView(d_Button);
+
+        d_Button.setOnClickListener(d_btn_click);
+        d_Button.getLayoutParams().height = 200;
+        d_Button.getLayoutParams().width = 200;
+
+        /////////////////////////////////////////////////////////////////////////////////
+        //control Button
+
+        LayoutInflater controlbtnInflater = (LayoutInflater) getApplicationContext().getSystemService(getApplicationContext().LAYOUT_INFLATER_SERVICE);
+        control_Button = controlbtnInflater.inflate(R.layout.b_button, null, false);
+        control_Button.setX(widths - 2000);
+        control_Button.setY(heights - 400);
+        relativeLayout.addView(control_Button);
+
+
+        control_Button.getLayoutParams().height = 200;
+        control_Button.getLayoutParams().width = 200;
+        mToast = Toast.makeText(getApplicationContext(),"NULL",Toast.LENGTH_SHORT);
+
+        ControlView control_Button = (ControlView) findViewById(volume);
+        control_Button.setKnobListener(new ControlView.KnobListener() {
+            @Override
+            public void onChanged(double angle) {
+                int volume  = (int)angle;
+                if (angle > 0){
+                    volume  = volume*50/180;
+                    mToast.setText(" "+ volume);
+                } // 오른쪽으로 회전
+                else{
+                    volume = 50+(50-(-volume)*50/180);
+                    mToast.setText(" " +volume);
+                } ; // 왼쪽으로 회전
+                mToast.show();
+
+                if(15>volume || volume>85){
+                    mToast.setText("up"+volume);
+                }else if(volume>15 && volume<40){
+                    mToast.setText("right"+volume);
+                }else if(volume>40 &&volume<65){
+                mToast.setText("down"+volume);
+                }else if(volume>65 &&volume<85){
+                    mToast.setText("left"+volume);
+                }
+                mToast.show();
+
+            }
+        });
+
+    }
+  /*  @Override
+    protected void onResume() {
+        super.onResume();
+        gamePanel.resume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        gamePanel.pause();
+    }*/
 
 
 } // 프로그램 끝
 
 
 
-
-/*
-setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);//가로 모드
-
-  //------------------------------------
-    //         새로 만든 View
-    //------------------------------------
-    class GameView extends View {
-        int width, height;                          // 화면의 폭과 높이
-        float x, y;                                   // 캐릭터의 현재 좌표
-        float dx, dy;                                // 캐릭터가 이동할 방향과 거리
-        int cw, ch;                                   // 캐릭터의 폭과 높이
-        Bitmap charater[] = new Bitmap[2];
-        int counter = 0;
-        float x1, y1, x2, y2;
-        boolean canRun = true;
-
-        //------------------------------------
-        //       게임 초기화
-        //------------------------------------
-        public GameView(Context context) {
-            super(context);
-            Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE))
-                    .getDefaultDisplay();
-
-            width = display.getWidth();          // 화면의 가로폭
-            height = display.getHeight();        // 화면의 세로폭
-            x = 100;                                 // 캐릭터의 현재 x위치
-            y = 100;                                 // 캐릭터의 현재 y위치
-            dx = 4;                                   // 캐릭터가 x축으로 이동할 거리
-            dy = 6;                                   // 캐릭터가 y축으로 이동할 거리
-
-            // 캐릭터 비트맵 읽기
-            charater[0] = BitmapFactory.decodeResource(getResources(), R.drawable.mario_ui);
-            charater[1] = BitmapFactory.decodeResource(getResources(), R.drawable.mario_ui);
-            cw = charater[0].getWidth() / 2;           // 캐릭터의 폭/2
-            ch = charater[1].getHeight() / 2;           // 캐릭터의 높이/2
-
-            setFocusable(true);
-            mHandler.sendEmptyMessageDelayed(0, 10);
-        }
-
-        //------------------------------------
-        //       실제 그림을 그려주는 부분
-        //------------------------------------
-        public void onDraw(Canvas canvas) {
-            x += dx;                                  // 가로로 이동
-            y += dy;                                  // 세로로 이동
-            if (x < cw) {                           // 왼쪽 벽
-                x = cw;
-                dx = -dx;
-            } else if (x > width - cw) {         // 오른쪽 벽
-                x = width - cw;
-                dx = -dx;
-            } else if (y < ch) {                     // 천정
-                y = ch;
-                dy = -dy;
-            } else if (y > height - ch) {        // 바닥
-                y = height - ch;
-                dy = -dy;
-            }
-            counter++;
-            int n = counter % 20 / 10;
-            canvas.drawBitmap(charater[n], x - cw, y - ch, null);
-        } // onDraw 끝
-
-        //------------------------------------
-        //      Timer Handler
-        //------------------------------------
-        Handler mHandler = new Handler() {                          // 타이머로 사용할 Handler
-            public void handleMessage(Message msg) {
-                if (canRun == true) {                                          // 반복 조건이 참이면 실행
-                    invalidate();                                                 // onDraw() 다시 실행
-                    Log.v("변수 값", "x=" + x + "  y=" + y);
-                    mHandler.sendEmptyMessageDelayed(0, 10);     // 10/1000초마다 반복
-                }  else {                                                           // 반복할 필요가 없으면
-                    finish();                                                    // Activity 종료
-                }
-            }
-        }; // Handler
-
-        //------------------------------------
-        //      onTouchEvent
-        //------------------------------------
-        public boolean onTouchEvent(MotionEvent event) {
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                x1 = event.getX();                                   // 버튼을 누른 위치
-                y1 = event.getY();
-            } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                x2 = event.getX();                                   // 버튼을 이동한 후 손을 뗀 위치
-                y2 = event.getY();
-                dx = (x2 - x1) / 10;                                // 버튼의 거리
-                dy = (y2 - y1) / 10;
-                x = x1;                                             // 캐릭터의 현재 위치를 버튼을 누른 곳으로 설정
-                y = y1;
-            }
-            return true;
-        } // TouchEvent
-
-        //------------------------------------
-        //      키보드 이벤트
-        //------------------------------------
-        @Override
-        public boolean onKeyDown(int keyCode, KeyEvent event) {
-            if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
-                canRun = false;
-            }
-            return true;
-        } // onKeyDown
-
-    } // GameView 끝
- *  */
