@@ -173,6 +173,7 @@ void CPlayer::DrawSprite(HDC hDC, int g_nSpriteCurrent, CCamera cam)
 
 	UINT xCoord = g_nSpriteCurrent % m_ppTexture[m_State].g_nSpriteX;
 	UINT yCoord = g_nSpriteCurrent / m_ppTexture[m_State].g_nSpriteX;
+	Name_Plate.Draw(hDC, m_Position.x - nSpriteWidth / 2 - cam.getPos().x, m_Position.y - nSpriteHeight / 2 - cam.getPos().y*(1280 / 940) * 3-10);
 	m_ppTexture[m_State].Texture.Draw(hDC
 		, m_Position.x - nSpriteWidth / 2 - cam.getPos().x, m_Position.y - nSpriteHeight / 2 - cam.getPos().y*(1280 / 940) * 3, nSpriteWidth, nSpriteHeight
 		, xCoord * nSpriteWidth, yCoord * nSpriteHeight

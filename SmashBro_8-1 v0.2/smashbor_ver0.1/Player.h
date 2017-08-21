@@ -77,6 +77,7 @@ public:
 	CImage UI;//플레이시 보이는 UI
 	CImage GageUI;
 	CImage GageBackUI;
+	CImage Name_Plate;
 	int Point_sprite_index = 0;
 	DWORD	m_State;			//현재상태 
 	DWORD	m_BeforeState;		//과거의상태 
@@ -125,7 +126,7 @@ public:
 	}
 	void Draw_Impact(HDC hDC, CCamera cam) {
 		if (fly == true)DrawParticle(hDC, cam, fly_paticle, -15);
-		if (attack_paticle.Pos_and_Count.size())DrawParticle(hDC, cam, attack_paticle, 20);
+		if (attack_paticle.Pos_and_Count.size())DrawParticle(hDC, cam, attack_paticle, 50);
 	}
 	void DrawSmashPoint(HDC hDC, POINT char_pos) {
 		UINT nSpriteWidth = Smash_Point.Texture.GetWidth() / Smash_Point.nSpriteCount;

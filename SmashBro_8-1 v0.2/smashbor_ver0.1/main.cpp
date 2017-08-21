@@ -496,20 +496,20 @@ void SetPlayerChar(int Player1, int Player2)
 		m_Player[0] = new CPlayer(26);
 		m_Player[0]->SetPosition(-200, 300);
 		m_Player[0]->SetStatus(BASIC_RIGHT);	//현재상태 셋팅 
-
+		m_Player[0]->Name_Plate.Load("character\\1P.png");
 		m_Player[1] = new CAIPlayer(26);
 		m_Player[1]->SetPosition(200, 300);
 		m_Player[1]->SetStatus(BASIC_LEFT);	//현재상태 셋팅 
-
+		m_Player[1]->Name_Plate.Load("character\\CPU.png");
 
 		m_Player[2] = new CAIPlayer(26);
 		m_Player[2]->SetPosition(0, 300);
 		m_Player[2]->SetStatus(BASIC_LEFT);	//현재상태 셋팅 
-
+		m_Player[2]->Name_Plate.Load("character\\CPU.png");
 		m_Player[3] = new CAIPlayer(26);
 		m_Player[3]->SetPosition(100, 300);
 		m_Player[3]->SetStatus(BASIC_LEFT);	//현재상태 셋팅 
-
+		m_Player[3]->Name_Plate.Load("character\\CPU.png");
 		switch (Player1)
 		{
 		case 0:
@@ -565,20 +565,20 @@ void SetPlayerChar(int Player1, int Player2)
 		m_Player[0] = new CPlayer(26);
 		m_Player[0]->SetPosition(-200, 300);
 		m_Player[0]->SetStatus(BASIC_RIGHT);	//현재상태 셋팅 
-
+		m_Player[0]->Name_Plate.Load("character\\1P.png");
 		m_Player[1] = new CPlayer(26);
 		m_Player[1]->SetPosition(200, 300);
 		m_Player[1]->SetStatus(BASIC_LEFT);	//현재상태 셋팅 
-
+		m_Player[1]->Name_Plate.Load("character\\2P.png");
 
 		m_Player[2] = new CAIPlayer(26);
 		m_Player[2]->SetPosition(0, 300);
 		m_Player[2]->SetStatus(BASIC_LEFT);	//현재상태 셋팅 
-
+		m_Player[2]->Name_Plate.Load("character\\CPU.png");
 		m_Player[3] = new CAIPlayer(26);
 		m_Player[3]->SetPosition(100, 300);
 		m_Player[3]->SetStatus(BASIC_LEFT);	//현재상태 셋팅 
-
+		m_Player[3]->Name_Plate.Load("character\\CPU.png");
 		bool bMario = false;
 		bool bWario = false;
 		bool bLuizy = false;
