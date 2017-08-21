@@ -1,5 +1,4 @@
 package com.example.parkjaeha.supermario;
-
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -7,16 +6,21 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
 
+import com.example.parkjaeha.supermario.hyunwoo.POINT;
 /**
  * Created by user1 on 2017-08-09.
  */
 
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.SoundPool;
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
     public GameThread thread;
@@ -51,7 +55,18 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
     private RectF whereToDraw = new RectF(manXPos, manYPos, (manXPos+frameWidth), frameHeight);
     //manxpos = 왼쪽위의 캐릭터의 가로 maxypos = 왼쪽위로 캐릭터의 세로
 
-
+    //현우 코드  08-21
+    MediaPlayer mediaPlayer;
+    SoundPool Die;
+    int explosionId=-1;
+    static boolean life=false;
+    private boolean live=true;
+    private boolean mapobject_collision=false;
+    private float m_Velocity_Y=0;
+    private float m_Velocity_X=0;
+    private int object_num;
+    private float[] object_Xpos;
+    private float[] object_Ypos;
     public GamePanel(Context context, MainActivity game, int ScreenWidth, int ScreenHeght){
         super(context);
 
@@ -62,7 +77,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         Height = display.getHeight();
         cx = Width / 2;                   // 화면의 중심점
         cy = Height / 2;
-
         res = context.getResources();          // 리소스 읽기
         // 배경화면 읽고 배경화면의 크기를 화면의 크기로 조정
 
@@ -84,6 +98,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         getHolder().addCallback(this);
         thread = new GameThread(getHolder(),this);
         setFocusable(true);
+
+        //현우 코드
+       Die=new SoundPool(2,AudioManager.STREAM_MUSIC,0);
+        explosionId=Die.load(this.getContext(),R.raw.die,1);
     }
 
     @Override
@@ -122,10 +140,16 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
 //캐릭터 위치변화
     void Update(float dt){
+
         //캐릭터가 업데이트 되는 시작시간을 저장한다.
          startFrameTime = System.currentTimeMillis();
 
         //캐릭터의 스프라이트를 이동하는 것처럼 보이기 위해 값을 변경시켜준다.
+        Gravity();
+        if(live=false&&life==false){
+            Die.play(explosionId,1,1,0,0,1);
+            life=true;
+        }
         if (isMoving) {
             manXPos = manXPos + runSpeedPerSecond / fps;
             //캐릭터가 width 프레임보다 커지면 다시 y를 증가시킨 x의 처음 위치로 이동
@@ -139,8 +163,46 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
             }
         }
     }
+    //현우 코드
+    void Gravity(){
+        if(mapobject_collision==false){
+            m_Velocity_Y+=1;
+        }
+        else {
+            m_Velocity_Y=0;
+        }
+        manYPos+=m_Velocity_Y;
+        if(manYPos>1600)live=false;
+    }
+    void map_collision(){
+        mapobject_collision=false;
 
+    }
+    //-ing
+    void map_setting(){
+        switch (CharacterMenu.map_num){
+            case 0:
 
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+            case 6:
+                break;
+            case 7:
+                break;
+            case 8:
+                break;
+
+        }
+    }
 //charager frame
     public void manageCurrentFrame() {
         long time = System.currentTimeMillis();

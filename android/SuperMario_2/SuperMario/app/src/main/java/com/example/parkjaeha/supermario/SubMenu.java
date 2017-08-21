@@ -70,7 +70,7 @@ choice.play(explosionId,1,1,0,0,1);
                     mapNumber = (int)(Math.random()*9);
                 }
                 Intent mainact = new Intent(SubMenu.this,CharacterMenu.class);
-                mainact.putExtra("map",mapNumber);
+                mainact.putExtra("map",mapNumber);//해답은 여기있을듯 사운드 자료 같이 받아오는법
                 startActivity(mainact);
             }
         });
@@ -89,7 +89,11 @@ choice.play(explosionId,1,1,0,0,1);
 
 
     }
-
+    @Override
+    public void onBackPressed() {
+        mediaPlayer.stop();
+        super.onBackPressed();
+    }
 
         //이미지 어뎁터
         public class ImageAdapter extends BaseAdapter{
