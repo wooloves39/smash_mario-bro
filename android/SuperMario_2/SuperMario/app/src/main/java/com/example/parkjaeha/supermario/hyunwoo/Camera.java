@@ -3,7 +3,7 @@ package com.example.parkjaeha.supermario.hyunwoo;
 /**
  * Created by woolo_so5omoy on 2017-08-21.
  */
-import com.example.parkjaeha.supermario.hyunwoo.POINT;
+
 public class Camera {
     POINT pos;//실제 카메라 위치
     POINT realpos;//카메라가 도착해야할 위치

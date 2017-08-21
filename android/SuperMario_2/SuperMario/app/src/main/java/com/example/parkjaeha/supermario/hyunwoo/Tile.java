@@ -4,8 +4,6 @@ package com.example.parkjaeha.supermario.hyunwoo;
  * Created by woolo_so5omoy on 2017-08-21.
  */
 
-import com.example.parkjaeha.supermario.hyunwoo.POINT;
-import com.example.parkjaeha.supermario.hyunwoo.RECT;
 public class Tile {
     int object_num;//타일의 수
     POINT[] object_pos;//그려지는 좌표

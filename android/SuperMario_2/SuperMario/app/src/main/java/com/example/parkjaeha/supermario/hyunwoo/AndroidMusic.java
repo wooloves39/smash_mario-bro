@@ -4,11 +4,12 @@ package com.example.parkjaeha.supermario.hyunwoo;
  * Created by woolo_so5omoy on 2017-08-10.
  */
 
-import java.io.IOException;
 import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
-import com.example.parkjaeha.supermario.hyunwoo.Music;
+
+import java.io.IOException;
+
 public class AndroidMusic implements Music, OnCompletionListener{
     MediaPlayer mediaPlayer;
     boolean isPrepared=false;

@@ -15,4 +15,5 @@ public class RECT {
         left=x1;
         right=x2;
     }
+
 }

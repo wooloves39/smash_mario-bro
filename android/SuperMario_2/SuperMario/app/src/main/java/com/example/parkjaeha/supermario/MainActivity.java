@@ -17,7 +17,13 @@ public class MainActivity extends ActionBarActivity {
     //extends activtiy
 // 플레이 화면 불러오기
     GamePanel gamePanel;
-    static int ch_num=0;
+    static int ch_num= -1;
+    static int rKey=0;
+    static int lKey=0;
+    static int uKey=0;
+    static int dKey=0;
+    public static int nKey = -1;
+
     View pauseButton;
     View pauseMenu;
     View a_Button;
@@ -25,6 +31,7 @@ public class MainActivity extends ActionBarActivity {
     View c_Button;
     View d_Button;
     View control_Button;
+    GamePanel game;
     public static Toast mToast;
     RelativeLayout relativeLayout ;
     //GameSurface gameSurface;
@@ -37,6 +44,7 @@ public class MainActivity extends ActionBarActivity {
             pauseMenu.setVisibility(View.GONE);
             pauseButton.setVisibility(View.VISIBLE);
             gamePanel.Pause_game = false;
+
             //continue
         }
     };
@@ -62,11 +70,13 @@ public class MainActivity extends ActionBarActivity {
             //mainMenu
         }
     };
+
     //A btn
     View.OnClickListener a_btn_click =  new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             Toast.makeText(getApplicationContext(),"A",Toast.LENGTH_SHORT).show();
+            nKey = 0;
         }
     };
 
@@ -75,6 +85,7 @@ public class MainActivity extends ActionBarActivity {
         @Override
         public void onClick(View v) {
             Toast.makeText(getApplicationContext(),"B",Toast.LENGTH_SHORT).show();
+            nKey = 1;
         }
     };
 
@@ -96,6 +107,7 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         //캐릭터 정보 가져오기
         Intent i = getIntent();
         ch_num = i.getExtras().getInt("character");
@@ -211,11 +223,11 @@ public class MainActivity extends ActionBarActivity {
                 int volume  = (int)angle;
                 if (angle > 0){
                     volume  = volume*50/180;
-                    mToast.setText(" "+ volume);
+                   // mToast.setText(" "+ volume);
                 } // 오른쪽으로 회전
                 else{
                     volume = 50+(50-(-volume)*50/180);
-                    mToast.setText(" " +volume);
+                   // mToast.setText(" " +volume);
                 } ; // 왼쪽으로 회전
                 mToast.show();
 

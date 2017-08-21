@@ -4,15 +4,14 @@ package com.example.parkjaeha.supermario.hyunwoo;
  * Created by woolo_so5omoy on 2017-08-10.
  */
 
-import java.io.IOException;
 import android.app.Activity;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.media.AudioManager;
 import android.media.SoundPool;
-import com.example.parkjaeha.supermario.hyunwoo.Audio;
-import com.example.parkjaeha.supermario.hyunwoo.Music;
-import com.example.parkjaeha.supermario.hyunwoo.Sound;
+
+import java.io.IOException;
+
 public class AndroidAudio implements Audio{
     AssetManager assets;
     SoundPool soundPool;

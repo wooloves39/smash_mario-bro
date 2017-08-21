@@ -3,9 +3,7 @@ package com.example.parkjaeha.supermario.hyunwoo;
 /**
  * Created by woolo_so5omoy on 2017-08-21.
  */
-import com.example.parkjaeha.supermario.hyunwoo.POINT;
-import com.example.parkjaeha.supermario.hyunwoo.RECT;
-import com.example.parkjaeha.supermario.hyunwoo.Tile;
+
 public class Map {
     Tile[] tiles;//각 맵의 다른 모형의 타일
     int obnum;//다른 모형의 타일 수

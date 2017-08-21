@@ -3,7 +3,7 @@ package com.example.parkjaeha.supermario.hyunwoo;
  * Created by woolo_so5omoy on 2017-08-10.
  */
 import android.media.SoundPool;
-import com.example.parkjaeha.supermario.hyunwoo.Sound;
+
 public class AndroidSound implements Sound {
     int soundId;
     SoundPool soundPool;
