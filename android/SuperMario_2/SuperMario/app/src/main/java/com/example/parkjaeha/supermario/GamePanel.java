@@ -6,14 +6,12 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
 
-import com.example.parkjaeha.supermario.hyunwoo.POINT;
 /**
  * Created by user1 on 2017-08-09.
  */
@@ -21,6 +19,10 @@ import com.example.parkjaeha.supermario.hyunwoo.POINT;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
+
+import com.example.parkjaeha.supermario.RECT;
+import com.example.parkjaeha.supermario.POINT;
+
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
     public GameThread thread;
@@ -65,8 +67,14 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
     private float m_Velocity_Y=0;
     private float m_Velocity_X=0;
     private int object_num;
-    private float[] object_Xpos;
-    private float[] object_Ypos;
+    private int[] object_posX;
+    private int[] object_posY;
+    private int[] object_RECT_bottom;
+    private int[] object_RECT_top;
+    private int[] object_RECT_left;
+    private int[] object_RECT_right;
+    private POINT[] object_pos;
+    private RECT[] objedect_size;
     public GamePanel(Context context, MainActivity game, int ScreenWidth, int ScreenHeght){
         super(context);
 
@@ -82,7 +90,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
         imgback = BitmapFactory.decodeResource(res, image.imageIDs[CharacterMenu.map_num]);
         imgback = Bitmap.createScaledBitmap(imgback, Width, Height, true);
-
+        map_setting();
         //  test =  new Test(BitmapFactory.decodeResource(res,R.drawable.mario_rightbasic),100,0,ScreenWidth,ScreenHeght);
         //charaters = BitmapFactory.decodeResource(res, image.img_Scharacter[MainActivity.ch_num]);
         //charaters = BitmapFactory.decodeResource(res,R.drawable.mario_rightbasic);
@@ -146,6 +154,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
         //캐릭터의 스프라이트를 이동하는 것처럼 보이기 위해 값을 변경시켜준다.
         Gravity();
+        map_collision();
         if(live=false&&life==false){
             Die.play(explosionId,1,1,0,0,1);
             life=true;
@@ -164,25 +173,75 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         }
     }
     //현우 코드
-    void Gravity(){
-        if(mapobject_collision==false){
-            m_Velocity_Y+=1;
-        }
-        else {
-            m_Velocity_Y=0;
-        }
-        manYPos+=m_Velocity_Y;
-        if(manYPos>1600)live=false;
+   public void Gravity(){
+      //  if(mapobject_collision==false){
+      //     m_Velocity_Y+=1;
+      // }
+      // else {
+      //     m_Velocity_Y=0;
+      // }
+      // manYPos+=m_Velocity_Y;
+      // if(manYPos>1600)live=false;
+       if(mapobject_collision==false){
+           manYPos+=5;
+       }
     }
-    void map_collision(){
+   public void map_collision(){
         mapobject_collision=false;
-
+        for(int i=0;i<object_num;++i){
+            if( manYPos<=object_RECT_top[i])continue;
+            if( manYPos>=object_RECT_bottom[i])continue;
+            if( manXPos<=object_RECT_left[i])continue;
+            if( manXPos<=object_RECT_right[i])continue;
+            mapobject_collision=true;
+        }
     }
     //-ing
-    void map_setting(){
+   public void map_size_setting(int num,int xpos,int ypos,POINT size){
+        object_RECT_top[num]=ypos-size.y;
+        object_RECT_bottom[num]=ypos+size.y;
+        object_RECT_left[num]=xpos-size.x;
+        object_RECT_right[num]=xpos+size.x;
+
+    }
+    public void map_setting(){
+        POINT size=new POINT();
         switch (CharacterMenu.map_num){
             case 0:
+                object_num=6;
 
+                object_posX=new int[6];
+              //  object_pos=new POINT[6];
+                object_posY=new int[6];
+                //objedect_size=new RECT[6];
+                object_RECT_bottom=new int[6];
+                object_RECT_left=new int[6];
+                object_RECT_right=new int[6];
+                object_RECT_top=new int[6];
+               // object_pos[0].x=1280;
+
+                object_posX[0]=1280;
+                object_posY[0]=1140;
+                size.x=780;
+                size.y=40;
+                map_size_setting(0,object_posX[0],object_posY[0],size);
+                object_posX[1]=880;
+                object_posY[1]=440;
+                size.x=320;
+                size.y=80;
+                map_size_setting(1,object_posX[1],object_posY[1],size);
+                object_posX[2]=1680;
+                object_posY[2]=440;
+                map_size_setting(2,object_posX[2],object_posY[2],size);
+                object_posX[3]=1280;
+                object_posY[3]=840;
+                map_size_setting(3,object_posX[3],object_posY[3],size);
+                object_posX[4]=2180;
+                object_posY[4]=840;
+                map_size_setting(4,object_posX[4],object_posY[4],size);
+                object_posX[5]=380;
+                object_posY[5]=840;
+                map_size_setting(5,object_posX[5],object_posY[5],size);
                 break;
             case 1:
                 break;
