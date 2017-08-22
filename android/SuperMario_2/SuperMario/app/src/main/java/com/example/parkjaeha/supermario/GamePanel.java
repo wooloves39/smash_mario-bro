@@ -6,6 +6,8 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.media.AudioManager;
@@ -64,22 +66,20 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
     int explosionId=-1;
     static boolean life=false;
     private boolean live=true;
-    private boolean mapobject_collision=false;
     private float m_Velocity_Y=0;
     private float m_Velocity_X=0;
     private int object_num;
     private int[] object_posX;
     private int[] object_posY;
-    private int[] object_RECT_bottom;
-    private int[] object_RECT_top;
-    private int[] object_RECT_left;
-    private int[] object_RECT_right;
-    private POINT[] object_pos;
-    private RECT[] objedect_size;
-
+    private float[] object_RECT_bottom;
+    private float[] object_RECT_top;
+    private float[] object_RECT_left;
+    private float[] object_RECT_right;
+     POINT[] object_pos=new POINT[6];
+     RECT[] objedect_size;
+    Paint paint=new Paint();
     public GamePanel(Context context, MainActivity game, int ScreenWidth, int ScreenHeght){
         super(context);
-
         //Mario ma = new Mario();
 
  //       ma.getMoveBitmaps();
@@ -97,7 +97,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
         imgback = BitmapFactory.decodeResource(res, image.imageIDs[CharacterMenu.map_num]);
         imgback = Bitmap.createScaledBitmap(imgback, Width, Height, true);
-        map_setting();
+
         background = BitmapFactory.decodeResource(res, R.drawable.background);
         background = Bitmap.createScaledBitmap(background, Width+1000, Height, true);
         //  test =  new Test(BitmapFactory.decodeResource(res,R.drawable.mario_rightbasic),100,0,ScreenWidth,ScreenHeght);
@@ -119,6 +119,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         //현우 코드
         Die=new SoundPool(2, AudioManager.STREAM_MUSIC,0);
         explosionId=Die.load(this.getContext(),R.raw.die,1);
+        map_setting();
+        paint = new Paint();
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setColor(Color.BLACK);
+        paint.setStrokeWidth(3);
     }
 
     @Override
@@ -150,6 +155,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
 
               canvas.drawBitmap(bitmapRunningMan, frameToDraw, whereToDraw, null);
+                canvas.drawRect(Player.posX,Player.posY,Player.posX+frameWidth,Player.posY+frameHeight,paint);
+
+                for(int i=0;i<object_num;++i){
+                canvas.drawRect(object_RECT_left[i],object_RECT_top[i],object_RECT_right[i],object_RECT_bottom[i],paint);
+                }
 //캐릭터 위치 설정하고 그값을 그린다.
             }
         }
@@ -244,18 +254,18 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         // }
         // manYPos+=m_Velocity_Y;
         // if(manYPos>1600)live=false;
-        if(mapobject_collision==false){
-            manYPos+=5;
+        if(Player.map_collision==false){
+         Player.posY+=5;
         }
     }
     public void map_collision(){
-        mapobject_collision=false;
+        Player.map_collision=false;
         for(int i=0;i<object_num;++i){
-            if( manYPos<=object_RECT_top[i])continue;
-            if( manYPos>=object_RECT_bottom[i])continue;
-            if( manXPos<=object_RECT_left[i])continue;
-            if( manXPos<=object_RECT_right[i])continue;
-            mapobject_collision=true;
+            if( Player.posY<=object_RECT_top[i])continue;
+            if( Player.posY>=object_RECT_bottom[i])continue;
+            if( Player.posX<=object_RECT_left[i])continue;
+            if( Player.posX<=object_RECT_right[i])continue;
+            Player.map_collision=true;
         }
     }
     //-ing
@@ -271,17 +281,19 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         switch (CharacterMenu.map_num){
             case 0:
                 object_num=6;
-
+                for(int i=0;i<object_num;++i){
+                    object_pos[i]=new POINT();
+                }
                 object_posX=new int[6];
-                //  object_pos=new POINT[6];
+                 // object_pos=new POINT[6];
                 object_posY=new int[6];
                 //objedect_size=new RECT[6];
-                object_RECT_bottom=new int[6];
-                object_RECT_left=new int[6];
-                object_RECT_right=new int[6];
-                object_RECT_top=new int[6];
-                // object_pos[0].x=1280;
-
+                object_RECT_bottom=new float[6];
+                object_RECT_left=new float[6];
+                object_RECT_right=new float[6];
+                object_RECT_top=new float[6];
+                 object_pos[0].x=1280;
+               // object_pos[0].x=1280;
                 object_posX[0]=1280;
                 object_posY[0]=1140;
                 size.x=780;
@@ -306,20 +318,300 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                 map_size_setting(5,object_posX[5],object_posY[5],size);
                 break;
             case 1:
+                object_num=8;
+
+                object_posX=new int[8];
+                //  object_pos=new POINT[6];
+                object_posY=new int[8];
+                //objedect_size=new RECT[6];
+                object_RECT_bottom=new float[8];
+                object_RECT_left=new float[8];
+                object_RECT_right=new float[8];
+                object_RECT_top=new float[8];
+                // object_pos[0].x=1280;
+
+                object_posX[0]=1280;
+                object_posY[0]=1140;
+                size.x=980;
+                size.y=40;
+                map_size_setting(0,object_posX[0],object_posY[0],size);
+                object_posX[1]=880;
+                object_posY[1]=440;
+                size.x=280;
+                size.y=40;
+                map_size_setting(1,object_posX[1],object_posY[1],size);
+                object_posX[2]=1680;
+                object_posY[2]=440;
+                map_size_setting(2,object_posX[2],object_posY[2],size);
+                object_posX[3]=1280;
+                object_posY[3]=640;
+                size.x=380;
+                size.y=40;
+                map_size_setting(3,object_posX[3],object_posY[3],size);
+                object_posX[4]=1880;
+                object_posY[4]=840;
+                size.x=190;
+                size.y=40;
+                map_size_setting(4,object_posX[4],object_posY[4],size);
+                object_posX[5]=640;
+                object_posY[5]=840;
+                map_size_setting(5,object_posX[5],object_posY[5],size);
+                object_posX[6]=1680;
+                object_posY[6]=1040;
+                map_size_setting(6,object_posX[6],object_posY[6],size);
+                object_posX[7]=840;
+                object_posY[7]=1040;
+                map_size_setting(7,object_posX[7],object_posY[7],size);
                 break;
             case 2:
+                object_num=4;
+
+                object_posX=new int[4];
+                //  object_pos=new POINT[6];
+                object_posY=new int[4];
+                //objedect_size=new RECT[6];
+                object_RECT_bottom=new float[4];
+                object_RECT_left=new float[4];
+                object_RECT_right=new float[4];
+                object_RECT_top=new float[4];
+                // object_pos[0].x=1280;
+
+                object_posX[0]=1280;
+                object_posY[0]=840;
+                size.x=780;
+                size.y=40;
+                map_size_setting(0,object_posX[0],object_posY[0],size);
+                object_posX[1]=1280;
+                object_posY[1]=440;
+                size.x=920;
+                size.y=40;
+                map_size_setting(1,object_posX[1],object_posY[1],size);
+                object_posX[2]=2080;
+                object_posY[2]=1040;
+                size.x=180;
+                size.y=40;
+                map_size_setting(2,object_posX[2],object_posY[2],size);
+                object_posX[3]=480;
+                object_posY[3]=1040;
+                map_size_setting(3,object_posX[3],object_posY[3],size);
+
                 break;
             case 3:
+                object_num=3;
+
+                object_posX=new int[3];
+                //  object_pos=new POINT[6];
+                object_posY=new int[3];
+                //objedect_size=new RECT[6];
+                object_RECT_bottom=new float[3];
+                object_RECT_left=new float[3];
+                object_RECT_right=new float[3];
+                object_RECT_top=new float[3];
+                // object_pos[0].x=1280;
+
+                object_posX[0]=1280;
+                object_posY[0]=940;
+                size.x=1180;
+                size.y=40;
+                map_size_setting(0,object_posX[0],object_posY[0],size);
+                object_posX[1]=1280;
+                object_posY[1]=1040;
+                size.x=580;
+                size.y=40;
+                map_size_setting(1,object_posX[1],object_posY[1],size);
+                object_posX[2]=1280;
+                object_posY[2]=940;
+                size.x=290;
+                size.y=40;
+                map_size_setting(2,object_posX[2],object_posY[2],size);
                 break;
             case 4:
-                break;
+                object_num=7;
+
+                object_posX=new int[7];
+                //  object_pos=new POINT[6];
+                object_posY=new int[7];
+                //objedect_size=new RECT[6];
+                object_RECT_bottom=new float[7];
+                object_RECT_left=new float[7];
+                object_RECT_right=new float[7];
+                object_RECT_top=new float[7];
+                // object_pos[0].x=1280;
+
+                object_posX[0]=1280;
+                object_posY[0]=1340;
+                size.x=860;
+                size.y=40;
+                map_size_setting(0,object_posX[0],object_posY[0],size);
+                object_posX[1]=780;
+                object_posY[1]=840;
+                size.x=180;
+                size.y=40;
+                map_size_setting(1,object_posX[1],object_posY[1],size);
+                object_posX[2]=1780;
+                object_posY[2]=840;
+                map_size_setting(2,object_posX[2],object_posY[2],size);
+                object_posX[3]=1080;
+                object_posY[3]=440;
+                map_size_setting(3,object_posX[3],object_posY[3],size);
+                object_posX[4]=1480;
+                object_posY[4]=440;
+                map_size_setting(4,object_posX[4],object_posY[4],size);
+                object_posX[5]=480;
+                object_posY[5]=640;
+                map_size_setting(5,object_posX[5],object_posY[5],size);
+                object_posX[6]=1080;
+                object_posY[6]=640;
+                map_size_setting(6,object_posX[6],object_posY[6],size);
+                 break;
             case 5:
-                break;
+                object_num=4;
+
+                object_posX=new int[4];
+                //  object_pos=new POINT[6];
+                object_posY=new int[4];
+                //objedect_size=new RECT[6];
+                object_RECT_bottom=new float[4];
+                object_RECT_left=new float[4];
+                object_RECT_right=new float[4];
+                object_RECT_top=new float[4];
+                // object_pos[0].x=1280;
+
+                object_posX[0]=1280;
+                object_posY[0]=1340;
+                size.x=1060;
+                size.y=40;
+                map_size_setting(0,object_posX[0],object_posY[0],size);
+                object_posX[1]=580;
+                object_posY[1]=740;
+                size.x=380;
+                size.y=40;
+                map_size_setting(1,object_posX[1],object_posY[1],size);
+                object_posX[2]=1980;
+                object_posY[2]=740;
+                map_size_setting(2,object_posX[2],object_posY[2],size);
+                object_posX[3]=1280;
+                object_posY[3]=740;
+                map_size_setting(3,object_posX[3],object_posY[3],size);
+                     break;
             case 6:
+                object_num=8;
+
+                object_posX=new int[8];
+                //  object_pos=new POINT[6];
+                object_posY=new int[8];
+                //objedect_size=new RECT[6];
+                object_RECT_bottom=new float[8];
+                object_RECT_left=new float[8];
+                object_RECT_right=new float[8];
+                object_RECT_top=new float[8];
+                // object_pos[0].x=1280;
+
+                object_posX[0]=1280;
+                object_posY[0]=940;
+                size.x=1180;
+                size.y=40;
+                map_size_setting(0,object_posX[0],object_posY[0],size);
+                object_posX[1]=80;
+                object_posY[1]=540;
+                size.x=280;
+                size.y=40;
+                map_size_setting(1,object_posX[1],object_posY[1],size);
+                object_posX[2]=680;
+                object_posY[2]=140;
+                map_size_setting(2,object_posX[2],object_posY[2],size);
+                object_posX[3]=1680;
+                object_posY[3]=240;
+                map_size_setting(3,object_posX[3],object_posY[3],size);
+                object_posX[4]=2480;
+                object_posY[4]=840;
+                map_size_setting(4,object_posX[4],object_posY[4],size);
+                object_posX[5]=880;
+                object_posY[5]=340;
+                size.x=290;
+                size.y=40;
+                map_size_setting(5,object_posX[5],object_posY[5],size);
+                object_posX[6]=780;
+                object_posY[6]=840;
+                map_size_setting(6,object_posX[6],object_posY[6],size);
+                object_posX[7]=1880;
+                object_posY[7]=640;
+                map_size_setting(7,object_posX[7],object_posY[7],size);
+
                 break;
             case 7:
+                object_num=9;
+
+                object_posX=new int[9];
+                //  object_pos=new POINT[6];
+                object_posY=new int[9];
+                //objedect_size=new RECT[6];
+                object_RECT_bottom=new float[9];
+                object_RECT_left=new float[9];
+                object_RECT_right=new float[9];
+                object_RECT_top=new float[9];
+                // object_pos[0].x=1280;
+
+                object_posX[0]=1000;
+                object_posY[0]=1340;
+                size.x=400;
+                size.y=40;
+                map_size_setting(0,object_posX[0],object_posY[0],size);
+                object_posX[1]=1560;
+                object_posY[1]=1340;
+                map_size_setting(1,object_posX[1],object_posY[1],size);
+                object_posX[2]=380;
+                object_posY[2]=1040;
+                map_size_setting(2,object_posX[2],object_posY[2],size);
+                object_posX[3]=2180;
+                object_posY[3]=1040;
+                map_size_setting(3,object_posX[3],object_posY[3],size);
+                object_posX[4]=680;
+                object_posY[4]=640;
+                map_size_setting(4,object_posX[4],object_posY[4],size);
+                object_posX[5]=1880;
+                object_posY[5]=640;
+                map_size_setting(5,object_posX[5],object_posY[5],size);
+                object_posX[6]=1280;
+                object_posY[6]=240;
+                map_size_setting(6,object_posX[6],object_posY[6],size);
+                object_posX[7]=180;
+                object_posY[7]=240;
+                map_size_setting(7,object_posX[7],object_posY[7],size);
+                object_posX[8]=2380;
+                object_posY[8]=240;
+                map_size_setting(8,object_posX[8],object_posY[8],size);
+
                 break;
             case 8:
+                object_num=4;
+
+                object_posX=new int[4];
+                //  object_pos=new POINT[6];
+                object_posY=new int[4];
+                //objedect_size=new RECT[6];
+                object_RECT_bottom=new float[4];
+                object_RECT_left=new float[4];
+                object_RECT_right=new float[4];
+                object_RECT_top=new float[4];
+                // object_pos[0].x=1280;
+
+                object_posX[0]=1280;
+                object_posY[0]=1340;
+                size.x=1480;
+                size.y=40;
+                map_size_setting(0,object_posX[0],object_posY[0],size);
+                object_posX[1]=740;
+                object_posY[1]=640;
+                size.x=280;
+                size.y=40;
+                map_size_setting(1,object_posX[1],object_posY[1],size);
+                object_posX[2]=1980;
+                object_posY[2]=640;
+                map_size_setting(2,object_posX[2],object_posY[2],size);
+                object_posX[3]=1280;
+                object_posY[3]=340;
+                map_size_setting(3,object_posX[3],object_posY[3],size);
                 break;
 
         }

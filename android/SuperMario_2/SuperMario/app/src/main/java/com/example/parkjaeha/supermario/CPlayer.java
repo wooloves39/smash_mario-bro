@@ -21,4 +21,7 @@ public class CPlayer
 
 
     void SetAnimation(int nAni){nAnimation = nAni;}
+
+    //현우 코드
+    boolean map_collision=false;
 }
