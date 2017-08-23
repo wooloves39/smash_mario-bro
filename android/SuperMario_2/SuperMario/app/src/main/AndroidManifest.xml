@@ -22,6 +22,11 @@
             </intent-filter>
 
         </activity>
+
+        <activity android:name=".RankMenu"
+            android:theme="@style/AppFullScreenTheme"
+            android:screenOrientation="landscape"
+            />
         <activity android:name=".SubMenu"
             android:theme="@style/AppFullScreenTheme"
             android:screenOrientation="landscape"/>

@@ -5,10 +5,10 @@ package com.example.parkjaeha.supermario;
  */
 
 public class RECT {
-   float bottom;
-  float top;
-  float left;
-  float right;
+  public   float bottom;
+   public float top;
+   public float left;
+   public float right;
     void setRECT(int x1,int y1,int x2,int y2){
         bottom=y1;
         top=y2;

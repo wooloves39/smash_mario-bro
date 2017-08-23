@@ -1,14 +1,20 @@
 package com.example.parkjaeha.supermario;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AlertDialog;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static com.example.parkjaeha.supermario.R.id.volume;
 
@@ -31,9 +37,15 @@ public class MainActivity extends ActionBarActivity {
     View c_Button;
     View d_Button;
     View control_Button;
+    View timeout;
     GamePanel game;
     public static Toast mToast;
     RelativeLayout relativeLayout ;
+    long myBaseTime;
+    public int seconds = 99;
+    public int minutes = 10;
+    Boolean timecheck = true;
+    boolean doubleBackToExitPressedOnce = false;
     //GameSurface gameSurface;
 
     //continue 클릭시 플레이 계속
@@ -44,7 +56,7 @@ public class MainActivity extends ActionBarActivity {
             pauseMenu.setVisibility(View.GONE);
             pauseButton.setVisibility(View.VISIBLE);
             gamePanel.Pause_game = false;
-
+            timecheck= true;
             //continue
         }
     };
@@ -64,8 +76,9 @@ public class MainActivity extends ActionBarActivity {
         public void onClick(View v) {
              pauseButton.setVisibility(View.GONE);
             pauseMenu.setVisibility(View.VISIBLE);
-
             gamePanel.Pause_game = true;
+            timecheck = false;
+
             // pause start
             //mainMenu
         }
@@ -245,19 +258,87 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
-    }
-  /*  @Override
-    protected void onResume() {
-        super.onResume();
-        gamePanel.resume();
-    }
+        //countdown timer
+        LayoutInflater timeInflater = (LayoutInflater) getApplicationContext().getSystemService(getApplicationContext().LAYOUT_INFLATER_SERVICE);
+        timeout = timeInflater.inflate(R.layout.timeout, null, false);
+        timeout.setX(widths - 1500);
+        timeout.setY(0);
+
+        relativeLayout.addView(timeout);
+
+        timeout.getLayoutParams().height = 220;
+        timeout.getLayoutParams().width = 300;
+
+
+        Timer t = new Timer();
+        //Set the schedule function and rate
+        t.scheduleAtFixedRate(new TimerTask() {
+
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        TextView tv = (TextView) findViewById(R.id.contentView);
+                        if(timecheck) {
+                            tv.setText(String.valueOf(seconds));
+
+                            seconds -= 1;
+
+                            if (seconds == 0) {
+                                gamePanel.thread.setRunning(false);
+                                tv.setText(String.valueOf(seconds));
+                                Intent rankmove = new Intent(MainActivity.this,RankMenu.class);
+                                startActivity(rankmove);
+                            }
+                        }
+                    }
+
+                });
+            }
+
+        }, 0, 1000);
+
+
+
+    }       //oncreate
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        gamePanel.pause();
-    }*/
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
 
+            AlertDialog.Builder d = new AlertDialog.Builder(this);
+            d.setMessage("정말 종료하시겠습니까?");
+            d.setPositiveButton("예", new DialogInterface.OnClickListener() {
+
+                public void onClick(DialogInterface dialog, int which) {
+                    // process전체 종료
+                    Intent i =  new Intent(MainActivity.this,MainMenu.class);
+                    startActivity(i);
+                    finish();
+                }
+            });
+            d.setNegativeButton("아니요", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            d.show();
+
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "한번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
+    }
 
 } // 프로그램 끝
 

@@ -24,5 +24,10 @@ public class Info {
             R.drawable.mario_rightmove,R.drawable.luizy_rightmove,R.drawable.wario_rigthtmove,R.drawable.waluizy_rightmove
     };
 
+    Integer[] img_background = {
+        R.drawable.background,R.drawable.background_map2,R.drawable.background,R.drawable.background_map4,R.drawable.background_map5,R.drawable.background_map6
+            ,R.drawable.background_map6,R.drawable.background_map6,R.drawable.background_map9
+    };
+
 
 }

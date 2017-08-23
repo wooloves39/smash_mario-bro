@@ -31,6 +31,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
     Info image = new Info();
     Resources res;
     Bitmap imgback,charaters,background;
+    int count=0,check=0;
 
     SharedPreferences pref ;
     public  static int Width, Height, cx, cy;
@@ -66,17 +67,24 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
     int explosionId=-1;
     static boolean life=false;
     private boolean live=true;
+    private boolean mapobject_collision=false;
     private float m_Velocity_Y=0;
     private float m_Velocity_X=0;
     private int object_num;
-     POINT[] object_pos;
-     RECT[] objedect_size;
+    private int[] object_posX;
+    private int[] object_posY;
+    private int[] object_RECT_bottom;
+    private int[] object_RECT_top;
+    private int[] object_RECT_left;
+    private int[] object_RECT_right;
+    private POINT[] object_pos;
+    private RECT[] objedect_size;
     Paint paint=new Paint();
+
+
     public GamePanel(Context context, MainActivity game, int ScreenWidth, int ScreenHeght){
         super(context);
-        //Mario ma = new Mario();
 
- //       ma.getMoveBitmaps();
 
         //화면 사이즈 width,height 크기
         Display display = ((WindowManager)context.getSystemService(context.WINDOW_SERVICE))
@@ -92,13 +100,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         imgback = BitmapFactory.decodeResource(res, image.imageIDs[CharacterMenu.map_num]);
         imgback = Bitmap.createScaledBitmap(imgback, Width, Height, true);
 
-        background = BitmapFactory.decodeResource(res, R.drawable.background);
-        background = Bitmap.createScaledBitmap(background, Width+1000, Height, true);
-        //  test =  new Test(BitmapFactory.decodeResource(res,R.drawable.mario_rightbasic),100,0,ScreenWidth,ScreenHeght);
-        //charaters = BitmapFactory.decodeResource(res, image.img_Scharacter[MainActivity.ch_num]);
-        //charaters = BitmapFactory.decodeResource(res,R.drawable.mario_rightbasic);
-        //sw = charaters.getWidth() / 2;
-        //sh = charaters.getHeight() / 2;
+        background = BitmapFactory.decodeResource(res, image.img_background[CharacterMenu.map_num]);
+        background = Bitmap.createScaledBitmap(background, 2*Width, Height, true);
 
         //image.imageIDs[MainActivity.ch_num]
         //캐릭터 객체 생성
@@ -118,6 +121,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         paint.setStyle(Paint.Style.STROKE);
         paint.setColor(Color.BLACK);
         paint.setStrokeWidth(3);
+
+
     }
 
     @Override
@@ -132,30 +137,29 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
         return true;
     }
+    int counter= 99;
 //draw
     void Draw(Canvas canvas){
         if(!Pause_game){
             if(canvas!=null){
-                //background
-                canvas.drawBitmap(background,0,0,null);
-               // Log.d("Background : ")
-                canvas.drawBitmap(imgback,0, 0, null);
+                //background  - 하나로 이미지 합쳐지만 이것도 하나로 합칠 예정
+                canvas.drawBitmap(background,count-1280,0,null);
+                canvas.drawBitmap(imgback,count, 0, null);
 
-                //canvas.drawBitmap(charaters, cx- sw, cy- sh, null);
                 //위치설정 및 그리기
               //  whereToDraw.set((int) manXPos, (int)manYPos, (int) manXPos+ frameWidth, (int)manYPos + frameHeight);
-
                 whereToDraw.set((int) Player.posX, (int) Player.posY, (int) Player.posX + frameWidth, (int) Player.posY + frameHeight);
 
-
               canvas.drawBitmap(bitmapRunningMan, frameToDraw, whereToDraw, null);
+
                 canvas.drawRect(Player.posX,Player.posY,Player.posX+frameWidth,Player.posY+frameHeight,paint);
 
                 for(int i=0;i<object_num;++i){
-                canvas.drawRect(objedect_size[i].left,objedect_size[i].top,objedect_size[i].right,objedect_size[i].bottom,paint);
+                    canvas.drawRect(objedect_size[i].left,objedect_size[i].top,objedect_size[i].right,objedect_size[i].bottom,paint);
                 }
 //캐릭터 위치 설정하고 그값을 그린다.
             }
+
         }
         //캐릭터를 그린 시간의 마지막 시간을 비교 연산한다.
         timeThisFrame = System.currentTimeMillis() - startFrameTime;
@@ -166,6 +170,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
 //캐릭터 위치변화
     void Update(float dt){
+
         //캐릭터가 업데이트 되는 시작시간을 저장한다.
          startFrameTime = System.currentTimeMillis();
 
@@ -181,15 +186,26 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
         //캐릭터의 스프라이트를 이동하는 것처럼 보이기 위해 값을 변경시켜준다.
         if (isMoving) {
+
             manXPos = manXPos + runSpeedPerSecond / fps;
             //캐릭터가 width 프레임보다 커지면 다시 y를 증가시킨 x의 처음 위치로 이동
-            if (manXPos > Width) {
-                manYPos += (int)frameHeight;
-                manXPos = 10;
+
+            //background moving  -  map moving _ camera
+            if(Maingame.nKey ==1 && Player.posX <1000 && Player.posX>500 ){
+                count=count-10;
+            }else if(Maingame.nKey ==0 && Player.posX<500 &&Player.posX>-300){
+                count = count+10;
+            }
+
+            // 캐릭터 움직임 최대 위치 제한
+            if (Player.posX > Width || Player.posX<-500 || Player.posX >2300) {
+                Player.posY += (int)frameHeight;
+                Player.posX = 10;
+                count = 0;
             }
             // 캐릭터가 height프레임을 넘어가면 처음 위치의 y자리로 이동
-            if (manYPos + frameHeight > Height) {
-                manYPos = 10;
+            if (Player.posY + frameHeight > Height) {
+                Player.posY = 10;
             }
 
             switch (Maingame.nKey)
@@ -217,7 +233,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
             manageCurrentFrame();
         }
     }
-
 
 //charager frame
     public void manageCurrentFrame() {
@@ -248,8 +263,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         // }
         // manYPos+=m_Velocity_Y;
         // if(manYPos>1600)live=false;
-        if(Player.map_collision==false){
-         Player.posY+=5;
+        if(mapobject_collision==false){
+            manYPos+=5;
         }
     }
     public void map_collision(){
@@ -267,7 +282,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
     }
     //-ing
     public void map_size_setting(int num,POINT pos,POINT size){
-       objedect_size[num].top=pos.y-size.y;
+        objedect_size[num].top=pos.y-size.y;
         objedect_size[num].bottom=pos.y+size.y;
         objedect_size[num].left=pos.x-size.x;
         objedect_size[num].right=pos.x+size.x;
@@ -435,7 +450,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                 object_pos[6].x=1950;
                 object_pos[6].y=570;
                 map_size_setting(6,object_pos[6],size);
-                 break;
+                break;
             case 5:
                 object_num=4;
                 object_pos=new POINT[4];
@@ -460,7 +475,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                 object_pos[3].x=1200;
                 object_pos[3].y=400;
                 map_size_setting(3,object_pos[3],size);
-                     break;
+                break;
             case 6:
                 object_num=8;
                 object_pos=new POINT[8];
