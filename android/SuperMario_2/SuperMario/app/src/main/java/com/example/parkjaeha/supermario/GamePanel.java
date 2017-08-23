@@ -100,7 +100,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         imgback = BitmapFactory.decodeResource(res, image.imageIDs[CharacterMenu.map_num]);
         imgback = Bitmap.createScaledBitmap(imgback, Width, Height, true);
 
-        background = BitmapFactory.decodeResource(res, R.drawable.background);
+        //background = BitmapFactory.decodeResource(res, R.drawable.background);
+        background = BitmapFactory.decodeResource(res, image.img_background[CharacterMenu.map_num]);
         background = Bitmap.createScaledBitmap(background, 2*Width, Height, true);
 
         //image.imageIDs[MainActivity.ch_num]
@@ -179,6 +180,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         //캐릭터의 스프라이트를 이동하는 것처럼 보이기 위해 값을 변경시켜준다.
 
 
+
         //캐릭터의 스프라이트를 이동하는 것처럼 보이기 위해 값을 변경시켜준다.
         if (isMoving)
         {
@@ -205,6 +207,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
             }
 
 
+
             switch (Maingame.nKey)
             {
                 case 0: // leftmove
@@ -229,6 +232,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                     Player.move(0, -1);
                     break;
             }
+
             Gravity();
             map_collision();
             if(live=false&&life==false)
@@ -236,6 +240,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                 Die.play(explosionId,1,1,0,0,1);
                 life=true;
             }
+
             manageCurrentFrame();
         }
     }
@@ -271,7 +276,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         // manYPos+=m_Velocity_Y;
         // if(manYPos>1600)live=false;
         if(mapobject_collision==false){
-            manYPos+=5;
+            Player.posY +=5;
         }
     }
     public void map_collision(){
