@@ -19,15 +19,17 @@ public class Info {
     Integer[] img_Scharacter= {
             R.drawable.mario_ui,R.drawable.luizy_ui,R.drawable.wario_ui,R.drawable.waluizy_ui
     };
-
-    Integer[] img_rightmove= {
-            R.drawable.mario_rightmove,R.drawable.luizy_rightmove,R.drawable.wario_rigthtmove,R.drawable.waluizy_rightmove
-    };
-
     Integer[] img_background = {
-        R.drawable.background,R.drawable.background_map2,R.drawable.background,R.drawable.background_map4,R.drawable.background_map5,R.drawable.background_map6
+            R.drawable.background,R.drawable.background_map2,R.drawable.background,R.drawable.background_map4,R.drawable.background_map5,R.drawable.background_map6
             ,R.drawable.background_map6,R.drawable.background_map6,R.drawable.background_map9
     };
+    Integer[] img_move= {
+            R.drawable.mario_rightmove, R.drawable.luizy_rightmove,R.drawable.wario_rightmove,R.drawable.waluizy_rightmove,
+            R.drawable.mario_leftmove,R.drawable.luizy_leftmove,R.drawable.wario_leftmove,R.drawable.waluizy_leftmove
+    };
 
-
+    Integer[] img_jump= {
+            R.drawable.mario_rightjump,R.drawable.luizy_rightjump,R.drawable.wario_rightjump,R.drawable.waluizy_rightjump,
+            R.drawable.mario_leftjump,R.drawable.luizy_leftjump,R.drawable.wario_leftjump,R.drawable.waluizy_leftjump
+    };
 }

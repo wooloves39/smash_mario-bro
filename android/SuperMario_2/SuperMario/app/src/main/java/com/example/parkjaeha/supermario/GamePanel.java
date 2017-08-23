@@ -100,12 +100,12 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         imgback = BitmapFactory.decodeResource(res, image.imageIDs[CharacterMenu.map_num]);
         imgback = Bitmap.createScaledBitmap(imgback, Width, Height, true);
 
-        background = BitmapFactory.decodeResource(res, image.img_background[CharacterMenu.map_num]);
+        background = BitmapFactory.decodeResource(res, R.drawable.background);
         background = Bitmap.createScaledBitmap(background, 2*Width, Height, true);
 
         //image.imageIDs[MainActivity.ch_num]
         //캐릭터 객체 생성
-        bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_rightmove[MainActivity.ch_num]);
+        bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_move[MainActivity.ch_num]);
         bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
 
             //getholder 호출
@@ -177,64 +177,71 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         //포지션이동
         Log.d("Key : " ,Maingame.nKey+"");
         //캐릭터의 스프라이트를 이동하는 것처럼 보이기 위해 값을 변경시켜준다.
-        Gravity();
-        map_collision();
-        if(live=false&&life==false){
-            Die.play(explosionId,1,1,0,0,1);
-            life=true;
-        }
+
 
         //캐릭터의 스프라이트를 이동하는 것처럼 보이기 위해 값을 변경시켜준다.
-        if (isMoving) {
-
+        if (isMoving)
+        {
             manXPos = manXPos + runSpeedPerSecond / fps;
             //캐릭터가 width 프레임보다 커지면 다시 y를 증가시킨 x의 처음 위치로 이동
-
             //background moving  -  map moving _ camera
             if(Maingame.nKey ==1 && Player.posX <1000 && Player.posX>500 ){
                 count=count-10;
-            }else if(Maingame.nKey ==0 && Player.posX<500 &&Player.posX>-300){
+            }
+            else if(Maingame.nKey ==0 && Player.posX<500 &&Player.posX>-300){
                 count = count+10;
             }
-
             // 캐릭터 움직임 최대 위치 제한
-            if (Player.posX > Width || Player.posX<-500 || Player.posX >2300) {
+            if (Player.posX > Width || Player.posX<-500 || Player.posX >2300)
+            {
                 Player.posY += (int)frameHeight;
                 Player.posX = 10;
                 count = 0;
             }
             // 캐릭터가 height프레임을 넘어가면 처음 위치의 y자리로 이동
-            if (Player.posY + frameHeight > Height) {
-                Player.posY = 10;
+            if (Player.posY + frameHeight > Height)
+            {
+            Player.posY = 10;
             }
+
 
             switch (Maingame.nKey)
             {
-                case 0:
-                    bitmapRunningMan = BitmapFactory.decodeResource(getResources(), R.drawable.wario_leftmove);
+                case 0: // leftmove
+                    bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_move[MainActivity.ch_num+4]);
                     bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
-
                     Player.move(-10, 0);
+                    Player.BeforeDirection = 1;
                     break;
-                case 1:
-                    bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_rightmove[MainActivity.ch_num]);
+
+                case 1: // Rightmove
+                    bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_move[MainActivity.ch_num]);
                     bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
-
-
                     Player.move(10, 0);
+                    Player.BeforeDirection = 0;
                     break;
                 case 2:
-                    Player.move(0, 1);
+                    bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_jump[MainActivity.ch_num + (4*Player.BeforeDirection)]); //왼쪽 오른쪽 자동 변경
+                    bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
+                    Player.move(0, 10);
                     break;
                 case 3:
                     Player.move(0, -1);
                     break;
             }
+            Gravity();
+            map_collision();
+            if(live=false&&life==false)
+            {
+                Die.play(explosionId,1,1,0,0,1);
+                life=true;
+            }
             manageCurrentFrame();
         }
     }
 
-//charager frame
+
+    //charager frame
     public void manageCurrentFrame() {
         long time = System.currentTimeMillis();
 
