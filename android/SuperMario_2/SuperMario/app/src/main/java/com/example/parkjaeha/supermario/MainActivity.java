@@ -29,6 +29,7 @@ public class MainActivity extends ActionBarActivity {
     static int uKey=0;
     static int dKey=0;
     public static int nKey = -1;
+    public static int cKey = -1;
 
     View pauseButton;
     View pauseMenu;
@@ -65,9 +66,9 @@ public class MainActivity extends ActionBarActivity {
         @Override
         public void onClick(View v) {
             gamePanel.thread.setRunning(false);
-            MainActivity.this.finish();
             Intent i = new Intent(MainActivity.this,MainMenu.class);
             startActivity(i);
+            finish();
         }
     };
     // 스탑버튼 클릭시 continue,main 선택용 보기가 나오고 게임 일시 정지
@@ -287,10 +288,12 @@ public class MainActivity extends ActionBarActivity {
                             seconds -= 1;
 
                             if (seconds == 0) {
-                                gamePanel.thread.setRunning(false);
+                                //gamePanel.thread.setRunning(false);
                                 tv.setText(String.valueOf(seconds));
-                                Intent rankmove = new Intent(MainActivity.this,RankMenu.class);
+                              /*  Intent rankmove = new Intent(MainActivity.this,RankMenu.class);
                                 startActivity(rankmove);
+                           */
+                            seconds = 99;
                             }
                         }
                     }

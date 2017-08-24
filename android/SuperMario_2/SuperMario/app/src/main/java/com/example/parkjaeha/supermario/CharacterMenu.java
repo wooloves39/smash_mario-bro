@@ -51,21 +51,29 @@ public class CharacterMenu extends AppCompatActivity implements View.OnClickList
             Intent chintent = new Intent(CharacterMenu.this,MainActivity.class);
             chintent.putExtra("character",ch_num);
             startActivity(chintent);
+            finish();
+
         }else if( v == img_ch2){
             ch_num = 1;
             Intent chintent = new Intent(CharacterMenu.this,MainActivity.class);
             chintent.putExtra("character",ch_num);
             startActivity(chintent);
+            finish();
+
         }else if( v == img_ch3){
             ch_num = 2;
             Intent chintent = new Intent(CharacterMenu.this,MainActivity.class);
             chintent.putExtra("character",ch_num);
             startActivity(chintent);
+            finish();
+
         }else if( v == img_ch4){
             ch_num = 3;
             Intent chintent = new Intent(CharacterMenu.this,MainActivity.class);
             chintent.putExtra("character",ch_num);
             startActivity(chintent);
+            finish();
+
         }
 
 

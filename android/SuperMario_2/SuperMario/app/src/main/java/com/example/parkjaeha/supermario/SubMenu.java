@@ -59,6 +59,8 @@ public class SubMenu extends ActionBarActivity {
                 Intent mainact = new Intent(SubMenu.this,CharacterMenu.class);
                 mainact.putExtra("map",mapNumber);
                 startActivity(mainact);
+                finish();
+
             }
         });
         //갤러리 클릭시
