@@ -5,9 +5,9 @@ package com.example.parkjaeha.supermario;
  */
 
 public class POINT {
-  public   int x;
-   public int y;
-    void setPOINT(int xPos,int yPos){
+   float x;
+   float y;
+    void setPOINT(float xPos,float yPos){
         x=xPos;
         y=yPos;
     }
