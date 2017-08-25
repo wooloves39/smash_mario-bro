@@ -82,8 +82,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
     Paint paint=new Paint();
 
 
-    public GamePanel(Context context, MainActivity game, int ScreenWidth, int ScreenHeght)
-    {
+    public GamePanel(Context context, MainActivity game, int ScreenWidth, int ScreenHeght){
         super(context);
 
 
@@ -123,27 +122,27 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         paint.setStyle(Paint.Style.STROKE);
         paint.setColor(Color.BLACK);
         paint.setStrokeWidth(3);
+
+
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event)
-    {
+    public boolean onTouchEvent(MotionEvent event) {
+
         // 터치 모션
-        switch (event.getAction() & MotionEvent.ACTION_MASK)
-        {
+        switch (event.getAction() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN :
                 isMoving = !isMoving;
                 break;
         }
+
         return true;
     }
     int counter= 99;
 //draw
     void Draw(Canvas canvas){
-        if(!Pause_game)
-        {
-            if(canvas!=null)
-            {
+        if(!Pause_game){
+            if(canvas!=null){
                 //background  - 하나로 이미지 합쳐지만 이것도 하나로 합칠 예정
                 canvas.drawBitmap(background,count-1280,0,null);
                 canvas.drawBitmap(imgback,count, 0, null);
@@ -214,26 +213,23 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                 case 0: // leftmove
                     bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_move[MainActivity.ch_num+4]);
                     bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
-                    //Player.move(-10, 0);
-                    Player.SetStatus(0);
-                    Player.Move(true, 2, 0);
-                    Player.BeforeDirection = 0;
+                    Player.move(-10, 0);
+                    Player.BeforeDirection = 1;
                     break;
 
                 case 1: // Rightmove
                     bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_move[MainActivity.ch_num]);
                     bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
-                   // Player.move(10, 0);
-                    Player.SetStatus(1);
-                    Player.Move(true, 2, 1);
-                    Player.BeforeDirection = 1;
+                    Player.move(10, 0);
+                    Player.BeforeDirection = 0;
                     break;
-
-                case 2: // JUMP
+                case 2:
                     bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_jump[MainActivity.ch_num + (4*Player.BeforeDirection)]); //왼쪽 오른쪽 자동 변경
                     bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
-                    Player.SetStatus(2);
-                    Player.m_bJump = true;
+                    Player.move(0, 10);
+                    break;
+                case 3:
+                    Player.move(0, -1);
                     break;
             }
 

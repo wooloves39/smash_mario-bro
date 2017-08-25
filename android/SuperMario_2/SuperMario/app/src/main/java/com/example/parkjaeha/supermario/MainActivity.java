@@ -107,7 +107,6 @@ public class MainActivity extends ActionBarActivity {
         @Override
         public void onClick(View v) {
             Toast.makeText(getApplicationContext(),"C",Toast.LENGTH_SHORT).show();
-            nKey = 2;
         }
     };
     //D btn
@@ -300,7 +299,6 @@ public class MainActivity extends ActionBarActivity {
             }
 
         }, 0, 1000);
-
 
 
 
