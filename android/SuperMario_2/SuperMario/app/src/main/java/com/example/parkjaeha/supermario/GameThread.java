@@ -30,7 +30,8 @@ public class GameThread extends Thread {
     public void run() {
         Canvas canvas;
         long  fps;
-        while (running){
+        while (running)
+        {
 
             if(!gamePanel.Pause_game){
 
