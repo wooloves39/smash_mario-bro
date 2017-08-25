@@ -287,27 +287,28 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                     bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_move[MainActivity.ch_num+4]);
                     bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
 
-                    Player.move(-10, 0);
-                    //p[0].move(-10,0);
-                    Player.BeforeDirection =1;
+                    Player.Move(true, 2, 0);
+                    Player.SetStatus(0);
+                    Player.BeforeDirection = 0;
+                    //p[0].Move(true, 2, 0);
                     break;
                 case 1:
                     bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_move[MainActivity.ch_num]);
                     bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
+                    Player.Move(true, 2, 1);
+                    Player.SetStatus(1);
+                    Player.BeforeDirection = 1;
+                    //p[0].Move(true, 2, 1);
 
-
-                    Player.move(10, 0);
-                    //p[0].move(10,0);
-                    Player.BeforeDirection=0;
                     break;
                 case 2:
                     bitmapRunningMan = BitmapFactory.decodeResource(getResources(),image.img_jump[MainActivity.ch_num+(4*Player.BeforeDirection)]);
                     //왼쪽오른쪽 자동변경
                     bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan,frameWidth*frameCount,frameHeight,false);
-                    Player.move(0, 10);
+                    //Player.move(0, 10);
                     break;
                 case 3:
-                    Player.move(0, -1);
+                   // Player.move(0, -1);
                     break;
             }
 
