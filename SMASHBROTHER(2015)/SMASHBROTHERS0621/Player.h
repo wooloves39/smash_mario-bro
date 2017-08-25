@@ -17,7 +17,8 @@ typedef struct player_options {
 	int JumpCount;
 	int smash_count;
 	float collsion_Length;
-	void setting(int character) {
+	void setting(int character) 
+	{
 		switch (character)
 		{
 		case 0:

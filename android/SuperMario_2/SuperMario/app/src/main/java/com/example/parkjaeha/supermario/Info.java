@@ -29,7 +29,16 @@ public class Info {
     };
 
     Integer[] img_jump= {
-            R.drawable.mario_rightjump,R.drawable.luizy_rightjump,R.drawable.wario_rightjump,R.drawable.waluizy_rightjump,
-            R.drawable.mario_leftjump,R.drawable.luizy_leftjump,R.drawable.wario_leftjump,R.drawable.waluizy_leftjump
+            R.drawable.mario_leftjump,R.drawable.luizy_leftjump,R.drawable.wario_leftjump,R.drawable.waluizy_leftjump,
+            R.drawable.mario_rightjump,R.drawable.luizy_rightjump,R.drawable.wario_rightjump,R.drawable.waluizy_rightjump
+    };
+
+    Integer[] img_Attack1= {
+            R.drawable.mario_leftattack1,R.drawable.luizy_leftattack1,R.drawable.wario_leftattack1,R.drawable.waluizy_leftattack1,
+            R.drawable.mario_rightattack1,R.drawable.luizy_rightattack1,R.drawable.wario_rightattack1,R.drawable.waluizy_rightattack1
+    };
+    Integer[] img_Attack2 ={
+            R.drawable.mario_leftattack2,R.drawable.luizy_leftattack2,R.drawable.wario_leftattack2,R.drawable.waluizy_leftattack2,
+            R.drawable.mario_rightattack2,R.drawable.luizy_rightattack2,R.drawable.wario_rightattack2,R.drawable.waluizy_rightattack2
     };
 }

@@ -20,6 +20,9 @@ public class CPlayer
     {this.nKey = key;}
     int beforeKey = -1;
     boolean changeDir = false;
+
+    int JumpHeight = 0;
+
     int GetKey(){return this.nKey;}
 
     //void move(int x, int y)
@@ -120,17 +123,25 @@ public class CPlayer
         }
     }//해당방향에 해당 거리만큼 이동한다.
 
-    void  JumpTimer()//벡터로 바꾸기
+    boolean  JumpTimer()//벡터로 바꾸기
     {
         if (m_bJump == true)
         {
-            this.posY -= 10;
-            // mapobject_collsion = false;
-            m_Velocity.y = -40;
+            this.posY -= (10 + (3*(10-JumpHeight)));
+            map_collision = true;
 
-            m_bJump = false;
+            this.JumpHeight += 1;
+            if(this.JumpHeight >= 10)
+            {
+                m_bJump = false;
+                map_collision = false;
+                this.JumpHeight = 0;
+                return true;
+            }
+            else
+                return false;
         }
-
+    return false;
     }
 
 

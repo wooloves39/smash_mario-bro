@@ -630,7 +630,8 @@ void CPlayer::KeyState(CCamera& cam, int state, int mode, int player) {
 
 							if (m_bJump == false)
 							{
-								if (JumpCount != Player_option.JumpCount) {
+								if (JumpCount != Player_option.JumpCount) 
+								{
 									charSystem->playSound(FMOD_CHANNEL_REUSE, charSound[1], false, &pChannel);
 									m_bJump = true;
 

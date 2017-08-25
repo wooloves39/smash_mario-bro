@@ -284,15 +284,16 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
             switch (Maingame.nKey)
             {
                 case 0:     //leftmove
+                    frameCount = 8;
                     bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_move[MainActivity.ch_num+4]);
                     bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
-
                     Player.Move(true, 2, 0);
                     Player.SetStatus(0);
                     Player.BeforeDirection = 0;
                     //p[0].Move(true, 2, 0);
                     break;
                 case 1:
+                    frameCount = 8;
                     bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_move[MainActivity.ch_num]);
                     bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
                     Player.Move(true, 2, 1);
@@ -302,17 +303,30 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
                     break;
                 case 2:
-                    bitmapRunningMan = BitmapFactory.decodeResource(getResources(),image.img_jump[MainActivity.ch_num+(4*Player.BeforeDirection)]);
-                    //왼쪽오른쪽 자동변경
-                    bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan,frameWidth*frameCount,frameHeight,false);
-                    //Player.move(0, 10);
+                    //점프
+                    if(Player.m_bJump == false)
+                    {
+                        frameCount = 5;
+                        bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_jump[MainActivity.ch_num + (4 * Player.BeforeDirection)]);
+                        //왼쪽오른쪽 자동변경
+                        bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
+                        Player.m_bJump = true;
+                    }
                     break;
                 case 3:
+                    //어택
+
                    // Player.move(0, -1);
                     break;
             }
 
             //캐릭터의 스프라이트를 이동하는 것처럼 보이기 위해 값을 변경시켜준다.
+            boolean offJump = Player.JumpTimer();
+            if(offJump)
+            {
+                Maingame.nKey  = Player.BeforeDirection;
+            }
+
             Gravity();
             map_collision();
             if(live=false&&life==false){
