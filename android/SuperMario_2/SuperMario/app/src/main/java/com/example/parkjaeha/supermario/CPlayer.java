@@ -9,7 +9,9 @@ public class CPlayer
 {
     int posX = 10;
     int posY = 10;
-
+    float m_Velocity_Y=0;
+    float m_Velocity_X=0;
+    boolean live=true;
     //캐릭터 상태저장
     static int nAnimation = 0; // 애니메이션 상태
     static int nStatus = 0; // 상태 define을 쓰고싶다..........

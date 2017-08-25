@@ -37,7 +37,12 @@
             android:theme="@style/AppFullScreenTheme"
             android:screenOrientation="landscape"
             />
-
+        <service android:name="ServiceClass">
+            <intent-filter>
+                <action android:name="com.example.parkjaeha.supermario"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </service>
     </application>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
