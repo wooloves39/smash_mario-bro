@@ -25,6 +25,8 @@ public class RankMenu  extends Activity {
 
             Intent finish = new Intent(RankMenu.this,MainMenu.class);
             startActivity(finish);
+            finish();
+
             //continue
         }
     };

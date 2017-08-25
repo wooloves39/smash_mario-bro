@@ -1,7 +1,6 @@
 package com.example.parkjaeha.supermario;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -30,19 +29,18 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
     public boolean Pause_game;
     Info image = new Info();
     Resources res;
-    Bitmap imgback,charaters,background;
+    Bitmap imgback,background;
     int count=0,check=0;
 
-    SharedPreferences pref ;
     public  static int Width, Height, cx, cy;
-    private int sw, sh;
-   // private  Test test;
-    //private Player player;
     long startFrameTime;
 
-    private volatile boolean playing;
     private Canvas canvas;
     private Bitmap bitmapRunningMan;
+    //AI
+    private Bitmap[] bitmapMan = new Bitmap[4];
+    private int[] playN= new int[3];
+
     private boolean isMoving;
     private float runSpeedPerSecond = 500;
     private float manXPos = 10, manYPos = 10;
@@ -58,7 +56,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
     //framewitdh = 캐릭터의 가로  frameheight = 캐릭터의 세로
     private RectF whereToDraw = new RectF(manXPos, manYPos, (manXPos+frameWidth), frameHeight);
     //manxpos = 왼쪽위의 캐릭터의 가로 maxypos = 왼쪽위로 캐릭터의 세로
+
+
      CPlayer Player = new CPlayer();
+    CPlayer [] p = new CPlayer[4];
     private MainActivity Maingame = new MainActivity();
 
     //현우 코드  08-21
@@ -67,24 +68,63 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
     int explosionId=-1;
     static boolean life=false;
     private boolean live=true;
-    private boolean mapobject_collision=false;
-    private float m_Velocity_Y=0;
-    private float m_Velocity_X=0;
+
     private int object_num;
-    private int[] object_posX;
-    private int[] object_posY;
-    private int[] object_RECT_bottom;
-    private int[] object_RECT_top;
-    private int[] object_RECT_left;
-    private int[] object_RECT_right;
     private POINT[] object_pos;
     private RECT[] objedect_size;
     Paint paint=new Paint();
 
+/*
+    //연기
+    private ArrayList<Smoke> smokes;
+    private long smkestarttime;
+*/
 
-    public GamePanel(Context context, MainActivity game, int ScreenWidth, int ScreenHeght)
-    {
+    //AI
+    private RectF[] whereToDraw2= new RectF[4];
+    private int [] a = new int[3];
+    private int [] b = new int[3];
+    private int [] c = new int[3];
+    private int [] d = new int[3];
+
+    private Rect[] rectangle = new Rect[4];
+
+
+    public GamePanel(Context context, MainActivity game, int ScreenWidth, int ScreenHeght){
         super(context);
+        //AI
+        playN = new int[4];
+        bitmapMan = new Bitmap[4];
+
+        //rect 생성
+        whereToDraw2 = new RectF[4];
+
+        //캐릭터 위치 변경
+        p[0] = new CPlayer();
+        p[1] = new CPlayer();
+        p[2] = new CPlayer();
+        //p[3] = new CPlayer();
+
+        //캐릭터 처음 위치
+        p[0].posX = 500;
+        p[0].posY = 10;
+        p[1].posX = 1000;
+        p[1].posY = 10;
+        p[2].posX = 1500;
+        p[2].posY = 10;
+        //p[3].posX = 10;
+        //p[3].posY = 10;
+
+        //캐릭터 선정
+        playerNum();
+        //rect 선정
+        rangeRect();
+
+        //캐릭터 위치 객체 생성
+        whereToDraw2[0]= new RectF(p[0].posX, p[0].posY, (p[0].posY+frameWidth), frameHeight);
+        whereToDraw2[1]= new RectF(p[1].posX, p[1].posY, (p[1].posY+frameWidth), frameHeight);
+        whereToDraw2[2]= new RectF(p[2].posX, p[2].posY, (p[2].posY+frameWidth), frameHeight);
+       // whereToDraw2[3]= new RectF(p[3].posX, p[3].posY, (p[3].posY+frameWidth), frameHeight);
 
 
         //화면 사이즈 width,height 크기
@@ -98,19 +138,36 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         res = context.getResources();          // 리소스 읽기
         // 배경화면 읽고 배경화면의 크기를 화면의 크기로 조정
 
-        imgback = BitmapFactory.decodeResource(res, image.imageIDs[CharacterMenu.map_num]);
-        imgback = Bitmap.createScaledBitmap(imgback, Width, Height, true);
+        //imgback = BitmapFactory.decodeResource(res, image.imageIDs[CharacterMenu.map_num]);
+        //imgback = Bitmap.createScaledBitmap(imgback, Width, Height, true);
 
-        //background = BitmapFactory.decodeResource(res, R.drawable.background);
         background = BitmapFactory.decodeResource(res, image.img_background[CharacterMenu.map_num]);
-        background = Bitmap.createScaledBitmap(background, 2*Width, Height, true);
+        background = Bitmap.createScaledBitmap(background, 2*Width-70, Height, true);
 
         //image.imageIDs[MainActivity.ch_num]
         //캐릭터 객체 생성
         bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_move[MainActivity.ch_num]);
         bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
 
-            //getholder 호출
+        //캐릭터 AI용
+        bitmapMan[0] = BitmapFactory.decodeResource(getResources(),image.img_move[playN[0]]);
+        bitmapMan[0] = Bitmap.createScaledBitmap(bitmapMan[0], frameWidth * frameCount, frameHeight, false);
+
+        bitmapMan[1] = BitmapFactory.decodeResource(getResources(),image.img_move[playN[1]]);
+        bitmapMan[1] = Bitmap.createScaledBitmap(bitmapMan[1], frameWidth * frameCount, frameHeight, false);
+
+        bitmapMan[2] = BitmapFactory.decodeResource(getResources(),image.img_move[playN[2]]);
+        bitmapMan[2] = Bitmap.createScaledBitmap(bitmapMan[2], frameWidth * frameCount, frameHeight, false);
+
+
+
+/*
+        //연기
+        smokes = new ArrayList<Smoke>();
+*/
+
+
+        //getholder 호출
         getHolder().addCallback(this);
         thread = new GameThread(getHolder(),this);
         setFocusable(true);
@@ -123,51 +180,76 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         paint.setStyle(Paint.Style.STROKE);
         paint.setColor(Color.BLACK);
         paint.setStrokeWidth(3);
+
+
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event)
-    {
+    public boolean onTouchEvent(MotionEvent event) {
+
         // 터치 모션
-        switch (event.getAction() & MotionEvent.ACTION_MASK)
-        {
+        switch (event.getAction() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN :
                 isMoving = !isMoving;
                 break;
         }
+
         return true;
     }
-    int counter= 99;
+
 //draw
     void Draw(Canvas canvas){
-        if(!Pause_game)
-        {
-            if(canvas!=null)
-            {
+
+        if(!Pause_game){
+            if(canvas!=null){
                 //background  - 하나로 이미지 합쳐지만 이것도 하나로 합칠 예정
                 canvas.drawBitmap(background,count-1280,0,null);
-                canvas.drawBitmap(imgback,count, 0, null);
+                //canvas.drawBitmap(imgback,count, 0, null);
 
                 //위치설정 및 그리기
               //  whereToDraw.set((int) manXPos, (int)manYPos, (int) manXPos+ frameWidth, (int)manYPos + frameHeight);
                 whereToDraw.set((int) Player.posX, (int) Player.posY, (int) Player.posX + frameWidth, (int) Player.posY + frameHeight);
+                //ai moving
+                whereToDraw2[0].set((int)p[0].posX,(int)p[0].posY,(int)p[0].posX+frameWidth,(int)p[0].posY+frameHeight);
+                whereToDraw2[1].set((int)p[1].posX,(int)p[1].posY,(int)p[1].posX+frameWidth,(int)p[1].posY+frameHeight);
+                whereToDraw2[2].set((int)p[2].posX,(int)p[2].posY,(int)p[2].posX+frameWidth,(int)p[2].posY+frameHeight);
+                //whereToDraw2[3].set((int)p[3].posX,(int)p[3].posY,(int)p[3].posX+frameWidth,(int)p[3].posY+frameHeight);
 
-              canvas.drawBitmap(bitmapRunningMan, frameToDraw, whereToDraw, null);
+                canvas.drawBitmap(bitmapRunningMan, frameToDraw, whereToDraw, null);
+                canvas.drawBitmap(bitmapMan[0], frameToDraw, whereToDraw2[0], null);
+                canvas.drawBitmap(bitmapMan[1], frameToDraw, whereToDraw2[1], null);
+                canvas.drawBitmap(bitmapMan[2], frameToDraw, whereToDraw2[2], null);
 
-                canvas.drawRect(Player.posX,Player.posY,Player.posX+frameWidth,Player.posY+frameHeight,paint);
+                canvas.drawRect(Player.posX+a[0],Player.posY+a[1],Player.posX+frameWidth-a[2],Player.posY+frameHeight,paint);
+                canvas.drawRect(p[0].posX+b[0],p[0].posY+b[1],p[0].posX+frameWidth-b[2],p[0].posY+frameHeight,paint);
+                canvas.drawRect(p[1].posX+c[0],p[1].posY+c[1],p[1].posX+frameWidth-c[2],p[1].posY+frameHeight,paint);
+                canvas.drawRect(p[2].posX+d[0],p[2].posY+d[1],p[2].posX+frameWidth-d[2],p[2].posY+frameHeight,paint);
+
+                //충돌 state test
+                if(Player.posX+55 == p[1].posX+55){
+                    Log.d("Collison : " ,Maingame.cKey+"player: "+(Player.posX+55)+"p[1]: "+(p[1].posX+55));
+                }
 
                 for(int i=0;i<object_num;++i){
                     canvas.drawRect(objedect_size[i].left,objedect_size[i].top,objedect_size[i].right,objedect_size[i].bottom,paint);
                 }
 //캐릭터 위치 설정하고 그값을 그린다.
             }
-
         }
         //캐릭터를 그린 시간의 마지막 시간을 비교 연산한다.
         timeThisFrame = System.currentTimeMillis() - startFrameTime;
         if (timeThisFrame >= 1) {
             fps = 1000 / timeThisFrame;
         }
+/*
+//연기
+        for(Smoke sp : smokes){
+
+            sp.draw(canvas);
+        }
+*/
+
+
     }
 
 //캐릭터 위치변화
@@ -178,79 +260,86 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
         //포지션이동
         Log.d("Key : " ,Maingame.nKey+"");
-        //캐릭터의 스프라이트를 이동하는 것처럼 보이기 위해 값을 변경시켜준다.
-
-
 
         //캐릭터의 스프라이트를 이동하는 것처럼 보이기 위해 값을 변경시켜준다.
-        if (isMoving)
-        {
+        if (isMoving) {
+
             manXPos = manXPos + runSpeedPerSecond / fps;
             //캐릭터가 width 프레임보다 커지면 다시 y를 증가시킨 x의 처음 위치로 이동
+            Gravity();
             //background moving  -  map moving _ camera
-            if(Maingame.nKey ==1 && Player.posX <1000 && Player.posX>500 ){
-                count=count-10;
-            }
-            else if(Maingame.nKey ==0 && Player.posX<500 &&Player.posX>-300){
-                count = count+10;
-            }
+            limitCamera();
+
             // 캐릭터 움직임 최대 위치 제한
-            if (Player.posX > Width || Player.posX<-500 || Player.posX >2300)
-            {
+            if (Player.posX > Width || Player.posX<-500 || Player.posX >2300) {
                 Player.posY += (int)frameHeight;
                 Player.posX = 10;
                 count = 0;
             }
             // 캐릭터가 height프레임을 넘어가면 처음 위치의 y자리로 이동
-            if (Player.posY + frameHeight > Height)
-            {
-            Player.posY = 10;
+            if (Player.posY + frameHeight > Height) {
+                Player.posY = 10;
             }
-
-
 
             switch (Maingame.nKey)
             {
-                case 0: // leftmove
+                case 0:     //leftmove
                     bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_move[MainActivity.ch_num+4]);
                     bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
-                    //Player.move(-10, 0);
-                    Player.SetStatus(0);
-                    Player.Move(true, 2, 0);
-                    Player.BeforeDirection = 0;
-                    break;
 
-                case 1: // Rightmove
+                    Player.move(-10, 0);
+                    //p[0].move(-10,0);
+                    Player.BeforeDirection =1;
+                    break;
+                case 1:
                     bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_move[MainActivity.ch_num]);
                     bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
-                   // Player.move(10, 0);
-                    Player.SetStatus(1);
-                    Player.Move(true, 2, 1);
-                    Player.BeforeDirection = 1;
-                    break;
 
-                case 2: // JUMP
-                    bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_jump[MainActivity.ch_num + (4*Player.BeforeDirection)]); //왼쪽 오른쪽 자동 변경
-                    bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
-                    Player.SetStatus(2);
-                    Player.m_bJump = true;
+
+                    Player.move(10, 0);
+                    //p[0].move(10,0);
+                    Player.BeforeDirection=0;
+                    break;
+                case 2:
+                    bitmapRunningMan = BitmapFactory.decodeResource(getResources(),image.img_jump[MainActivity.ch_num+(4*Player.BeforeDirection)]);
+                    //왼쪽오른쪽 자동변경
+                    bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan,frameWidth*frameCount,frameHeight,false);
+                    Player.move(0, 10);
+                    break;
+                case 3:
+                    Player.move(0, -1);
                     break;
             }
 
+            //캐릭터의 스프라이트를 이동하는 것처럼 보이기 위해 값을 변경시켜준다.
             Gravity();
             map_collision();
-            if(live=false&&life==false)
-            {
+            if(live=false&&life==false){
                 Die.play(explosionId,1,1,0,0,1);
                 life=true;
             }
 
             manageCurrentFrame();
+
+/*
+//연기
+            long elapsed =(System.nanoTime() - smkestarttime)/1000000;
+            if(elapsed>120) {
+                smokes.add(new Smoke(Player.posX, Player.posY + 10));
+                smkestarttime = System.nanoTime();
+            }
+
+            for(int i =0;i<smokes.size();i++){
+                smokes.get(i).update();
+                if(smokes.get(1).posX < -10){
+                    smokes.remove(i);
+                }
+            }
+*/
         }
     }
 
-
-    //charager frame
+//charager frame
     public void manageCurrentFrame() {
         long time = System.currentTimeMillis();
 
@@ -267,6 +356,69 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
         frameToDraw.left = currentFrame * frameWidth;
         frameToDraw.right = frameToDraw.left + frameWidth;
+    }
+//AI rect 변경
+    public void rangeRect(){
+        if(MainActivity.ch_num == 0){
+            //빨초노보 rect
+            a[0]=75;a[1]=80;a[2]=50;
+            b[0]=55;b[1]=65;b[2]=50;
+            c[0]=55;c[1]=55;c[2]=40;
+            d[0]=55;d[1]=30;d[2]=40;
+
+        }else if(MainActivity.ch_num ==1){
+            //초빨보노
+            a[0]=55;a[1]=65;a[2]=50;
+            b[0]=75;b[1]=80;b[2]=50;
+            c[0]=55;c[1]=30;c[2]=40;
+            d[0]=55;d[1]=55;d[2]=40;
+
+        }else if(MainActivity.ch_num ==2){
+            //노빨초보
+            a[0]=55;a[1]=55;a[2]=40;
+            b[0]=75;b[1]=80;b[2]=50;
+            c[0]=55;c[1]=65;c[2]=50;
+            d[0]=55;d[1]=30;d[2]=40;
+
+        }else if(MainActivity.ch_num ==3){
+            //보빨초노
+            a[0]=55;a[1]=30;a[2]=40;
+            b[0]=75;b[1]=80;b[2]=50;
+            c[0]=55;c[1]=65;c[2]=50;
+            d[0]=55;d[1]=55;d[2]=40;
+
+        }
+    }
+
+    public void limitCamera(){
+        if(Maingame.nKey ==1 && Player.posX <1000 && Player.posX>500 ){
+            count=count-10;
+        }else if(Maingame.nKey ==0 && Player.posX<500 &&Player.posX>-300){
+            count = count+10;
+        }
+    }
+
+    public void playerNum(){
+      if(MainActivity.ch_num == 0){
+          playN[0] =1;//초
+          playN[1] =2;//노
+          playN[2] =3;//보
+
+      }else if(MainActivity.ch_num ==1){
+          playN[0] =0;//빨
+          playN[1] =3;//보
+          playN[2] =2;//노
+
+
+      }else if(MainActivity.ch_num ==2){
+          playN[0] =0;//빨
+          playN[1] =1;//초
+          playN[2] =3;//보
+      }else if(MainActivity.ch_num ==3){
+          playN[0] =0;//빨
+          playN[1] =1;//초
+          playN[2] =2;//노
+      }
     }
 
     //현우 코드
@@ -604,6 +756,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 //surface
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
+
+/*
+        smkestarttime = System.nanoTime();
+*/
 
         thread.setRunning(true);
         thread.start();
