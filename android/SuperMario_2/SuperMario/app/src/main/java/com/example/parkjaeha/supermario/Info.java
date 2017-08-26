@@ -23,22 +23,28 @@ public class Info {
             R.drawable.map01,R.drawable.map02,R.drawable.map03,R.drawable.map04,R.drawable.map05,R.drawable.map06
             ,R.drawable.map07,R.drawable.map08,R.drawable.map09
     };
+    //움직일때
     Integer[] img_move= {
             R.drawable.mario_rightmove, R.drawable.luizy_rightmove,R.drawable.wario_rightmove,R.drawable.waluizy_rightmove,
             R.drawable.mario_leftmove,R.drawable.luizy_leftmove,R.drawable.wario_leftmove,R.drawable.waluizy_leftmove
     };
 
+    //점프할때
     Integer[] img_jump= {
             R.drawable.mario_leftjump,R.drawable.luizy_leftjump,R.drawable.wario_leftjump,R.drawable.waluizy_leftjump,
             R.drawable.mario_rightjump,R.drawable.luizy_rightjump,R.drawable.wario_rightjump,R.drawable.waluizy_rightjump
     };
 
+    //공격할때1
     Integer[] img_Attack1= {
             R.drawable.mario_leftattack1,R.drawable.luizy_leftattack1,R.drawable.wario_leftattack1,R.drawable.waluizy_leftattack1,
             R.drawable.mario_rightattack1,R.drawable.luizy_rightattack1,R.drawable.wario_rightattack1,R.drawable.waluizy_rightattack1
     };
+    //공격할때2
     Integer[] img_Attack2 ={
             R.drawable.mario_leftattack2,R.drawable.luizy_leftattack2,R.drawable.wario_leftattack2,R.drawable.waluizy_leftattack2,
             R.drawable.mario_rightattack2,R.drawable.luizy_rightattack2,R.drawable.wario_rightattack2,R.drawable.waluizy_rightattack2
     };
+
+
 }

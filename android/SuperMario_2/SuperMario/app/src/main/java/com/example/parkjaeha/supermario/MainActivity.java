@@ -86,7 +86,9 @@ public class MainActivity extends ActionBarActivity {
     };
 
     //A btn
-    View.OnClickListener a_btn_click =  new View.OnClickListener() {
+    View.OnClickListener a_btn_click =  new View.OnClickListener()
+    {
+
         @Override
         public void onClick(View v) {
             Toast.makeText(getApplicationContext(),"A",Toast.LENGTH_SHORT).show();
@@ -116,6 +118,7 @@ public class MainActivity extends ActionBarActivity {
         @Override
         public void onClick(View v) {
             Toast.makeText(getApplicationContext(),"D",Toast.LENGTH_SHORT).show();
+            nKey = 3;
         }
     };
 

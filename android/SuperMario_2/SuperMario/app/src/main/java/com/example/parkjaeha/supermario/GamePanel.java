@@ -284,20 +284,37 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
             switch (Maingame.nKey)
             {
                 case 0:     //leftmove
-                    frameCount = 8;
-                    bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_move[MainActivity.ch_num+4]);
-                    bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
+                    if (Player.map_collision == false) {
+
+                        frameCount = 5;
+                        bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_jump[MainActivity.ch_num + (4 * Player.BeforeDirection)]);
+                        //왼쪽오른쪽 자동변경
+                        bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
+                    } else {
+                        frameCount= 8;
+                        bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_move[MainActivity.ch_num + 4]);
+                        bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
+                        Player.SetStatus(0);
+                    }
                     Player.Move(true, 2, 0);
-                    Player.SetStatus(0);
                     Player.BeforeDirection = 0;
                     //p[0].Move(true, 2, 0);
                     break;
                 case 1:
-                    frameCount = 8;
+                    if (Player.map_collision == false)
+                    {
+                        frameCount = 5;
+                        bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_jump[MainActivity.ch_num + (4 * Player.BeforeDirection)]);
+                        //왼쪽오른쪽 자동변경
+                        bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
+                    }
+                    else {
+                        frameCount = 8;
                     bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_move[MainActivity.ch_num]);
                     bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
-                    Player.Move(true, 2, 1);
                     Player.SetStatus(1);
+                    }
+                    Player.Move(true, 2, 1);
                     Player.BeforeDirection = 1;
                     //p[0].Move(true, 2, 1);
 
@@ -315,9 +332,28 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                     break;
                 case 3:
                     //어택
+                    frameCount = 4;
+                    Player.SingleFrame = true; // 프레임이 1번만 돌게 해준다.
 
-                   // Player.move(0, -1);
-                    break;
+                    //첫 공격일때
+                    if(Player.n_AttackCount == 0)
+                    {
+                        Player.n_AttackCount = 1;
+                        bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_Attack1[MainActivity.ch_num + (4 * Player.BeforeDirection)]);
+                        bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
+                        Player.nextAttackFrame = -1; // 다음 프레임은 없음. 그냥 기본자세로 변경
+                    }
+                    //두번째 공격일때
+                    else if(Player.n_AttackCount == 1)
+                    {
+                        Player.n_AttackCount = 2;
+
+                        Player.nextAttackFrame = 1; //다음프레임은 공격2로
+                    }
+                    //그 이외
+                    else Player.n_AttackCount = 0;
+
+                break;
             }
 
             //캐릭터의 스프라이트를 이동하는 것처럼 보이기 위해 값을 변경시켜준다.
@@ -355,7 +391,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
     }
 
 //charager frame
-    public void manageCurrentFrame() {
+    public void manageCurrentFrame()
+    {
         long time = System.currentTimeMillis();
 
         if (isMoving) {
@@ -363,9 +400,35 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                 lastFrameChangeTime = time;
                 currentFrame++;
 
-                if (currentFrame >= frameCount) {
+
+                if (currentFrame >= frameCount)
+                {
+                  //  if(Player.SingleFrame) // True면 한번만 돌도록.
+                  //  {
+                  //      if(Player.nextAttackFrame == 1) //다음 공격씬이 있을경우
+                  //      {
+                  //          //다음 공격씬
+                  //          bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_Attack2[MainActivity.ch_num + (4 * Player.BeforeDirection)]);
+                  //          bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
+                  //          Player.nextAttackFrame = 0;
+                  //      }
+                  //      else // 없는경우
+                  //      {
+                  //          frameCount = 5;
+                  //          bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_jump[MainActivity.ch_num + (4 * Player.BeforeDirection)]);
+                  //          //왼쪽오른쪽 자동변경
+                  //          bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
+                  //          Player.SingleFrame = false;
+                  //          Player.nextAttackFrame = 0;
+                  //      }
+//
+                  //  }
+                  //  else
+                  //  {
                     currentFrame = 0;
+                  //  }
                 }
+
             }
         }
 

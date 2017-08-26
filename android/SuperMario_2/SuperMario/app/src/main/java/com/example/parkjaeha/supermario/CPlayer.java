@@ -13,7 +13,7 @@ public class CPlayer
     //캐릭터 상태저장
     static int nAnimation = 0; // 애니메이션 상태
     static int nStatus = 0; // 상태 define을 쓰고싶다..........
-    static int BeforeDirection = 0; //직전의 방향을 저장해둔다. 0번이면 오른쪽, 1번이면 왼쪽
+    static int BeforeDirection = 1; //직전의 방향을 저장해둔다. 0번이면 오른쪽, 1번이면 왼쪽
 
     int nKey = -1;
     void SetKey(int key)
@@ -53,6 +53,11 @@ public class CPlayer
     int	m_BeforeState;		//과거의상태
     int		DIR;	//키입력에 따른 방향
     int		n_AttackCount;//일반 공격 어택은 1과2로 구성, 조작에 따른 스프라이트 변경 변수
+    static int     nextAttackFrame = -1;
+    static int     now_frameCount = 8;
+
+    //프레임이 1번만 돌아가는 상태일 경우 사용.
+    static boolean SingleFrame = false;
 
     boolean	FrameEnd;//프레임이 끝나고 시작됨을 알리는 변수
     boolean	m_bJump = false;//점프중인지 아닌지 판별하는 요소
@@ -66,7 +71,7 @@ public class CPlayer
     //디폴트 생성자 추가
     public CPlayer()
     {
-
+        BeforeDirection = 1;
         m_dirRight.x = 1;
         m_dirRight.y = 0;
 
