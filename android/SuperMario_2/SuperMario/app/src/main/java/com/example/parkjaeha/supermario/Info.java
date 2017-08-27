@@ -46,5 +46,11 @@ public class Info {
             R.drawable.mario_rightattack2,R.drawable.luizy_rightattack2,R.drawable.wario_rightattack2,R.drawable.waluizy_rightattack2
     };
 
+    //기본
+    Integer[] img_basic ={
+            R.drawable.mario_leftbasic,R.drawable.luizy_leftbasic,R.drawable.wario_leftbasic,R.drawable.waluizy_leftbasic,
+            R.drawable.mario_rightbasic,R.drawable.luizy_rightbasic,R.drawable.wario_rightbasic,R.drawable.waluizy_rightbasic
+    };
+
 
 }

@@ -298,6 +298,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                     }
                     Player.Move(true, 2, 0);
                     Player.BeforeDirection = 0;
+                    Maingame.nKey = 4;
+
                     //p[0].Move(true, 2, 0);
                     break;
                 case 1:
@@ -316,6 +318,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                     }
                     Player.Move(true, 2, 1);
                     Player.BeforeDirection = 1;
+                    Maingame.nKey = 4;
+
                     //p[0].Move(true, 2, 1);
 
                     break;
@@ -329,31 +333,44 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                         bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
                         Player.m_bJump = true;
                     }
+
                     break;
                 case 3:
                     //어택
+
                     frameCount = 4;
                     Player.SingleFrame = true; // 프레임이 1번만 돌게 해준다.
 
                     //첫 공격일때
                     if(Player.n_AttackCount == 0)
                     {
-                        Player.n_AttackCount = 1;
+                        currentFrame = 0;
+                        Player.n_AttackCount = 1; // 공격카운트를 1로 올려줌 (1번째 공격이다. )
                         bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_Attack1[MainActivity.ch_num + (4 * Player.BeforeDirection)]);
                         bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
-                        Player.nextAttackFrame = -1; // 다음 프레임은 없음. 그냥 기본자세로 변경
+                        Player.nextAttackFrame = -1; // 다음 프레임은없음 그냥 BASIC으로 변경.
                     }
                     //두번째 공격일때
                     else if(Player.n_AttackCount == 1)
                     {
-                        Player.n_AttackCount = 2;
+                        Player.n_AttackCount = 2; // 2번째 공격까지한다.
 
-                        Player.nextAttackFrame = 1; //다음프레임은 공격2로
+                        Player.nextAttackFrame = 1; //다음프레임은 공격2이다.
                     }
                     //그 이외
-                    else Player.n_AttackCount = 0;
-
+                    //else Player.n_AttackCount = 0;
+                    Maingame.nKey = 4;
                 break;
+
+                case 4: // BASIC
+                    if(Player.map_collision & Player.n_AttackCount == 0) {
+                        frameCount = 4;
+                        bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_basic[MainActivity.ch_num + 4]);
+                        bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
+                        Player.SetStatus(4);
+                    }
+
+                    break;
             }
 
             //캐릭터의 스프라이트를 이동하는 것처럼 보이기 위해 값을 변경시켜준다.
@@ -401,37 +418,34 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                 currentFrame++;
 
 
-                if (currentFrame >= frameCount)
-                {
-                  //  if(Player.SingleFrame) // True면 한번만 돌도록.
-                  //  {
-                  //      if(Player.nextAttackFrame == 1) //다음 공격씬이 있을경우
-                  //      {
-                  //          //다음 공격씬
-                  //          bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_Attack2[MainActivity.ch_num + (4 * Player.BeforeDirection)]);
-                  //          bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
-                  //          Player.nextAttackFrame = 0;
-                  //      }
-                  //      else // 없는경우
-                  //      {
-                  //          frameCount = 5;
-                  //          bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_jump[MainActivity.ch_num + (4 * Player.BeforeDirection)]);
-                  //          //왼쪽오른쪽 자동변경
-                  //          bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
-                  //          Player.SingleFrame = false;
-                  //          Player.nextAttackFrame = 0;
-                  //      }
-//
-                  //  }
-                  //  else
-                  //  {
-                    currentFrame = 0;
-                  //  }
-                }
+                if (currentFrame >= frameCount) {
+                    if (Player.SingleFrame) // True면 한번만 돌도록.
+                    {
+                        if (Player.nextAttackFrame == 1) //다음 공격씬이 있을경우
+                        {
+                            //다음 공격씬
+                            currentFrame = 0;
+                            bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_Attack2[MainActivity.ch_num + (4 * Player.BeforeDirection)]);
+                            bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
+                            Player.nextAttackFrame = -1;
 
+                        }
+                        else if (Player.nextAttackFrame == -1) //다음 공격 없는경우
+                        {
+
+                            frameCount = 5;
+                            bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_basic[MainActivity.ch_num + (4 * Player.BeforeDirection)]);
+                            bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
+                            Player.SingleFrame = false;
+                            Player.n_AttackCount =0;
+                        }
+                    }
+                    else
+                        currentFrame = 0;
+
+                }
             }
         }
-
         frameToDraw.left = currentFrame * frameWidth;
         frameToDraw.right = frameToDraw.left + frameWidth;
     }
