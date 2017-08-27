@@ -366,21 +366,31 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                     frameCount = 4;
                     Player.SingleFrame = true; // 프레임이 1번만 돌게 해준다.
 
-                    //첫 공격일때
-                    if(Player.n_AttackCount == 0)
+                    //점프상태인 경우에
+                    if(Player.map_collision == false)
                     {
+                        frameCount = 3;
                         currentFrame = 0;
                         Player.n_AttackCount = 1; // 공격카운트를 1로 올려줌 (1번째 공격이다. )
-                        bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_Attack1[MainActivity.ch_num + (4 * Player.BeforeDirection)]);
+                        bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_kick[MainActivity.ch_num + (4 * Player.BeforeDirection)]);
                         bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
                         Player.nextAttackFrame = -1; // 다음 프레임은없음 그냥 BASIC으로 변경.
                     }
-                    //두번째 공격일때
-                    else if(Player.n_AttackCount == 1)
-                    {
-                        Player.n_AttackCount = 2; // 2번째 공격까지한다.
+                    else {
+                        //첫 공격일때
+                        if (Player.n_AttackCount == 0) {
+                            currentFrame = 0;
+                            Player.n_AttackCount = 1; // 공격카운트를 1로 올려줌 (1번째 공격이다. )
+                            bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_Attack1[MainActivity.ch_num + (4 * Player.BeforeDirection)]);
+                            bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
+                            Player.nextAttackFrame = -1; // 다음 프레임은없음 그냥 BASIC으로 변경.
+                        }
+                        //두번째 공격일때
+                        else if (Player.n_AttackCount == 1) {
+                            Player.n_AttackCount = 2; // 2번째 공격까지한다.
 
-                        Player.nextAttackFrame = 1; //다음프레임은 공격2이다.
+                            Player.nextAttackFrame = 1; //다음프레임은 공격2이다.
+                        }
                     }
                     //그 이외
                     //else Player.n_AttackCount = 0;
@@ -388,7 +398,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                     break;
 
                 case 4: // BASIC
-                    if(Player.map_collision & Player.n_AttackCount == 0) {
+                    if(Player.map_collision & Player.n_AttackCount == 0)
+                    {
                         frameCount = 4;
                         bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_basic[MainActivity.ch_num + 4]);
                         bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
@@ -398,54 +409,54 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                     break;
             }
 
-                    //touch moving
-                    // 좌우 움직이기 관련 버튼입니다.
-                    switch (Maingame.mKey)
-                    {
-                        case 0:     //leftmove
-                            bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_move[MainActivity.ch_num + 4]);
-                            bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
+            //touch moving
+            // 좌우 움직이기 관련 버튼입니다.
+            switch (Maingame.mKey)
+            {
+                case 0:     //leftmove
+                    bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_move[MainActivity.ch_num + 4]);
+                    bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
 
-                            if(Maingame.cKey ==1) {
-                               // Player.move(-10, 0);
-                                //이 함수가 없네? ㅎㅎ
-                            }else{
+                    if(Maingame.cKey ==1) {
+                        // Player.move(-10, 0);
+                        //이 함수가 없네? ㅎㅎ
+                    }else{
 
-                                Maingame.mKey = 4;
-                            }
-                            //p[0].move(-10,0);
-                            Player.BeforeDirection =1;
-                            break;
-                        case 1:
-
-                            bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_move[MainActivity.ch_num]);
-                            bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
-
-                            if(Maingame.cKey==1) {
-                               // Player.move(10, 0);
-                            }else{
-                                Maingame.mKey = 4;
-                            }
-                            //p[0].move(10,0);
-                            Player.BeforeDirection=0;
-                            break;
-                        case 2:
-                            bitmapRunningMan = BitmapFactory.decodeResource(getResources(),image.img_jump[MainActivity.ch_num+(4*Player.BeforeDirection)]);
-                            //왼쪽오른쪽 자동변경
-                            bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan,frameWidth*frameCount,frameHeight,false);
-                          //  Player.move(0, 10);
-                            break;
-                        case 3:
-                            //Player.move(0, -1);
-                            break;
-                        default:
-                            Log.d("hello",Maingame.nKey+"  "+ Maingame.cKey);
-                            break;
+                        Maingame.mKey = 4;
                     }
+                    //p[0].move(-10,0);
+                    Player.BeforeDirection =1;
+                    break;
+                case 1:
+
+                    bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_move[MainActivity.ch_num]);
+                    bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
+
+                    if(Maingame.cKey==1) {
+                        // Player.move(10, 0);
+                    }else{
+                        Maingame.mKey = 4;
+                    }
+                    //p[0].move(10,0);
+                    Player.BeforeDirection=0;
+                    break;
+                case 2:
+                    bitmapRunningMan = BitmapFactory.decodeResource(getResources(),image.img_jump[MainActivity.ch_num+(4*Player.BeforeDirection)]);
+                    //왼쪽오른쪽 자동변경
+                    bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan,frameWidth*frameCount,frameHeight,false);
+                    //  Player.move(0, 10);
+                    break;
+                case 3:
+                    //Player.move(0, -1);
+                    break;
+                default:
+                    Log.d("hello",Maingame.nKey+"  "+ Maingame.cKey);
+                    break;
+            }
 
 
 
-                    //캐릭터의 스프라이트를 이동하는 것처럼 보이기 위해 값을 변경시켜준다.
+            //캐릭터의 스프라이트를 이동하는 것처럼 보이기 위해 값을 변경시켜준다.
             boolean offJump = Player.JumpTimer();
             if(offJump)
             {
