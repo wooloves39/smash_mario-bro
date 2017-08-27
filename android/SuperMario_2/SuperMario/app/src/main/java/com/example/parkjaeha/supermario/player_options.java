@@ -1,7 +1,7 @@
 package com.example.parkjaeha.supermario;
 
 /**
- * Created by yeb01 on 2017-08-28.
+ * Created by parkjaeha on 2017-08-27.
  */
 
 public class Player_options

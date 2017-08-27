@@ -54,7 +54,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
     private Rect frameToDraw = new Rect(0, 0, frameWidth, frameHeight);
     //framewitdh = 캐릭터의 가로  frameheight = 캐릭터의 세로
-    private RectF whereToDraw = new RectF(manXPos, manYPos, (manXPos+frameWidth), frameHeight);
     //manxpos = 왼쪽위의 캐릭터의 가로 maxypos = 왼쪽위로 캐릭터의 세로
 
 
@@ -68,20 +67,13 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
     int explosionId=-1;
     static boolean life=false;
     private boolean live=true;
-    private boolean mapobject_collision=false;
-    private float m_Velocity_Y=0;
-    private float m_Velocity_X=0;
     private int object_num;
-    private int[] object_posX;
-    private int[] object_posY;
-    private int[] object_RECT_bottom;
-    private int[] object_RECT_top;
-    private int[] object_RECT_left;
-    private int[] object_RECT_right;
     private POINT[] object_pos;
     private RECT[] objedect_size;
     Paint paint=new Paint();
     Camera cam=new Camera();
+    private RectF whereToDraw = new RectF(Player.posX, Player.posY, (Player.posX+frameWidth), frameHeight);
+
 /*
     //연기
     private ArrayList<Smoke> smokes;
@@ -189,7 +181,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         paint.setColor(Color.BLACK);
         paint.setStrokeWidth(3);
         cam.setPos(Player.posX);
-
+        System.out.println(Player.posX);
 
     }
 
@@ -212,24 +204,23 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         if(!Pause_game){
             if(canvas!=null){
                 //background  - 하나로 이미지 합쳐지만 이것도 하나로 합칠 예정
-                canvas.drawBitmap(background,cam.realpos.x,0,null);
+                canvas.drawBitmap(background,-cam.realpos.x-1280,0,null);
                 //canvas.drawBitmap(imgback,count, 0, null);
 
                 //위치설정 및 그리기
               //  whereToDraw.set((int) manXPos, (int)manYPos, (int) manXPos+ frameWidth, (int)manYPos + frameHeight);
-                whereToDraw.set((int) Player.posX, (int) Player.posY, (int) Player.posX + frameWidth, (int) Player.posY + frameHeight);
+                whereToDraw.set((int) Player.posX-cam.realpos.x, (int) Player.posY, (int) Player.posX-cam.realpos.x + frameWidth, (int) Player.posY + frameHeight);
                 //ai moving
                 whereToDraw2[0].set((int)p[0].posX,(int)p[0].posY,(int)p[0].posX+frameWidth,(int)p[0].posY+frameHeight);
                 whereToDraw2[1].set((int)p[1].posX,(int)p[1].posY,(int)p[1].posX+frameWidth,(int)p[1].posY+frameHeight);
                 whereToDraw2[2].set((int)p[2].posX,(int)p[2].posY,(int)p[2].posX+frameWidth,(int)p[2].posY+frameHeight);
                 //whereToDraw2[3].set((int)p[3].posX,(int)p[3].posY,(int)p[3].posX+frameWidth,(int)p[3].posY+frameHeight);
-
                 canvas.drawBitmap(bitmapRunningMan, frameToDraw, whereToDraw, null);
                 canvas.drawBitmap(bitmapMan[0], frameToDraw, whereToDraw2[0], null);
                 canvas.drawBitmap(bitmapMan[1], frameToDraw, whereToDraw2[1], null);
                 canvas.drawBitmap(bitmapMan[2], frameToDraw, whereToDraw2[2], null);
 
-                canvas.drawRect(Player.posX+a[0],Player.posY+a[1],Player.posX+frameWidth-a[2],Player.posY+frameHeight,paint);
+                canvas.drawRect(Player.posX+a[0]-cam.realpos.x,Player.posY+a[1],Player.posX+frameWidth-a[2]-cam.realpos.x,Player.posY+frameHeight,paint);
                 canvas.drawRect(p[0].posX+b[0],p[0].posY+b[1],p[0].posX+frameWidth-b[2],p[0].posY+frameHeight,paint);
                 canvas.drawRect(p[1].posX+c[0],p[1].posY+c[1],p[1].posX+frameWidth-c[2],p[1].posY+frameHeight,paint);
                 canvas.drawRect(p[2].posX+d[0],p[2].posY+d[1],p[2].posX+frameWidth-d[2],p[2].posY+frameHeight,paint);
@@ -256,7 +247,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
 
                 for(int i=0;i<object_num;++i){
-                    canvas.drawRect(objedect_size[i].left,objedect_size[i].top,objedect_size[i].right,objedect_size[i].bottom,paint);
+                    canvas.drawRect(objedect_size[i].left-cam.realpos.x,objedect_size[i].top,objedect_size[i].right-cam.realpos.x,objedect_size[i].bottom,paint);
                 }
 //캐릭터 위치 설정하고 그값을 그린다.
             }
@@ -365,7 +356,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
                     frameCount = 4;
                     Player.SingleFrame = true; // 프레임이 1번만 돌게 해준다.
-
                     //점프상태인 경우에
                     if(Player.map_collision == false)
                     {
@@ -409,54 +399,54 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                     break;
             }
 
-            //touch moving
-            // 좌우 움직이기 관련 버튼입니다.
-            switch (Maingame.mKey)
-            {
-                case 0:     //leftmove
-                    bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_move[MainActivity.ch_num + 4]);
-                    bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
+                    //touch moving
+                    // 좌우 움직이기 관련 버튼입니다.
+                    switch (Maingame.mKey)
+                    {
+                        case 0:     //leftmove
+                            bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_move[MainActivity.ch_num + 4]);
+                            bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
 
-                    if(Maingame.cKey ==1) {
-                        // Player.move(-10, 0);
-                        //이 함수가 없네? ㅎㅎ
-                    }else{
+                            if(Maingame.cKey ==1) {
+                               // Player.move(-10, 0);
+                                //이 함수가 없네? ㅎㅎ
+                            }else{
 
-                        Maingame.mKey = 4;
+                                Maingame.mKey = 4;
+                            }
+                            //p[0].move(-10,0);
+                            Player.BeforeDirection =1;
+                            break;
+                        case 1:
+
+                            bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_move[MainActivity.ch_num]);
+                            bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
+
+                            if(Maingame.cKey==1) {
+                               // Player.move(10, 0);
+                            }else{
+                                Maingame.mKey = 4;
+                            }
+                            //p[0].move(10,0);
+                            Player.BeforeDirection=0;
+                            break;
+                        case 2:
+                            bitmapRunningMan = BitmapFactory.decodeResource(getResources(),image.img_jump[MainActivity.ch_num+(4*Player.BeforeDirection)]);
+                            //왼쪽오른쪽 자동변경
+                            bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan,frameWidth*frameCount,frameHeight,false);
+                          //  Player.move(0, 10);
+                            break;
+                        case 3:
+                            //Player.move(0, -1);
+                            break;
+                        default:
+                            Log.d("hello",Maingame.nKey+"  "+ Maingame.cKey);
+                            break;
                     }
-                    //p[0].move(-10,0);
-                    Player.BeforeDirection =1;
-                    break;
-                case 1:
-
-                    bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_move[MainActivity.ch_num]);
-                    bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
-
-                    if(Maingame.cKey==1) {
-                        // Player.move(10, 0);
-                    }else{
-                        Maingame.mKey = 4;
-                    }
-                    //p[0].move(10,0);
-                    Player.BeforeDirection=0;
-                    break;
-                case 2:
-                    bitmapRunningMan = BitmapFactory.decodeResource(getResources(),image.img_jump[MainActivity.ch_num+(4*Player.BeforeDirection)]);
-                    //왼쪽오른쪽 자동변경
-                    bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan,frameWidth*frameCount,frameHeight,false);
-                    //  Player.move(0, 10);
-                    break;
-                case 3:
-                    //Player.move(0, -1);
-                    break;
-                default:
-                    Log.d("hello",Maingame.nKey+"  "+ Maingame.cKey);
-                    break;
-            }
 
 
 
-            //캐릭터의 스프라이트를 이동하는 것처럼 보이기 위해 값을 변경시켜준다.
+                    //캐릭터의 스프라이트를 이동하는 것처럼 보이기 위해 값을 변경시켜준다.
             boolean offJump = Player.JumpTimer();
             if(offJump)
             {
@@ -603,6 +593,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
     //현우 코드
     public void Gravity() {
         if (Player.map_collision == false) {
+            if(Player.m_Velocity.y<30)
             Player.m_Velocity.y += 3;
         } else {
             Player.m_Velocity.y = 0;
@@ -624,7 +615,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
             if( cha_point.y<=objedect_size[i].top)continue;
             if( cha_point.y>=objedect_size[i].bottom)continue;
             if( cha_point.x<=objedect_size[i].left)continue;
-            if( cha_point.x<=objedect_size[i].right)continue;
+            if( cha_point.x>=objedect_size[i].right)continue;
             Player.map_collision=true;
         }
     }
@@ -647,27 +638,28 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                     object_pos[i]=new POINT();
                     objedect_size[i]=new RECT();
                 }
-                object_pos[0].x=1180;
-                object_pos[0].y=1090;
-                size.x=760;
+
+                object_pos[0].x=(1180*Width)/2560;
+                object_pos[0].y=(1050*Height)/1440;
+                size.x=820;
                 size.y=40;
                 map_size_setting(0,object_pos[0],size);
-                object_pos[1].x=800;
-                object_pos[1].y=440;
+                object_pos[1].x=(740*Width)/2560;
+                object_pos[1].y=(340*Height)/1440;
                 size.x=260;
                 size.y=50;
                 map_size_setting(1,object_pos[1],size);
-                object_pos[2].x=1550;
-                object_pos[2].y=440;
+                object_pos[2].x=(1600*Width)/2560;
+                object_pos[2].y=(340*Height)/1440;
                 map_size_setting(2,object_pos[2],size);
-                object_pos[3].x=1180;
-                object_pos[3].y=840;
+                object_pos[3].x=(1180*Width)/2560;
+                object_pos[3].y=(700*Height)/1440;
                 map_size_setting(3,object_pos[3],size);
-                object_pos[4].x=2030;
-                object_pos[4].y=840;
+                object_pos[4].x=(2030*Width)/2560;
+                object_pos[4].y=(700*Height)/1440;
                 map_size_setting(4,object_pos[4],size);
-                object_pos[5].x=330;
-                object_pos[5].y=840;
+                object_pos[5].x=(330*Width)/2560;
+                object_pos[5].y=(700*Height)/1440;
                 map_size_setting(5,object_pos[5],size);
                 break;
             case 1:
@@ -679,38 +671,38 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                     object_pos[i]=new POINT();
                     objedect_size[i]=new RECT();
                 }
-                object_pos[0].x=1200;
-                object_pos[0].y=1200;
+                object_pos[0].x=(1200*Width)/2560;
+                object_pos[0].y=(1200*Height)/1440;
                 size.x=950;
                 size.y=40;
                 map_size_setting(0,object_pos[0],size);
-                object_pos[1].x=830;
-                object_pos[1].y=540;
+                object_pos[1].x=(830*Width)/2560;
+                object_pos[1].y=(540*Height)/1440;
 
                 size.x=260;
                 size.y=40;
                 map_size_setting(1,object_pos[1],size);
-                object_pos[2].x=1580;
-                object_pos[2].y=540;
+                object_pos[2].x=(1580*Width)/2560;
+                object_pos[2].y=(540*Height)/1440;
                 map_size_setting(2,object_pos[2],size);
-                object_pos[3].x=1200;
-                object_pos[3].y=640;
+                object_pos[3].x=(1200*Width)/2560;
+                object_pos[3].y=(640*Height)/1440;
                 size.x=280;
                 size.y=40;
                 map_size_setting(3,object_pos[3],size);
-                object_pos[4].x=1780;
-                object_pos[4].y=840;
+                object_pos[4].x=(1780*Width)/2560;
+                object_pos[4].y=(840*Height)/1440;
                 size.x=190;
                 size.y=40;
                 map_size_setting(4,object_pos[4],size);
-                object_pos[5].x=640;
-                object_pos[5].y=840;
+                object_pos[5].x=(640*Width)/2560;
+                object_pos[5].y=(840*Height)/1440;
                 map_size_setting(5,object_pos[5],size);
-                object_pos[6].x=1580;
-                object_pos[6].y=1040;
+                object_pos[6].x=(1580*Width)/2560;
+                object_pos[6].y=(1040*Height)/1440;
                 map_size_setting(6,object_pos[6],size);
-                object_pos[7].x=840;
-                object_pos[7].y=1040;
+                object_pos[7].x=(840*Width)/2560;
+                object_pos[7].y=(1040*Height)/1440;
                 map_size_setting(7,object_pos[7],size);
                 break;
             case 2:
@@ -721,23 +713,23 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                     object_pos[i]=new POINT();
                     objedect_size[i]=new RECT();
                 }
-                object_pos[0].x=1150;
-                object_pos[0].y=1300;
+                object_pos[0].x=(1150*Width)/2560;
+                object_pos[0].y=(1300*Height)/1440;
                 size.x=700;
                 size.y=40;
                 map_size_setting(0,object_pos[0],size);
-                object_pos[1].x=1200;
-                object_pos[1].y=460;
+                object_pos[1].x=(1200*Width)/2560;
+                object_pos[1].y=(460*Height)/1440;
                 size.x=920;
                 size.y=40;
                 map_size_setting(1,object_pos[1],size);
-                object_pos[2].x=1920;
-                object_pos[2].y=980;
+                object_pos[2].x=(1920*Width)/2560;
+                object_pos[2].y=(980*Height)/1440;
                 size.x=180;
                 size.y=40;
                 map_size_setting(2,object_pos[2],size);
-                object_pos[3].x=420;
-                object_pos[3].y=980;
+                object_pos[3].x=(420*Width)/2560;
+                object_pos[3].y=(980*Height)/1440;
                 map_size_setting(3,object_pos[3],size);
 
                 break;
@@ -749,18 +741,18 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                     object_pos[i]=new POINT();
                     objedect_size[i]=new RECT();
                 }
-                object_pos[0].x=1200;
-                object_pos[0].y=1340;
+                object_pos[0].x=(1200*Width)/2560;
+                object_pos[0].y=(1340*Height)/1440;
                 size.x=1100;
                 size.y=40;
                 map_size_setting(0,object_pos[0],size);
-                object_pos[1].x=1200;
-                object_pos[1].y=1040;
+                object_pos[1].x=(1200*Width)/2560;
+                object_pos[1].y=(1040*Height)/1440;
                 size.x=530;
                 size.y=40;
                 map_size_setting(1,object_pos[1],size);
-                object_pos[2].x=1200;
-                object_pos[2].y=940;
+                object_pos[2].x=(1200*Width)/2560;
+                object_pos[2].y=(940*Height)/1440;
                 size.x=290;
                 size.y=40;
                 map_size_setting(2,object_pos[2],size);
@@ -773,30 +765,30 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                     object_pos[i]=new POINT();
                     objedect_size[i]=new RECT();
                 }
-                object_pos[0].x=1200;
-                object_pos[0].y=940;
+                object_pos[0].x=(1200*Width)/2560;
+                object_pos[0].y=(940*Height)/1440;
                 size.x=840;
                 size.y=40;
                 map_size_setting(0,object_pos[0],size);
-                object_pos[1].x=720;
-                object_pos[1].y=770;
+                object_pos[1].x=(720*Width)/2560;
+                object_pos[1].y=(770*Height)/1440;
                 size.x=180;
                 size.y=40;
                 map_size_setting(1,object_pos[1],size);
-                object_pos[2].x=1650;
-                object_pos[2].y=770;
+                object_pos[2].x=(1650*Width)/2560;
+                object_pos[2].y=(770*Height)/1440;
                 map_size_setting(2,object_pos[2],size);
-                object_pos[3].x=1000;
-                object_pos[3].y=390;
+                object_pos[3].x=(1000*Width)/2560;
+                object_pos[3].y=(390*Height)/1440;
                 map_size_setting(3,object_pos[3],size);
-                object_pos[4].x=1400;
-                object_pos[4].y=390;
+                object_pos[4].x=(1400*Width)/2560;
+                object_pos[4].y=(390*Height)/1440;
                 map_size_setting(4,object_pos[4],size);
-                object_pos[5].x=440;
-                object_pos[5].y=570;
+                object_pos[5].x=(440*Width)/2560;
+                object_pos[5].y=(570*Height)/1440;
                 map_size_setting(5,object_pos[5],size);
-                object_pos[6].x=1950;
-                object_pos[6].y=570;
+                object_pos[6].x=(1950*Width)/2560;
+                object_pos[6].y=(570*Height)/1440;
                 map_size_setting(6,object_pos[6],size);
                 break;
             case 5:
@@ -807,21 +799,21 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                     object_pos[i]=new POINT();
                     objedect_size[i]=new RECT();
                 }
-                object_pos[0].x=1200;
-                object_pos[0].y=1080;
+                object_pos[0].x=(1200*Width)/2560;
+                object_pos[0].y=(1080*Height)/1440;
                 size.x=1000;
                 size.y=40;
                 map_size_setting(0,object_pos[0],size);
-                object_pos[1].x=500;
-                object_pos[1].y=720;
+                object_pos[1].x=(500*Width)/2560;
+                object_pos[1].y=(720*Height)/1440;
                 size.x=380;
                 size.y=40;
                 map_size_setting(1,object_pos[1],size);
-                object_pos[2].x=1880;
-                object_pos[2].y=720;
+                object_pos[2].x=(1880*Width)/2560;
+                object_pos[2].y=(720*Height)/1440;
                 map_size_setting(2,object_pos[2],size);
-                object_pos[3].x=1200;
-                object_pos[3].y=400;
+                object_pos[3].x=(1200*Width)/2560;
+                object_pos[3].y=(400*Height)/1440;
                 map_size_setting(3,object_pos[3],size);
                 break;
             case 6:
@@ -832,36 +824,36 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                     object_pos[i]=new POINT();
                     objedect_size[i]=new RECT();
                 }
-                object_pos[0].x=1200;
-                object_pos[0].y=1240;
+                object_pos[0].x=(1200*Width)/2560;
+                object_pos[0].y=(1240*Height)/1440;
                 size.x=1150;
                 size.y=40;
                 //ing
                 map_size_setting(0,object_pos[0],size);
-                object_pos[1].x=50;
-                object_pos[1].y=500;
+                object_pos[1].x=(50*Width)/2560;
+                object_pos[1].y=(500*Height)/1440;
                 size.x=280;
                 size.y=40;
                 map_size_setting(1,object_pos[1],size);
-                object_pos[2].x=600;
-                object_pos[2].y=90;
+                object_pos[2].x=(600*Width)/2560;
+                object_pos[2].y=(90*Height)/1440;
                 map_size_setting(2,object_pos[2],size);
-                object_pos[3].x=1580;
-                object_pos[3].y=180;
+                object_pos[3].x=(1580*Width)/2560;
+                object_pos[3].y=(180*Height)/1440;
                 map_size_setting(3,object_pos[3],size);
-                object_pos[4].x=2320;
-                object_pos[4].y=810;
+                object_pos[4].x=(2320*Width)/2560;
+                object_pos[4].y=(810*Height)/1440;
                 map_size_setting(4,object_pos[4],size);
-                object_pos[5].x=920;
-                object_pos[5].y=350;
+                object_pos[5].x=(920*Width)/2560;
+                object_pos[5].y=(350*Height)/1440;
                 size.x=290;
                 size.y=40;
                 map_size_setting(5,object_pos[5],size);
-                object_pos[6].x=700;
-                object_pos[6].y=860;
+                object_pos[6].x=(700*Width)/2560;
+                object_pos[6].y=(860*Height)/1440;
                 map_size_setting(6,object_pos[6],size);
-                object_pos[7].x=1780;
-                object_pos[7].y=660;
+                object_pos[7].x=(1780*Width)/2560;
+                object_pos[7].y=(660*Height)/1440;
                 map_size_setting(7,object_pos[7],size);
 
                 break;
@@ -873,34 +865,34 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                     object_pos[i]=new POINT();
                     objedect_size[i]=new RECT();
                 }
-                object_pos[0].x=910;
-                object_pos[0].y=1430;
+                object_pos[0].x=(910*Width)/2560;
+                object_pos[0].y=(1430*Height)/1440;
                 size.x=400;
                 size.y=40;
                 map_size_setting(0,object_pos[0],size);
-                object_pos[1].x=1430;
-                object_pos[1].y=1430;
+                object_pos[1].x=(1430*Width)/2560;
+                object_pos[1].y=(1430*Height)/1440;
                 map_size_setting(1,object_pos[1],size);
-                object_pos[2].x=280;
-                object_pos[2].y=1000;
+                object_pos[2].x=(280*Width)/2560;
+                object_pos[2].y=(1000*Height)/1440;
                 map_size_setting(2,object_pos[2],size);
-                object_pos[3].x=2030;
-                object_pos[3].y=1000;
+                object_pos[3].x=(2030*Width)/2560;
+                object_pos[3].y=(1000*Height)/1440;
                 map_size_setting(3,object_pos[3],size);
-                object_pos[4].x=580;
-                object_pos[4].y=600;
+                object_pos[4].x=(580*Width)/2560;
+                object_pos[4].y=(600*Height)/1440;
                 map_size_setting(4,object_pos[4],size);
-                object_pos[5].x=1780;
-                object_pos[5].y=600;
+                object_pos[5].x=(1780*Width)/2560;
+                object_pos[5].y=(600*Height)/1440;
                 map_size_setting(5,object_pos[5],size);
-                object_pos[6].x=1200;
-                object_pos[6].y=170;
+                object_pos[6].x=(1200*Width)/2560;
+                object_pos[6].y=(170*Height)/1440;
                 map_size_setting(6,object_pos[6],size);
-                object_pos[7].x=80;
-                object_pos[7].y=170;
+                object_pos[7].x=(80*Width)/2560;
+                object_pos[7].y=(170*Height)/1440;
                 map_size_setting(7,object_pos[7],size);
-                object_pos[8].x=2280;
-                object_pos[8].y=170;
+                object_pos[8].x=(2280*Width)/2560;
+                object_pos[8].y=(170*Height)/1440;
                 map_size_setting(8,object_pos[8],size);
 
                 break;
@@ -912,21 +904,21 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                     object_pos[i]=new POINT();
                     objedect_size[i]=new RECT();
                 }
-                object_pos[0].x=1200;
-                object_pos[0].y=1040;
+                object_pos[0].x=(1200*Width)/2560;
+                object_pos[0].y=(1040*Height)/1440;
                 size.x=1200;
                 size.y=40;
                 map_size_setting(0,object_pos[0],size);
-                object_pos[1].x=550;
-                object_pos[1].y=640;
+                object_pos[1].x=(550*Width)/2560;
+                object_pos[1].y=(640*Height)/1440;
                 size.x=280;
                 size.y=40;
                 map_size_setting(1,object_pos[1],size);
-                object_pos[2].x=1880;
-                object_pos[2].y=640;
+                object_pos[2].x=(1880*Width)/2560;
+                object_pos[2].y=(640*Height)/1440;
                 map_size_setting(2,object_pos[2],size);
-                object_pos[3].x=1200;
-                object_pos[3].y=340;
+                object_pos[3].x=(1200*Width)/2560;
+                object_pos[3].y=(340*Height)/1440;
                 map_size_setting(3,object_pos[3],size);
                 break;
 
