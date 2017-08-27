@@ -18,7 +18,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
-
+import com.example.parkjaeha.supermario.Camera;
 /**
  * Created by user1 on 2017-08-09.
  */
@@ -73,7 +73,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
     private POINT[] object_pos;
     private RECT[] objedect_size;
     Paint paint=new Paint();
-
+    Camera cam=new Camera();
 /*
     //연기
     private ArrayList<Smoke> smokes;
@@ -180,7 +180,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         paint.setStyle(Paint.Style.STROKE);
         paint.setColor(Color.BLACK);
         paint.setStrokeWidth(3);
-
+        cam.setPos(Player.posX);
 
     }
 
@@ -203,7 +203,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         if(!Pause_game){
             if(canvas!=null){
                 //background  - 하나로 이미지 합쳐지만 이것도 하나로 합칠 예정
-                canvas.drawBitmap(background,count-1280,0,null);
+                canvas.drawBitmap(background,cam.realpos.x,0,null);
                 //canvas.drawBitmap(imgback,count, 0, null);
 
                 //위치설정 및 그리기
@@ -266,7 +266,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
             manXPos = manXPos + runSpeedPerSecond / fps;
             //캐릭터가 width 프레임보다 커지면 다시 y를 증가시킨 x의 처음 위치로 이동
-            Gravity();
             //background moving  -  map moving _ camera
             limitCamera();
 
@@ -382,6 +381,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
             Gravity();
             map_collision();
+            cam.realsetPos(Player.posX);
+            cam.add();
             if(live=false&&life==false){
                 Die.play(explosionId,1,1,0,0,1);
                 life=true;
@@ -515,17 +516,17 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
     //현우 코드
     public void Gravity(){
-        //  if(mapobject_collision==false){
-        //     m_Velocity_Y+=1;
-        // }
-        // else {
-        //     m_Velocity_Y=0;
-        // }
-        // manYPos+=m_Velocity_Y;
-        // if(manYPos>1600)live=false;
-        if(Player.map_collision==false){
-            Player.posY +=5;
-        }
+          if(Player.map_collision==false){
+             Player.m_Velocity.y+=3;
+         }
+         else {
+             Player.m_Velocity.y=0;
+         }
+         Player.posY+=Player.m_Velocity.y;
+         if(Player.posY>1600)live=false;
+        //if(Player.map_collision==false){
+        //    Player.posY +=5;
+        //}
     }
     public void map_collision(){
         POINT cha_point=new POINT();
