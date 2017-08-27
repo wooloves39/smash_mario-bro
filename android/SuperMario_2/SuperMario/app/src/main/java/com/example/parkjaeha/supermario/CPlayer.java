@@ -22,6 +22,8 @@ public class CPlayer
 
     int JumpHeight = 0;
 
+    int PUSH=0,RPUNCH=0,LPUNCH=0;
+
     int GetKey(){return this.nKey;}
 
     //void move(int x, int y)
@@ -37,7 +39,7 @@ public class CPlayer
     public POINT m_Velocity = new POINT();//가속도
 
     public POINT m_dirRight = new POINT();//플레이어의 방향
-    public player_options Player_option= new player_options();
+    public Player_options Player_option= new Player_options();
     int nTexture;//스프라이트의 개수
     //강한 공격 게이지 및 수치
     int smash_point = 2;
@@ -145,7 +147,7 @@ public class CPlayer
             else
                 return false;
         }
-    return false;
+        return false;
     }
 
 

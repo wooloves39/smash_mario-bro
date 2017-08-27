@@ -3,6 +3,9 @@ package com.example.parkjaeha.supermario;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
@@ -13,10 +16,6 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Gallery;
 import android.widget.ImageView;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.media.SoundPool;
-
 
 import static com.example.parkjaeha.supermario.R.id.img_map;
 
@@ -26,6 +25,7 @@ import static com.example.parkjaeha.supermario.R.id.img_map;
 
 public class SubMenu extends ActionBarActivity {
 //맵나오는 화면
+
     MediaPlayer mediaPlayer;
     SoundPool choice;
     int explosionId=-1;
@@ -38,14 +38,18 @@ public class SubMenu extends ActionBarActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         //사운드 배경음악
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
         mediaPlayer=MediaPlayer.create(this,R.raw.choice_state);
         mediaPlayer.setLooping(true);
         mediaPlayer.start();
-      //  startService(new Intent("com.example.parkjaeha.supermario"));
+        //  startService(new Intent("com.example.parkjaeha.supermario"));
         choice=new SoundPool(2,AudioManager.STREAM_MUSIC,0);
         explosionId=choice.load(this,R.raw.choice,1);
+
+
         //풀스크린
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -65,8 +69,10 @@ public class SubMenu extends ActionBarActivity {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 choice.play(explosionId,1,1,0,0,1);
                 mediaPlayer.stop();
+
                 if(mapNumber==9){
                     mapNumber = (int)(Math.random()*9);
                 }

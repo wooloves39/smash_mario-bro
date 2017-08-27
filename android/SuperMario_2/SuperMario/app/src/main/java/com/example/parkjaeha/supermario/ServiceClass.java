@@ -1,15 +1,15 @@
 package com.example.parkjaeha.supermario;
 
+import android.app.Service;
+import android.content.Intent;
+import android.media.MediaPlayer;
+import android.os.IBinder;
+
 /**
- * Created by woolo_so5omoy on 2017-08-25.
+ * Created by parkjaeha on 2017-08-27.
  */
-         import android.app.Service;
-         import android.content.Intent;
-         import android.media.MediaPlayer;
-         import android.media.MediaRecorder;
-         import android.os.IBinder;
-         import android.util.Log;
-public class ServiceClass extends Service{
+
+public class ServiceClass extends Service {
     private MediaPlayer mPlayer=null;
     @Override
     public IBinder onBind(Intent intent){

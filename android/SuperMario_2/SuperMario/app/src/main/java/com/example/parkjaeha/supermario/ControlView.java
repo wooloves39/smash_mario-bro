@@ -18,6 +18,7 @@ public class ControlView extends android.support.v7.widget.AppCompatImageView im
     private KnobListener listner;
     float x,y;
     float mx,my;
+    String str;
 
     public interface  KnobListener{
         public void onChanged(double angle);
@@ -31,6 +32,7 @@ public class ControlView extends android.support.v7.widget.AppCompatImageView im
         super(context);
         this.setImageResource(R.drawable.exit);
         this.setOnTouchListener(this);
+
     }
 
 
@@ -56,10 +58,41 @@ public class ControlView extends android.support.v7.widget.AppCompatImageView im
         y=event.getY(0);
         angle = getAngle(x,y);
         invalidate();;
+       // MainActivity.cKey =1;
+        if(event.getActionMasked() == event.ACTION_UP){
+            MainActivity.cKey =0;
+            MainActivity.mKey = 4;
+        }
+        if(event.getActionMasked() == event.ACTION_DOWN){
+            MainActivity.cKey =1;
+        }
+
         listner.onChanged(angle);
 
         return true;
     }
+
+  /*  @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        x = (int) event.getX();
+        y = (int) event.getY();
+
+        int action =event.getActionMasked();
+
+        if(action ==MotionEvent.ACTION_DOWN){
+            this.str = "ACTION_DOWN";
+            MainActivity.cKey = 1;
+        }
+
+        if(action ==MotionEvent.ACTION_UP){
+            this.str = "ACTION_UP";
+            MainActivity.cKey = 0;
+        }
+
+
+        return super.onTouchEvent(event);
+    }*/
+
 
     protected  void onDraw(Canvas c){
         Paint paing = new Paint();

@@ -1,10 +1,10 @@
 package com.example.parkjaeha.supermario;
 
 /**
- * Created by yeb01 on 2017-08-25.
+ * Created by parkjaeha on 2017-08-27.
  */
 
-public class player_options
+public class Player_options
 {
     float speed;
     float velocityX_max;

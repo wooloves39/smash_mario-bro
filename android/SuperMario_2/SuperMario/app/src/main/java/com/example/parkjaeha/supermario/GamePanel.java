@@ -18,7 +18,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
-import com.example.parkjaeha.supermario.Camera;
+
 /**
  * Created by user1 on 2017-08-09.
  */
@@ -30,7 +30,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
     Info image = new Info();
     Resources res;
     Bitmap imgback,background;
-    int count=0,check=0;
+    int count=0,check=0,key=0;
 
     public  static int Width, Height, cx, cy;
     long startFrameTime;
@@ -68,8 +68,16 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
     int explosionId=-1;
     static boolean life=false;
     private boolean live=true;
-
+    private boolean mapobject_collision=false;
+    private float m_Velocity_Y=0;
+    private float m_Velocity_X=0;
     private int object_num;
+    private int[] object_posX;
+    private int[] object_posY;
+    private int[] object_RECT_bottom;
+    private int[] object_RECT_top;
+    private int[] object_RECT_left;
+    private int[] object_RECT_right;
     private POINT[] object_pos;
     private RECT[] objedect_size;
     Paint paint=new Paint();
@@ -182,6 +190,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         paint.setStrokeWidth(3);
         cam.setPos(Player.posX);
 
+
     }
 
     @Override
@@ -226,9 +235,25 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                 canvas.drawRect(p[2].posX+d[0],p[2].posY+d[1],p[2].posX+frameWidth-d[2],p[2].posY+frameHeight,paint);
 
                 //충돌 state test
-                if(Player.posX+55 == p[1].posX+55){
-                    Log.d("Collison : " ,Maingame.cKey+"player: "+(Player.posX+55)+"p[1]: "+(p[1].posX+55));
+
+                if( (Player.posX+a[0] == p[1].posX+c[0] || Player.posX+frameWidth-a[2]== p[1].posX+frameWidth-c[2]) && Player.posY+a[0] == p[1].posY+c[0] ||Player.posY+frameHeight ==p[1].posY+frameHeight){
+                    Log.d("Collison : " ,"x가 부딪힘  push ");
+                    Player.PUSH =1;
+                    //점프로 인한 상황에서 위아래 부분이 부딪히는 충돌임
                 }
+
+                if( (( Player.posX+frameWidth-a[2]== p[1].posX+frameWidth-c[2]) || ( Player.posX+frameWidth-a[2] ==p[1].posX+c[0]) ) && Maingame.nKey ==1 && (Player.posY+a[0] == p[1].posY+c[0] ||Player.posY+frameHeight ==p[1].posY+frameHeight) ){
+                    Log.d("Collison : " ,"오른쪽 어택");
+                    Player.RPUNCH =1;
+                    //플레이어가 오른쪽으로 어택시
+                }
+
+                if( ((Player.posX+frameWidth-a[2]== p[1].posX+frameWidth-c[2]) || (Player.posX+frameWidth-a[2] ==p[1].posX+c[0]))  && Maingame.nKey ==0 && (Player.posY+a[0] == p[1].posY+c[0] ||Player.posY+frameHeight ==p[1].posY+frameHeight) ){
+                    Log.d("Collison : " ,"왼쪽 어택");
+                    Player.LPUNCH =1;
+                    //플레이어가 왼쪽으로 어택시
+                }
+
 
                 for(int i=0;i<object_num;++i){
                     canvas.drawRect(objedect_size[i].left,objedect_size[i].top,objedect_size[i].right,objedect_size[i].bottom,paint);
@@ -266,6 +291,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
             manXPos = manXPos + runSpeedPerSecond / fps;
             //캐릭터가 width 프레임보다 커지면 다시 y를 증가시킨 x의 처음 위치로 이동
+
             //background moving  -  map moving _ camera
             limitCamera();
 
@@ -311,9 +337,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                     }
                     else {
                         frameCount = 8;
-                    bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_move[MainActivity.ch_num]);
-                    bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
-                    Player.SetStatus(1);
+                        bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_move[MainActivity.ch_num]);
+                        bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
+                        Player.SetStatus(1);
                     }
                     Player.Move(true, 2, 1);
                     Player.BeforeDirection = 1;
@@ -359,7 +385,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                     //그 이외
                     //else Player.n_AttackCount = 0;
                     Maingame.nKey = 4;
-                break;
+                    break;
 
                 case 4: // BASIC
                     if(Player.map_collision & Player.n_AttackCount == 0) {
@@ -372,12 +398,61 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                     break;
             }
 
-            //캐릭터의 스프라이트를 이동하는 것처럼 보이기 위해 값을 변경시켜준다.
+                    //touch moving
+                    // 좌우 움직이기 관련 버튼입니다.
+                    switch (Maingame.mKey)
+                    {
+                        case 0:     //leftmove
+                            bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_move[MainActivity.ch_num + 4]);
+                            bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
+
+                            if(Maingame.cKey ==1) {
+                               // Player.move(-10, 0);
+                                //이 함수가 없네? ㅎㅎ
+                            }else{
+
+                                Maingame.mKey = 4;
+                            }
+                            //p[0].move(-10,0);
+                            Player.BeforeDirection =1;
+                            break;
+                        case 1:
+
+                            bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_move[MainActivity.ch_num]);
+                            bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
+
+                            if(Maingame.cKey==1) {
+                               // Player.move(10, 0);
+                            }else{
+                                Maingame.mKey = 4;
+                            }
+                            //p[0].move(10,0);
+                            Player.BeforeDirection=0;
+                            break;
+                        case 2:
+                            bitmapRunningMan = BitmapFactory.decodeResource(getResources(),image.img_jump[MainActivity.ch_num+(4*Player.BeforeDirection)]);
+                            //왼쪽오른쪽 자동변경
+                            bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan,frameWidth*frameCount,frameHeight,false);
+                          //  Player.move(0, 10);
+                            break;
+                        case 3:
+                            //Player.move(0, -1);
+                            break;
+                        default:
+                            Log.d("hello",Maingame.nKey+"  "+ Maingame.cKey);
+                            break;
+                    }
+
+
+
+                    //캐릭터의 스프라이트를 이동하는 것처럼 보이기 위해 값을 변경시켜준다.
             boolean offJump = Player.JumpTimer();
             if(offJump)
             {
                 Maingame.nKey  = Player.BeforeDirection;
             }
+
+
 
             Gravity();
             map_collision();
@@ -409,8 +484,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
     }
 
 //charager frame
-    public void manageCurrentFrame()
-    {
+    public void manageCurrentFrame() {
         long time = System.currentTimeMillis();
 
         if (isMoving) {
@@ -450,7 +524,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         frameToDraw.left = currentFrame * frameWidth;
         frameToDraw.right = frameToDraw.left + frameWidth;
     }
-//AI rect 변경
+
+    //AI rect 변경
     public void rangeRect(){
         if(MainActivity.ch_num == 0){
             //빨초노보 rect
@@ -515,19 +590,20 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
     }
 
     //현우 코드
-    public void Gravity(){
-          if(Player.map_collision==false){
-             Player.m_Velocity.y+=3;
-         }
-         else {
-             Player.m_Velocity.y=0;
-         }
-         Player.posY+=Player.m_Velocity.y;
-         if(Player.posY>1600)live=false;
+    public void Gravity() {
+        if (Player.map_collision == false) {
+            Player.m_Velocity.y += 3;
+        } else {
+            Player.m_Velocity.y = 0;
+        }
+        Player.posY += Player.m_Velocity.y;
+        if (Player.posY > 1600) live = false;
         //if(Player.map_collision==false){
         //    Player.posY +=5;
         //}
     }
+
+
     public void map_collision(){
         POINT cha_point=new POINT();
         cha_point.x=(2*Player.posX+frameWidth)/2;
@@ -535,10 +611,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         Player.map_collision=false;
         for(int i=0;i<object_num;++i){
             if( cha_point.y<=objedect_size[i].top)continue;
+            if( cha_point.y>=objedect_size[i].bottom)continue;
             if( cha_point.x<=objedect_size[i].left)continue;
-            if( cha_point.x>=objedect_size[i].right)continue;
+            if( cha_point.x<=objedect_size[i].right)continue;
             Player.map_collision=true;
-            return;
         }
     }
     //-ing

@@ -23,13 +23,15 @@ public class MainActivity extends ActionBarActivity {
     //extends activtiy
 // 플레이 화면 불러오기
     GamePanel gamePanel;
-    static int ch_num= -1;
+    //ch_num test를 위해 1로 설정 -1로 나중에 변경 요망
+    static int ch_num= 1;
     static int rKey=0;
     static int lKey=0;
     static int uKey=0;
     static int dKey=0;
     public static int nKey = -1;
-    public static int cKey = -1;
+    public static int mKey = -1;
+    public static int cKey = 0;
 
     View pauseButton;
     View pauseMenu;
@@ -86,9 +88,7 @@ public class MainActivity extends ActionBarActivity {
     };
 
     //A btn
-    View.OnClickListener a_btn_click =  new View.OnClickListener()
-    {
-
+    View.OnClickListener a_btn_click =  new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             Toast.makeText(getApplicationContext(),"A",Toast.LENGTH_SHORT).show();
@@ -127,8 +127,10 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
 
         //캐릭터 정보 가져오기
-        Intent i = getIntent();
-        ch_num = i.getExtras().getInt("character");
+
+        //테스트를 위해 주석
+        //Intent i = getIntent();
+        //ch_num = i.getExtras().getInt("character");
 
         setContentView(R.layout.game);
         //화면 사이즈
@@ -235,6 +237,7 @@ public class MainActivity extends ActionBarActivity {
         mToast = Toast.makeText(getApplicationContext(),"NULL",Toast.LENGTH_SHORT);
 
         ControlView control_Button = (ControlView) findViewById(volume);
+
         control_Button.setKnobListener(new ControlView.KnobListener() {
             @Override
             public void onChanged(double angle) {
@@ -247,16 +250,18 @@ public class MainActivity extends ActionBarActivity {
                     volume = 50+(50-(-volume)*50/180);
                    // mToast.setText(" " +volume);
                 } ; // 왼쪽으로 회전
-                mToast.show();
+                //mToast.show();
 
                 if(15>volume || volume>85){
                     mToast.setText("up"+volume);
                 }else if(volume>15 && volume<40){
                     mToast.setText("right"+volume);
+                    mKey = 1;
                 }else if(volume>40 &&volume<65){
                 mToast.setText("down"+volume);
                 }else if(volume>65 &&volume<85){
                     mToast.setText("left"+volume);
+                    mKey = 0;
                 }
                 mToast.show();
 
