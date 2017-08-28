@@ -54,6 +54,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
     private Rect frameToDraw = new Rect(0, 0, frameWidth, frameHeight);
     //framewitdh = 캐릭터의 가로  frameheight = 캐릭터의 세로
+   // private RectF whereToDraw = new RectF(manXPos, manYPos, (manXPos+frameWidth), frameHeight);
     //manxpos = 왼쪽위의 캐릭터의 가로 maxypos = 왼쪽위로 캐릭터의 세로
 
 
@@ -67,7 +68,16 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
     int explosionId=-1;
     static boolean life=false;
     private boolean live=true;
+    private boolean mapobject_collision=false;
+    private float m_Velocity_Y=0;
+    private float m_Velocity_X=0;
     private int object_num;
+    private int[] object_posX;
+    private int[] object_posY;
+    private int[] object_RECT_bottom;
+    private int[] object_RECT_top;
+    private int[] object_RECT_left;
+    private int[] object_RECT_right;
     private POINT[] object_pos;
     private RECT[] objedect_size;
     Paint paint=new Paint();
@@ -92,6 +102,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
     public GamePanel(Context context, MainActivity game, int ScreenWidth, int ScreenHeght){
         super(context);
+
         //AI
         playN = new int[4];
         bitmapMan = new Bitmap[4];
@@ -181,7 +192,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         paint.setColor(Color.BLACK);
         paint.setStrokeWidth(3);
         cam.setPos(Player.posX);
-        System.out.println(Player.posX);
+
 
     }
 
@@ -204,22 +215,27 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         if(!Pause_game){
             if(canvas!=null){
                 //background  - 하나로 이미지 합쳐지만 이것도 하나로 합칠 예정
-                canvas.drawBitmap(background,-cam.realpos.x-1280,0,null);
+                //canvas.drawBitmap(background,cam.realpos.x,0,null);
                 //canvas.drawBitmap(imgback,count, 0, null);
+                canvas.drawBitmap(background,-cam.realpos.x-1280,0,null);
 
                 //위치설정 및 그리기
               //  whereToDraw.set((int) manXPos, (int)manYPos, (int) manXPos+ frameWidth, (int)manYPos + frameHeight);
+               // whereToDraw.set((int) Player.posX, (int) Player.posY, (int) Player.posX + frameWidth, (int) Player.posY + frameHeight);
                 whereToDraw.set((int) Player.posX-cam.realpos.x, (int) Player.posY, (int) Player.posX-cam.realpos.x + frameWidth, (int) Player.posY + frameHeight);
+
                 //ai moving
                 whereToDraw2[0].set((int)p[0].posX,(int)p[0].posY,(int)p[0].posX+frameWidth,(int)p[0].posY+frameHeight);
                 whereToDraw2[1].set((int)p[1].posX,(int)p[1].posY,(int)p[1].posX+frameWidth,(int)p[1].posY+frameHeight);
                 whereToDraw2[2].set((int)p[2].posX,(int)p[2].posY,(int)p[2].posX+frameWidth,(int)p[2].posY+frameHeight);
                 //whereToDraw2[3].set((int)p[3].posX,(int)p[3].posY,(int)p[3].posX+frameWidth,(int)p[3].posY+frameHeight);
+
                 canvas.drawBitmap(bitmapRunningMan, frameToDraw, whereToDraw, null);
                 canvas.drawBitmap(bitmapMan[0], frameToDraw, whereToDraw2[0], null);
                 canvas.drawBitmap(bitmapMan[1], frameToDraw, whereToDraw2[1], null);
                 canvas.drawBitmap(bitmapMan[2], frameToDraw, whereToDraw2[2], null);
 
+               // canvas.drawRect(Player.posX+a[0],Player.posY+a[1],Player.posX+frameWidth-a[2],Player.posY+frameHeight,paint);
                 canvas.drawRect(Player.posX+a[0]-cam.realpos.x,Player.posY+a[1],Player.posX+frameWidth-a[2]-cam.realpos.x,Player.posY+frameHeight,paint);
                 canvas.drawRect(p[0].posX+b[0],p[0].posY+b[1],p[0].posX+frameWidth-b[2],p[0].posY+frameHeight,paint);
                 canvas.drawRect(p[1].posX+c[0],p[1].posY+c[1],p[1].posX+frameWidth-c[2],p[1].posY+frameHeight,paint);
@@ -247,6 +263,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
 
                 for(int i=0;i<object_num;++i){
+                   // canvas.drawRect(objedect_size[i].left,objedect_size[i].top,objedect_size[i].right,objedect_size[i].bottom,paint);
                     canvas.drawRect(objedect_size[i].left-cam.realpos.x,objedect_size[i].top,objedect_size[i].right-cam.realpos.x,objedect_size[i].bottom,paint);
                 }
 //캐릭터 위치 설정하고 그값을 그린다.
@@ -357,7 +374,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
                     frameCount = 4;
                     Player.SingleFrame = true; // 프레임이 1번만 돌게 해준다.
-                    //점프상태인 경우에
+
+                    //첫 공격일때
                     if(Player.map_collision == false)
                     {
                         frameCount = 3;
@@ -366,8 +384,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                         bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_kick[MainActivity.ch_num + (4 * Player.BeforeDirection)]);
                         bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
                         Player.nextAttackFrame = -1; // 다음 프레임은없음 그냥 BASIC으로 변경.
-                    }
-                    else {
+                    }else {
                         //첫 공격일때
                         if (Player.n_AttackCount == 0) {
                             currentFrame = 0;
@@ -379,18 +396,17 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                         //두번째 공격일때
                         else if (Player.n_AttackCount == 1) {
                             Player.n_AttackCount = 2; // 2번째 공격까지한다.
-
-                            Player.nextAttackFrame = 1; //다음프레임은 공격2이다.
                         }
                     }
+
+                        Player.nextAttackFrame = 1; //다음프레임은 공격2이다.
                     //그 이외
                     //else Player.n_AttackCount = 0;
                     Maingame.nKey = 4;
                     break;
 
                 case 4: // BASIC
-                    if(Player.map_collision & Player.n_AttackCount == 0)
-                    {
+                    if(Player.map_collision & Player.n_AttackCount == 0) {
                         frameCount = 4;
                         bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_basic[MainActivity.ch_num + (4 * Player.BeforeDirection)]);
                         bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
@@ -409,9 +425,14 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                             bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
 
                             if(Maingame.cKey ==1) {
+                               // Player.move(-10, 0);
                                 Player.Move(true, 2, 0);
                                 //이 함수가 없네? ㅎㅎ
+                            }else{
+
+                                Maingame.mKey = 4;
                             }
+                            //p[0].move(-10,0);
                             Player.BeforeDirection =1;
                             break;
                         case 1:
@@ -420,7 +441,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                             bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
 
                             if(Maingame.cKey==1) {
+                               // Player.move(10, 0);
                                 Player.Move(true, 2, 1);
+                            }else{
+                                Maingame.mKey = 4;
                             }
                             //p[0].move(10,0);
                             Player.BeforeDirection=0;
@@ -503,6 +527,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                         }
                         else if (Player.nextAttackFrame == -1) //다음 공격 없는경우
                         {
+
+                            frameCount = 5;
                             currentFrame = 0;
                             if(Player.map_collision == false) frameCount = 4;
                             else frameCount = 5;
@@ -634,7 +660,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                     object_pos[i]=new POINT();
                     objedect_size[i]=new RECT();
                 }
-
                 object_pos[0].x=(1180*Width)/2560;
                 object_pos[0].y=(1050*Height)/1440;
                 size.x=820;

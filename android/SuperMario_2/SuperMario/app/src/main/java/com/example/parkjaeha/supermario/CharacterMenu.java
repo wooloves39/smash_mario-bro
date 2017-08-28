@@ -1,7 +1,7 @@
 package com.example.parkjaeha.supermario;
 
 import android.content.Intent;
-import android.media.MediaPlayer;
+import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -20,7 +20,7 @@ public class CharacterMenu extends AppCompatActivity implements View.OnClickList
     int ch_num = 0 ;
     static  int map_num=0;
 
-    MediaPlayer mediaPlayer;
+    //MediaPlayer mediaPlayer;
     SoundPool choice;
     int explosionId=-1;
 
@@ -28,14 +28,15 @@ public class CharacterMenu extends AppCompatActivity implements View.OnClickList
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        MediaPlayer mediaPlayer;
-        SoundPool choice;
-        int explosionId=-1;
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.charactermenu);
+
+        choice=new SoundPool(2, AudioManager.STREAM_MUSIC,0);
+        explosionId=choice.load(this,R.raw.choice,1);
+
 
         img_ch1 = (ImageView)findViewById(R.id.img_ch1);
         img_ch2 = (ImageView)findViewById(R.id.img_ch2);
@@ -52,12 +53,14 @@ public class CharacterMenu extends AppCompatActivity implements View.OnClickList
 
 
     }
+    //캐릭터 고르면 미디어 스탑 
 //캐릭터 선택 시
     @Override
     public void onClick(View v) {
 
         if(v == img_ch1){
             choice.play(explosionId,1,1,0,0,1);
+            SubMenu.mediaPlayer.stop();
             ch_num = 0;
             Intent chintent = new Intent(CharacterMenu.this,MainActivity.class);
             chintent.putExtra("character",ch_num);
@@ -66,6 +69,7 @@ public class CharacterMenu extends AppCompatActivity implements View.OnClickList
 
         }else if( v == img_ch2){
             choice.play(explosionId,1,1,0,0,1);
+            SubMenu.mediaPlayer.stop();
             ch_num = 1;
             Intent chintent = new Intent(CharacterMenu.this,MainActivity.class);
             chintent.putExtra("character",ch_num);
@@ -74,6 +78,7 @@ public class CharacterMenu extends AppCompatActivity implements View.OnClickList
 
         }else if( v == img_ch3){
             choice.play(explosionId,1,1,0,0,1);
+            SubMenu.mediaPlayer.stop();
             ch_num = 2;
             Intent chintent = new Intent(CharacterMenu.this,MainActivity.class);
             chintent.putExtra("character",ch_num);
@@ -82,7 +87,7 @@ public class CharacterMenu extends AppCompatActivity implements View.OnClickList
 
         }else if( v == img_ch4){
             choice.play(explosionId,1,1,0,0,1);
-            mediaPlayer.stop();
+            SubMenu.mediaPlayer.stop();
             ch_num = 3;
             Intent chintent = new Intent(CharacterMenu.this,MainActivity.class);
             chintent.putExtra("character",ch_num);

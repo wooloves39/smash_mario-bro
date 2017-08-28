@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.parkjaeha.supermario">
 
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -12,7 +15,7 @@
         android:theme="@style/AppTheme">
 
         <!-- 테스트를 위해 바꿈 이부분이 MainMenu임 -->
-        <activity android:name=".MainActivity"
+        <activity android:name=".MainMenu"
             android:theme="@style/AppFullScreenTheme"
             android:screenOrientation="landscape"
             >
@@ -34,18 +37,12 @@
         <activity android:name=".CharacterMenu"
             android:theme="@style/AppFullScreenTheme"
             android:screenOrientation="landscape"/>
+
         <!-- 테스트를 위해 바꿈 이부분이 MainActivity임 -->
-        <activity android:name=".MainMenu"
+        <activity android:name=".MainActivity"
             android:theme="@style/AppFullScreenTheme"
             android:screenOrientation="landscape"
             />
-
-        <service android:name="ServiceClass">
-            <intent-filter>
-                <action android:name="com.example.parkjaeha.supermario"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
-        </service>
 
 
     </application>
