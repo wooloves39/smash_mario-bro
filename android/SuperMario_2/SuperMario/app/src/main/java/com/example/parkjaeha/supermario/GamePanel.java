@@ -193,7 +193,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
         paint.setStrokeWidth(3);
         cam.setPos(Player.posX);
 
-
+        //초기화
+        Player.BeforeDirection = 1;
+        Maingame.mKey = 2;
+        Maingame.nKey = 4;
+        Player.nextAttackFrame = -1;
     }
 
     @Override
@@ -316,46 +320,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
 
             switch (Maingame.nKey)
             {
-                case 0:     //leftmove
-                    if (Player.map_collision == false) {
-                        Player.BeforeDirection = 0;
-                        frameCount = 5;
-                        bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_jump[MainActivity.ch_num + (4 * Player.BeforeDirection)]);
-                        //왼쪽오른쪽 자동변경
-                        bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
-                    } else {
-                        frameCount= 8;
-                        bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_move[MainActivity.ch_num + 4]);
-                        bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
-                        Player.SetStatus(0);
-                    }
-                    Player.Move(true, 2, 0);
-                    Player.BeforeDirection = 0;
-                    Maingame.nKey = 4;
-
-                    //p[0].Move(true, 2, 0);
+                case 0:
                     break;
                 case 1:
-                    if (Player.map_collision == false)
-                    {
-                        Player.BeforeDirection = 1;
-                        frameCount = 5;
-                        bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_jump[MainActivity.ch_num + (4 * Player.BeforeDirection)]);
-                        //왼쪽오른쪽 자동변경
-                        bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
-                    }
-                    else {
-                        frameCount = 8;
-                        bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_move[MainActivity.ch_num]);
-                        bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
-                        Player.SetStatus(1);
-                    }
-                    Player.Move(true, 2, 1);
-                    Player.BeforeDirection = 1;
-                    Maingame.nKey = 4;
-
-                    //p[0].Move(true, 2, 1);
-
                     break;
                 case 2:
                     //점프
@@ -367,14 +334,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                         bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
                         Player.m_bJump = true;
                     }
-
                     break;
                 case 3:
                     //어택
-
                     frameCount = 4;
                     Player.SingleFrame = true; // 프레임이 1번만 돌게 해준다.
-
                     //첫 공격일때
                     if(Player.map_collision == false)
                     {
@@ -384,8 +348,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                         bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_kick[MainActivity.ch_num + (4 * Player.BeforeDirection)]);
                         bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
                         Player.nextAttackFrame = -1; // 다음 프레임은없음 그냥 BASIC으로 변경.
-                    }else {
-                        //첫 공격일때
+                    }
+                    else
+                    {
                         if (Player.n_AttackCount == 0) {
                             currentFrame = 0;
                             Player.n_AttackCount = 1; // 공격카운트를 1로 올려줌 (1번째 공격이다. )
@@ -395,24 +360,38 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                         }
                         //두번째 공격일때
                         else if (Player.n_AttackCount == 1) {
-                            Player.n_AttackCount = 2; // 2번째 공격까지한다.
+                            Player.nextAttackFrame = 1;
                         }
                     }
 
-                        Player.nextAttackFrame = 1; //다음프레임은 공격2이다.
                     //그 이외
                     //else Player.n_AttackCount = 0;
                     Maingame.nKey = 4;
                     break;
 
                 case 4: // BASIC
-                    if(Player.map_collision & Player.n_AttackCount == 0) {
-                        frameCount = 4;
-                        bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_basic[MainActivity.ch_num + (4 * Player.BeforeDirection)]);
-                        bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
-                        Player.SetStatus(4);
-                    }
+                    if(Maingame.mKey==2)
+                    {
+                        if (Player.n_AttackCount == 0)
+                        {
+                            if (Player.map_collision == false)
+                            {
+                            Player.BeforeDirection = 1;
+                            frameCount = 5;
+                            bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_jump[MainActivity.ch_num + (4 * Player.BeforeDirection)]);
+                            //왼쪽오른쪽 자동변경
+                            bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
+                            }
+                            else
+                            {
 
+                                 frameCount = 4;
+                                 bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_basic[MainActivity.ch_num + (4 * Player.BeforeDirection)]);
+                                 bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
+                                 Player.SetStatus(4);
+                            }
+                        }
+                    }
                     break;
             }
 
@@ -421,39 +400,78 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
                     switch (Maingame.mKey)
                     {
                         case 0:     //leftmove
-                            bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_move[MainActivity.ch_num + 4]);
-                            bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
-
-                            if(Maingame.cKey ==1) {
-                               // Player.move(-10, 0);
+                            if(Maingame.cKey ==1)
+                            {
+                              if (Player.map_collision == false)
+                              {
+                                  Player.BeforeDirection = 0;
+                                  frameCount = 5;
+                                  bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_jump[MainActivity.ch_num + (4 * Player.BeforeDirection)]);
+                                  //왼쪽오른쪽 자동변경
+                                  bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
+                              }
+                              else
+                              {
+                                  frameCount= 8;
+                                  bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_move[MainActivity.ch_num + 4]);
+                                  bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
+                                  Player.SetStatus(0);
+                              }
                                 Player.Move(true, 2, 0);
-                                //이 함수가 없네? ㅎㅎ
-                            }else{
-
-                                Maingame.mKey = 4;
+                                Player.BeforeDirection = 0;
                             }
-                            //p[0].move(-10,0);
-                            Player.BeforeDirection =1;
+                            else{
+
+                                Maingame.mKey = 2;
+                            }
                             break;
+
                         case 1:
-
-                            bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_move[MainActivity.ch_num]);
-                            bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
-
-                            if(Maingame.cKey==1) {
-                               // Player.move(10, 0);
+                            if(Maingame.cKey==1)
+                            {
+                                 if (Player.map_collision == false)
+                                 {
+                                     Player.BeforeDirection = 1;
+                                     frameCount = 5;
+                                     bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_jump[MainActivity.ch_num + (4 * Player.BeforeDirection)]);
+                                     //왼쪽오른쪽 자동변경
+                                     bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
+                                 }
+                                 else
+                                 {
+                                     frameCount = 8;
+                                     bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_move[MainActivity.ch_num]);
+                                     bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
+                                     Player.SetStatus(1);
+                                 }
                                 Player.Move(true, 2, 1);
-                            }else{
-                                Maingame.mKey = 4;
+                                Player.BeforeDirection = 1;
                             }
-                            //p[0].move(10,0);
-                            Player.BeforeDirection=0;
+                            else
+                            {
+                                Maingame.mKey = 2;
+                            }
                             break;
                         case 2:
-                            bitmapRunningMan = BitmapFactory.decodeResource(getResources(),image.img_jump[MainActivity.ch_num+(4*Player.BeforeDirection)]);
-                            //왼쪽오른쪽 자동변경
-                            bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan,frameWidth*frameCount,frameHeight,false);
-                          //  Player.move(0, 10);
+                            if(Maingame.nKey == 4)
+                            {
+                                if (Player.n_AttackCount == 0)
+                                {
+                                    if (Player.map_collision == false)
+                                    {
+                                        frameCount = 5;
+                                        bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_jump[MainActivity.ch_num + (4 * Player.BeforeDirection)]);
+                                        //왼쪽오른쪽 자동변경
+                                        bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
+                                    }
+                                    else {
+                                        frameCount = 4;
+                                        bitmapRunningMan = BitmapFactory.decodeResource(getResources(), image.img_basic[MainActivity.ch_num + (4 * Player.BeforeDirection)]);
+                                        bitmapRunningMan = Bitmap.createScaledBitmap(bitmapRunningMan, frameWidth * frameCount, frameHeight, false);
+                                        Player.SetStatus(4);
+                                    }
+                                }
+                            }
                             break;
                         case 3:
                             //Player.move(0, -1);
@@ -469,7 +487,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback{
             boolean offJump = Player.JumpTimer();
             if(offJump)
             {
-                Maingame.nKey  = Player.BeforeDirection;
+                Maingame.nKey  = 4;
             }
 
 
