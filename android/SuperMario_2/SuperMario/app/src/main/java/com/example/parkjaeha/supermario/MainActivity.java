@@ -7,7 +7,9 @@ import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -24,14 +26,10 @@ public class MainActivity extends ActionBarActivity {
 // 플레이 화면 불러오기
     GamePanel gamePanel;
     //ch_num test를 위해 1로 설정 -1로 나중에 변경 요망
-    static int ch_num= 1;
-    static int rKey=0;
-    static int lKey=0;
-    static int uKey=0;
-    static int dKey=0;
+    static int ch_num= -1;
     public static int nKey = -1;
     public static int mKey = -1;
-    public static int cKey = 0;
+    public static int cKey = -1;
 
     View pauseButton;
     View pauseMenu;
@@ -41,86 +39,96 @@ public class MainActivity extends ActionBarActivity {
     View d_Button;
     View control_Button;
     View timeout;
-    GamePanel game;
     public static Toast mToast;
     RelativeLayout relativeLayout ;
     long myBaseTime;
     public int seconds = 99;
-    public int minutes = 10;
     Boolean timecheck = true;
     boolean doubleBackToExitPressedOnce = false;
-    //GameSurface gameSurface;
 
-    //continue 클릭시 플레이 계속
-    View.OnClickListener Continue_list = new View.OnClickListener() {
+    final int MAX_POINTS =2;
+
+
+//continue 클릭시 플레이 계속
+    View.OnTouchListener Continue_list =  new View.OnTouchListener() {
         @Override
-        public void onClick(View v) {
-
+        public boolean onTouch(View v, MotionEvent event) {
             pauseMenu.setVisibility(View.GONE);
             pauseButton.setVisibility(View.VISIBLE);
             gamePanel.Pause_game = false;
             timecheck= true;
-            //continue
+            return true;
         }
     };
+
     //mainmenu 클릭시 메인메뉴 화면으로 이동
-    View.OnClickListener Main_menu_list = new View.OnClickListener() {
+    View.OnTouchListener Main_menu_list = new View.OnTouchListener() {
         @Override
-        public void onClick(View v) {
+        public boolean onTouch(View v,MotionEvent event) {
             gamePanel.thread.setRunning(false);
             Intent i = new Intent(MainActivity.this,MainMenu.class);
             startActivity(i);
             finish();
+
+            return true;
         }
     };
+
     // 스탑버튼 클릭시 continue,main 선택용 보기가 나오고 게임 일시 정지
-    View.OnClickListener pause_click = new View.OnClickListener() {
+    View.OnTouchListener pause_click = new View.OnTouchListener() {
         @Override
-        public void onClick(View v) {
-             pauseButton.setVisibility(View.GONE);
+        public boolean onTouch(View v,MotionEvent event) {
+            pauseButton.setVisibility(View.GONE);
             pauseMenu.setVisibility(View.VISIBLE);
             gamePanel.Pause_game = true;
             timecheck = false;
 
-            // pause start
-            //mainMenu
+
+            return true;
         }
     };
 
     //A btn
-    View.OnClickListener a_btn_click =  new View.OnClickListener() {
+    View.OnTouchListener a_btn_click =  new View.OnTouchListener() {
         @Override
-        public void onClick(View v) {
-            Toast.makeText(getApplicationContext(),"A",Toast.LENGTH_SHORT).show();
+        public boolean onTouch(View v,MotionEvent event) {
+            Log.d("A_CLICK" , ": A");
             nKey = 0;
+            return true;
         }
     };
 
     //B btn
-    View.OnClickListener b_btn_click =  new View.OnClickListener() {
+    View.OnTouchListener b_btn_click =  new View.OnTouchListener() {
         @Override
-        public void onClick(View v) {
-            Toast.makeText(getApplicationContext(),"B",Toast.LENGTH_SHORT).show();
+        public boolean onTouch(View v,MotionEvent event) {
+            Log.d("B_CLICK" , ": B");
             nKey = 1;
+            return true;
         }
     };
 
     //C btn
-    View.OnClickListener c_btn_click =  new View.OnClickListener() {
+    View.OnTouchListener c_btn_click =  new View.OnTouchListener() {
         @Override
-        public void onClick(View v) {
-            Toast.makeText(getApplicationContext(),"C",Toast.LENGTH_SHORT).show();
+        public boolean onTouch(View v,MotionEvent event) {
+           Log.d("C_CLICK" , ": C");
             nKey = 2;
+            return true;
+
         }
     };
     //D btn
-    View.OnClickListener d_btn_click =  new View.OnClickListener() {
+    View.OnTouchListener d_btn_click =  new View.OnTouchListener() {
         @Override
-        public void onClick(View v) {
-            Toast.makeText(getApplicationContext(),"D",Toast.LENGTH_SHORT).show();
+        public boolean onTouch(View v,MotionEvent event) {
+            Log.d("D_CLICK" , ": D");
             nKey = 3;
+            return true;
         }
     };
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -129,8 +137,8 @@ public class MainActivity extends ActionBarActivity {
         //캐릭터 정보 가져오기
 
         //테스트를 위해 주석
-        //Intent i = getIntent();
-        //ch_num = i.getExtras().getInt("character");
+        Intent i = getIntent();
+        ch_num = i.getExtras().getInt("character");
 
         setContentView(R.layout.game);
         //화면 사이즈
@@ -155,7 +163,7 @@ public class MainActivity extends ActionBarActivity {
         relativeLayout.addView(pauseButton);
 
         //스탑 버튼 oncliklistener, size지정
-        pauseButton.setOnClickListener(pause_click);
+        pauseButton.setOnTouchListener(pause_click);
         pauseButton.getLayoutParams().height = 150;
         pauseButton.getLayoutParams().width = 150;
 
@@ -169,8 +177,8 @@ public class MainActivity extends ActionBarActivity {
         TextView menu = (TextView) pauseMenu.findViewById(R.id.textView2);
 
         //보기 버튼 클릭시
-        cont.setOnClickListener(Continue_list);
-        menu.setOnClickListener(Main_menu_list);
+        cont.setOnTouchListener(Continue_list);
+        menu.setOnTouchListener(Main_menu_list);
 
         ///////////////////////////////////////////////////////////////////
 
@@ -182,7 +190,7 @@ public class MainActivity extends ActionBarActivity {
         a_Button.setRotation(315.0f);
         relativeLayout.addView(a_Button);
 
-        a_Button.setOnClickListener(a_btn_click);
+        a_Button.setOnTouchListener(a_btn_click);
         a_Button.getLayoutParams().height = 200;
         a_Button.getLayoutParams().width = 200;
 
@@ -194,7 +202,7 @@ public class MainActivity extends ActionBarActivity {
         b_Button.setRotation(135.0f);
         relativeLayout.addView(b_Button);
 
-        b_Button.setOnClickListener(b_btn_click);
+        b_Button.setOnTouchListener(b_btn_click);
         b_Button.getLayoutParams().height = 200;
         b_Button.getLayoutParams().width = 200;
 
@@ -206,7 +214,7 @@ public class MainActivity extends ActionBarActivity {
         c_Button.setRotation(135.0f);
         relativeLayout.addView(c_Button);
 
-        c_Button.setOnClickListener(c_btn_click);
+        c_Button.setOnTouchListener(c_btn_click);
         c_Button.getLayoutParams().height = 200;
         c_Button.getLayoutParams().width = 200;
 
@@ -218,7 +226,7 @@ public class MainActivity extends ActionBarActivity {
         d_Button.setRotation(135.0f);
         relativeLayout.addView(d_Button);
 
-        d_Button.setOnClickListener(d_btn_click);
+        d_Button.setOnTouchListener(d_btn_click);
         d_Button.getLayoutParams().height = 200;
         d_Button.getLayoutParams().width = 200;
 
@@ -253,17 +261,20 @@ public class MainActivity extends ActionBarActivity {
                 //mToast.show();
 
                 if(15>volume || volume>85){
-                    mToast.setText("up"+volume);
+                   // mToast.setText("up"+volume);
                 }else if(volume>15 && volume<40){
-                    mToast.setText("right"+volume);
+                   // mToast.setText("right"+volume);
+                    Log.d("right","mkey=1");
                     mKey = 1;
                 }else if(volume>40 &&volume<65){
-                mToast.setText("down"+volume);
+               // mToast.setText("down"+volume);
                 }else if(volume>65 &&volume<85){
-                    mToast.setText("left"+volume);
+                   // mToast.setText("left"+volume);
+                    Log.d("left","mkey=0");
                     mKey = 0;
+
                 }
-                mToast.show();
+                //mToast.show();
 
             }
         });
@@ -279,7 +290,7 @@ public class MainActivity extends ActionBarActivity {
         timeout.getLayoutParams().height = 220;
         timeout.getLayoutParams().width = 300;
 
-
+        //시간용
         Timer t = new Timer();
         //Set the schedule function and rate
         t.scheduleAtFixedRate(new TimerTask() {
@@ -293,9 +304,7 @@ public class MainActivity extends ActionBarActivity {
                         TextView tv = (TextView) findViewById(R.id.contentView);
                         if(timecheck) {
                             tv.setText(String.valueOf(seconds));
-
                             seconds -= 1;
-
                             if (seconds == 0) {
                                 //gamePanel.thread.setRunning(false);
                                 tv.setText(String.valueOf(seconds));
@@ -304,15 +313,49 @@ public class MainActivity extends ActionBarActivity {
                            */
                             seconds = 99;
                             }
+
                         }
+//멀티 터치시
+                        // mkey -> 1이면 오른쪽 0이면 왼쪽
+                        // nkey -> a,b,c,d버튼 위- C(2) 왼쪽- A(0) 아래- D(3) 오른쪽- B(1)
+                        // ckey -> ACTION_DOWN (1) ACTION_UP(0)
+                        if(mKey==1 && nKey ==0 && cKey ==1) {
+                            Log.d("U&C:: " , "R멀티A");
+
+                        }else if(mKey==0 && nKey==0 && cKey ==1){
+                            Log.d("U&C:: " , "L멀티A");
+                        }
+
+                        if(mKey==1 && nKey ==1 && cKey ==1) {
+                            System.out.println("U&C:: " + "R멀티B");
+
+                        }else if(mKey==0 && nKey==1 && cKey ==1){
+                            Log.d("U&C:: " , "L멀티B");
+                        }
+
+                        if(mKey==1 &&nKey ==2 && cKey ==1) {
+                            System.out.println("U&C:: " + "R멀티C");
+
+                        }else if(mKey==0 && nKey==2 && cKey ==1){
+                            Log.d("U&C:: " , "L멀티C");
+                        }
+
+                        if(mKey==1 && nKey ==3 && cKey ==1) {
+                            System.out.println("U&C:: " + "R멀티D");
+
+                        }else if(mKey==0 && nKey==3 && cKey ==1){
+                            Log.d("U&C:: " , "L멀티D");
+                        }
+
+                        nKey=-1;
+
                     }
 
                 });
+
             }
 
         }, 0, 1000);
-
-
 
     }       //oncreate
 

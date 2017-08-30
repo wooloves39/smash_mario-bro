@@ -70,7 +70,6 @@ public class CPlayer
     static int frameCount = 8;
     static int currentFrame = 0;
 
-
     //---------------------0825 Player 함수 일괄추가 -------------//
 
     //디폴트 생성자 추가

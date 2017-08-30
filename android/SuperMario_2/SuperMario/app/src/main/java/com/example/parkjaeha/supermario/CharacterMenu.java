@@ -53,7 +53,7 @@ public class CharacterMenu extends AppCompatActivity implements View.OnClickList
 
 
     }
-    //캐릭터 고르면 미디어 스탑 
+    //캐릭터 고르면 미디어 스탑
 //캐릭터 선택 시
     @Override
     public void onClick(View v) {

@@ -18,7 +18,16 @@ public class ControlView extends android.support.v7.widget.AppCompatImageView im
     private KnobListener listner;
     float x,y;
     float mx,my;
-    String str;
+    final int MAX_POINTS =2;
+    float [] fx = new float[MAX_POINTS];
+    float [] fy = new float[MAX_POINTS];
+    boolean[] touching = new boolean[MAX_POINTS];
+    static int key=0;
+
+    public void ControlView(){
+        this.key = 0;
+    }
+
 
     public interface  KnobListener{
         public void onChanged(double angle);
@@ -54,19 +63,58 @@ public class ControlView extends android.support.v7.widget.AppCompatImageView im
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
+
         x=event.getX(0);
         y=event.getY(0);
         angle = getAngle(x,y);
-        invalidate();;
-       // MainActivity.cKey =1;
+
+        /*int count = event.getPointerCount();
+        Log.v("count >>", count + "");
+        if (count == 2) {
+            // some action
+        }*/
+
+        // multitouch
+        int index = event.getActionIndex();
+        int id = event.getPointerId(index);
+        int action = event.getActionMasked();
+
+     /*   switch (action){
+
+            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_POINTER_DOWN:
+                fx[id] = (int) event.getX(index);
+                fy[id] = (int) event.getY(index);
+                touching[id] =true;
+
+                if(MainActivity.dKey ==1 && MainActivity.mKey ==1 )
+                System.out.println("ACTION_JAEHA2: " +fx[id]+"  "+fy[id] +"id:" + id);
+                break;
+            case MotionEvent.ACTION_MOVE:
+                break;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_POINTER_UP:
+            case MotionEvent.ACTION_CANCEL:
+                touching[id] = false;
+                break;
+        }*/
+
+        /*if((action == MotionEvent.ACTION_DOWN) &&(action == MotionEvent.ACTION_POINTER_DOWN)){
+            System.out.println("ACTION_JAEHA3: " +fx[id]+"  "+fy[id] +"id:" + id);
+
+        }*/
+
         if(event.getActionMasked() == event.ACTION_UP){
             MainActivity.cKey =0;
+            this.key =MainActivity.cKey;
             MainActivity.mKey = 4;
         }
         if(event.getActionMasked() == event.ACTION_DOWN){
             MainActivity.cKey =1;
+            this.key =MainActivity.cKey;
         }
 
+        invalidate();
         listner.onChanged(angle);
 
         return true;
