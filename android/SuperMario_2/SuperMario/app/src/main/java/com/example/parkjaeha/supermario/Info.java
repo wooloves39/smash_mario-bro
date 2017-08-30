@@ -54,7 +54,11 @@ public class Info {
             R.drawable.mario_rightkick,R.drawable.luizy_rightkick,R.drawable.wario_rightkick,R.drawable.waluizy_rightkick
     };
 
-
+    //Defence
+    Integer[] img_def ={
+            R.drawable.mario_left_def,R.drawable.luizy_left_def,R.drawable.wario_left_def,R.drawable.waluizy_left_def,
+            R.drawable.mario_right_def,R.drawable.luizy_right_def,R.drawable.wario_right_def,R.drawable.waluizy_right_def
+    };
 
 
 }

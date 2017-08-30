@@ -66,6 +66,10 @@ public class CPlayer
     boolean fly = false;//강한공격을 맞아 날아가는 상태인지에 대한 변수
     POINT d3dxvShift = new POINT();
 
+    //-------------------0830 프레임을 안에다 넣기-----------------------//
+    static int frameCount = 8;
+    static int currentFrame = 0;
+
 
     //---------------------0825 Player 함수 일괄추가 -------------//
 
