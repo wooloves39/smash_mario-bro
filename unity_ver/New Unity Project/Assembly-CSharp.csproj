@@ -51,8 +51,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\script\Camera_Script.cs" />
+     <Compile Include="Assets\script\Character_choice.cs" />
      <Compile Include="Assets\script\LoadScreen.cs" />
+     <Compile Include="Assets\script\map_choice.cs" />
+     <Compile Include="Assets\script\Player.cs" />
      <Compile Include="Assets\script\PlayerManager.cs" />
+     <Compile Include="Assets\script\Public_datatype.cs" />
+     <Compile Include="Assets\script\Ranking.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
