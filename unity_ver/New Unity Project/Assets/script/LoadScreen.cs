@@ -45,7 +45,6 @@ public class LoadScreen : MonoBehaviour {
         }
 
         // 로딩이 완료되었을 때!
-
         button.SetActive(true);
     }
 
