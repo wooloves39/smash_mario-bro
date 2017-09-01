@@ -1,7 +1,21 @@
-
+.metadata/
+Temp/
+Obj/
+UnityGenerated/
+Library/
 *.opendb
 *.tlog
 SMASHBROTHER(2015)/.vs/SMASHBROTHERS0621/v14/.suo
+ExprotedObj/
+*.svd
+*.userprefs
+*.csproj
+*.pidb
+*.suo
+*.sln
+*.user
+*.unityproj
+*.bootproj
 *.exe
 *.ilk
 *.pdb
@@ -16,5 +30,36 @@ SMASHBROTHER(2015)/.vs/SMASHBROTHERS0621/v14/.suo
 *.tlog
 *.log
 *.idb
+
+# ============ #
+ 
+# OS generated #
+ 
+# ============ #
+ 
+.DS_Store
+ 
+.DS_Store?
+ 
+._*
+ 
+.Spotlight-V100
+ 
+.Trashes
+ 
+Icon?
+ 
+ehthumbs.db
+ 
+Thumbs.db
+ 
+GraphicsSettings.asset
+ 
+ProjectSettings.asset
+ 
+ProjectVersion.txt
+
+
+√‚√≥: http://minhyeokism.tistory.com/67 [programmer-dominic.kim]
 SmashBro_8-1 v0.2/.vs/smashbor_ver0.1/v14/.suo
 unity_ver/New Unity Project/.vs/New Unity Project/v14/.suo

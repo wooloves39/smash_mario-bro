@@ -26,7 +26,18 @@ public class LoadScreen : MonoBehaviour {
 	
 	void Update ()
     {
-        UpdateBar();
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit[] hit = Physics.SphereCastAll(ray, 0.5f);
+        for (int i = 0; i < hit.Length; ++i)
+        {
+            if (hit[i].collider != null)
+            {
+                Debug.Log("s");
+                StartGame();
+            }
+        }
+                UpdateBar();
+
 	}
 
     public IEnumerator BuildUnits()
