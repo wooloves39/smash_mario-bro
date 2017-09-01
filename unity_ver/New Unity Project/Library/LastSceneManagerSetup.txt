@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/supermario.unity
+- path: Assets/map_stats.unity
   isLoaded: 1
   isActive: 1
