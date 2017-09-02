@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Character_choice : MonoBehaviour {
+public class Character_choice : MonoBehaviour
+{
     private int Player;
     private int[] others;
     private int choice = 100;
-
+    public AudioClip touch;
+    private AudioSource touchsound;
     //추가 
     public GameObject[] cha;
     private GameObject choice_char;
@@ -18,17 +20,22 @@ public class Character_choice : MonoBehaviour {
 
     void Start()
     {
+        this.touchsound = this.gameObject.AddComponent<AudioSource>();
+        this.touchsound.clip = this.touch;
+        this.touchsound.loop = false;
         char_pos.x = 0;
         char_pos.y = 2;
         char_pos.z = -1;
+        choice = 0;
     }
 
     // Update is called once per frame
-    void Update() {
+    void Update()
+    {
 
         //충돌체크 추가
-
-        choice = 0;
+        
+       
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -38,6 +45,7 @@ public class Character_choice : MonoBehaviour {
                 int before_choice = choice;
                 if (hit[i].collider != null)
                 {
+                    touchsound.Play();
                     if (hit[i].collider.tag == "Mario")
                     {
                         choice = 1;
@@ -62,13 +70,14 @@ public class Character_choice : MonoBehaviour {
                     //}
                 }
             }
-            //???
-            if (choice != 0)
-            {
-                Singletone.Instance.Charnumber = choice;
-                Application.LoadLevel(Singletone.Instance.Mapnumber + 4);
-            }
         }
+        if (choice != 0)
+        {
+            Singletone.Instance.Charnumber = choice;
+            if (!touchsound.isPlaying)
+                Application.LoadLevel(Singletone.Instance.Mapnumber + 4);
+        }
+
         //if (choicing)
         //{ //초이스 되었을때 캐릭터 씬으로 바뀐다.
         //    Debug.Log("캐릭터 선정 완료");

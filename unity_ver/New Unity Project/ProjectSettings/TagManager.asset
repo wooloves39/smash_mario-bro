@@ -4,27 +4,7 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - floor
-  - map1
-  - map2
-  - map3
-  - map4
-  - map5
-  - map6
-  - map7
-  - map8
-  - map9
-  - random
   - choice_map
-<<<<<<< HEAD
-  - start
-  - death
-=======
-  - Mario
-  - Luizy
-  - Wario
-  - Waluizy
->>>>>>> 53c42797abd702518d972f475773751e4f727a09
   layers:
   - Default
   - TransparentFX
@@ -35,9 +15,9 @@ TagManager:
   - 
   - 
   - 
-  - character
-  - map
-  - Player
+  - 
+  - 
+  - 
   - 
   - 
   - 
