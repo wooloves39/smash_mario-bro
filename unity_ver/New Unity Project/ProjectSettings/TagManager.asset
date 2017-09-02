@@ -16,6 +16,10 @@ TagManager:
   - map9
   - random
   - choice_map
+  - Mario
+  - Luizy
+  - Wario
+  - Waluizy
   layers:
   - Default
   - TransparentFX
