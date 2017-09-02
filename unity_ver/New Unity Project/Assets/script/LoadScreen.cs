@@ -66,6 +66,7 @@ public class LoadScreen : MonoBehaviour {
 
     public void StartGame()
     {
-        gameObject.SetActive(false);
+        Application.LoadLevel(1);
+        //gameObject.SetActive(false);
     }
 }

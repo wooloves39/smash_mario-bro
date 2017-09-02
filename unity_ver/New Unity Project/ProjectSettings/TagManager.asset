@@ -16,8 +16,15 @@ TagManager:
   - map9
   - random
   - choice_map
+<<<<<<< HEAD
   - start
   - death
+=======
+  - Mario
+  - Luizy
+  - Wario
+  - Waluizy
+>>>>>>> 53c42797abd702518d972f475773751e4f727a09
   layers:
   - Default
   - TransparentFX
