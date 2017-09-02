@@ -16,6 +16,8 @@ TagManager:
   - map9
   - random
   - choice_map
+  - start
+  - death
   layers:
   - Default
   - TransparentFX
@@ -28,7 +30,7 @@ TagManager:
   - 
   - character
   - map
-  - 
+  - Player
   - 
   - 
   - 
