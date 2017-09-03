@@ -30,6 +30,9 @@ public class PlayerManager : MonoBehaviour
         rigid = gameObject.GetComponent<Rigidbody2D>();
 
         health = maxHealth;
+
+        UiButtonManager ui = GameObject.FindGameObjectWithTag("Manager").GetComponent<UiButtonManager>();
+        ui.Init();
     }
 
 	void Update ()
@@ -43,7 +46,7 @@ public class PlayerManager : MonoBehaviour
             return;
         }
 
-        /*  플레이어 이동하는거 구버전 스크립트
+        /*
         // 왼쪽 입력 시에
         if (Input.GetKeyDown (KeyCode.LeftArrow))
         {
@@ -90,84 +93,56 @@ public class PlayerManager : MonoBehaviour
 
         else if (inputLeft)
         {
-            Vector3 scale = transform.localScale; // 이 부분은 스프라이트 뒤집어주는 코드임
-            // 아예 이미지를 -1로 해서 뒤집어버림!
-            scale.x = Mathf.Abs(scale.x);
-            transform.localScale = scale;
-
-            animator.SetInteger("Direction", -1);
             animator.SetBool("isMoving", true);
+
+            transform.localScale = new Vector3(1, 1, 1);
         }
 
         else if (inputRight)
         {
-            Vector3 scale = transform.localScale;
-            scale.x = -Mathf.Abs(scale.x);
-            transform.localScale = scale;
-
-            animator.SetInteger("Direction", 1);
             animator.SetBool("isMoving", true);
+
+            transform.localScale = new Vector3(-1, 1, 1);
         }
 
 
-        if (inputJump && !animator.GetBool("isJumping"))
+        if (inputJump && !animator.GetBool("isJumping") || (animator.GetBool ("isJumping")))
         {
-            if (Input.GetAxis("Horizontal") < 0)
-            {
-                Vector3 scale = transform.localScale; // 이 부분은 스프라이트 뒤집어주는 코드임
-                                                      // 아예 이미지를 -1로 해서 뒤집어버림!
-                scale.x = -Mathf.Abs(scale.x);
-                transform.localScale = scale;
-                isJumping = true;
-                animator.SetBool("isJumping", true);
-                animator.SetTrigger("doJumping");
-                animator.SetInteger("Direction", 1);
-            }
-            else if (Input.GetAxis("Horizontal") > 0)
-            {
-                Vector3 scale = transform.localScale; // 이 부분은 스프라이트 뒤집어주는 코드임
-                                                      // 아예 이미지를 -1로 해서 뒤집어버림!
-                scale.x = Mathf.Abs(scale.x);
-                transform.localScale = scale;
-                isJumping = true;
-                animator.SetBool("isJumping", true);
-                animator.SetTrigger("doJumping");
-                animator.SetInteger("Direction", -1);
-            }
+            isJumping = true;
+            inputJump = false;
+            animator.SetBool("isJumping", true);
+            animator.SetTrigger("doJumping");
         }
 
-        /*
-         * 클릭방식 무빙!
+        /* 얘는 키보드 캐릭터 조작입니다!
         if (Input.GetAxisRaw ("Horizontal") == 0)
         {
             animator.SetBool("isMoving", false);
         }
 
-        else if (Input.GetAxisRaw ("Horizontal") < 0)
+        else if (Input.GetAxisRaw ("Horizontal") < 0) // 왼쪽 이동
         {
             Vector3 scale = transform.localScale; // 이 부분은 스프라이트 뒤집어주는 코드임
             // 아예 이미지를 -1로 해서 뒤집어버림!
             scale.x = Mathf.Abs(scale.x);
             transform.localScale = scale;
 
-            animator.SetInteger("Direction", -1);
             animator.SetBool("isMoving", true);
         }
 
-        else if (Input.GetAxisRaw ("Horizontal") > 0)
+        else if (Input.GetAxisRaw ("Horizontal") > 0) // 오른쪽 이동
         {
             Vector3 scale = transform.localScale;
             scale.x = -Mathf.Abs(scale.x);
             transform.localScale = scale;
 
-            animator.SetInteger("Direction", 1);
             animator.SetBool("isMoving", true);
         }
 
 
-        if (Input.GetKeyDown(KeyCode.UpArrow) && !animator.GetBool ("isJumping"))
+        if (Input.GetKeyDown(KeyCode.UpArrow) && !animator.GetBool ("isJumping")) // 점프
         {
-            if (Input.GetAxis("Horizontal") < 0)
+            if (Input.GetAxis("Horizontal") < 0) // 레프트 점프
             {
                 Vector3 scale = transform.localScale; // 이 부분은 스프라이트 뒤집어주는 코드임
                                                       // 아예 이미지를 -1로 해서 뒤집어버림!
@@ -176,9 +151,8 @@ public class PlayerManager : MonoBehaviour
                 isJumping = true;
                 animator.SetBool("isJumping", true);
                 animator.SetTrigger("doJumping");
-                animator.SetInteger("Direction", 1);
             }
-            else if (Input.GetAxis("Horizontal") > 0)
+            else if (Input.GetAxis("Horizontal") > 0) // 라이트 점프
             {
                 Vector3 scale = transform.localScale; // 이 부분은 스프라이트 뒤집어주는 코드임
                                                       // 아예 이미지를 -1로 해서 뒤집어버림!
@@ -187,11 +161,11 @@ public class PlayerManager : MonoBehaviour
                 isJumping = true;
                 animator.SetBool("isJumping", true);
                 animator.SetTrigger("doJumping");
-                animator.SetInteger("Direction", -1);
             }
         }
 
         */
+
 
         /*
          * ㅠㅠㅠㅠㅠ점프 구버전...
@@ -216,9 +190,6 @@ public class PlayerManager : MonoBehaviour
         }
         */
     }
-
-
-
     
     void Die()
     {
@@ -256,23 +227,23 @@ public class PlayerManager : MonoBehaviour
         Jump();
     }
 
-    void Move()
+    public void Move()
     {
         Vector3 moveVelocity = Vector3.zero;
 
-        if (Input.GetAxisRaw("Horizontal") < 0)
+        if (inputLeft)
         {
             moveVelocity = Vector3.left;
         }
 
-        else if (Input.GetAxisRaw("Horizontal") > 0)
+        else if (inputRight)
         {
             moveVelocity = Vector3.right;
         }
         transform.position += moveVelocity * movePower * Time.deltaTime * 2.5f;
     }
 
-    void Jump()
+    public void Jump()
     {
         if (!isJumping)
         {

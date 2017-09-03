@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class aUiButtonManager : MonoBehaviour {
+public class UiButtonManager : MonoBehaviour
+{
 
     GameObject player;
     PlayerManager playerScript;
@@ -34,18 +35,9 @@ public class aUiButtonManager : MonoBehaviour {
         playerScript.inputRight = false;
     }
 
-    public void JumlClick ()
+    public void JumlClick()
     {
+        Debug.Log("jump");
         playerScript.inputJump = true;
     }
-
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 }

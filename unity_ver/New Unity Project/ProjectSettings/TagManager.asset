@@ -3,12 +3,12 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-<<<<<<< HEAD
-  tags: []
-=======
   tags:
   - choice_map
->>>>>>> aed25d4549ffeb6fd129d0ac5cbc8d5c27b2729e
+  - death
+  - floor
+  - start
+  - Manager
   layers:
   - Default
   - TransparentFX

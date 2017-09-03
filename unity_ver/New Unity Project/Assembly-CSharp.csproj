@@ -53,15 +53,17 @@
   <ItemGroup>
      <Compile Include="Assets\script\Camera_Script.cs" />
      <Compile Include="Assets\script\Character_choice.cs" />
+     <Compile Include="Assets\script\Choice_sound.cs" />
      <Compile Include="Assets\script\GameManager.cs" />
      <Compile Include="Assets\script\LoadScreen.cs" />
      <Compile Include="Assets\script\map_choice.cs" />
      <Compile Include="Assets\script\Player.cs" />
      <Compile Include="Assets\script\PlayerManager.cs" />
+     <Compile Include="Assets\script\Playstate_map.cs" />
      <Compile Include="Assets\script\Public_datatype.cs" />
      <Compile Include="Assets\script\Ranking.cs" />
      <Compile Include="Assets\script\Singletone.cs" />
-     <Compile Include="Assets\script\UIButtonManager.cs" />
+     <Compile Include="Assets\script\UiButtonManager.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
