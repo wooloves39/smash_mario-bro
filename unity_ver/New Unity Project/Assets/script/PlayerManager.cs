@@ -251,10 +251,14 @@ public class PlayerManager : MonoBehaviour
         }
         rigid.velocity = Vector2.zero;
 
+        Debug.Log("on Jumping!");
+
         Vector2 jumpVelocity = new Vector2(0, jumpPower);
-        rigid.AddForce(jumpVelocity*5.5f, ForceMode2D.Impulse);
+        rigid.AddForce(jumpVelocity*5.4f, ForceMode2D.Impulse);
 
         isJumping = false;
+
+        Debug.Log("jump exit");
     }
 
 }
