@@ -108,6 +108,56 @@ NavMeshSettings:
     tileSize: 256
     accuratePlacement: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &554338538
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 554338540}
+  - component: {fileID: 554338539}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &554338539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 554338538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd46048f78c086545a26e01525e39a4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maps:
+  - {fileID: 1843363662801388, guid: 50ad52ef267156d4fbd99cc0c7d145fc, type: 2}
+  - {fileID: 1158492468237906, guid: 3d759e64b8f641047ba4433e24c59b9d, type: 2}
+  - {fileID: 1333289058512504, guid: 1b4679a9e6091f740a83a8f2956ed788, type: 2}
+  - {fileID: 1670982540014126, guid: d4c2617818c7e9b49adf24d47d11af2b, type: 2}
+  - {fileID: 1224323454246440, guid: dd564bb6f22c3f2479e5f635cb42b50a, type: 2}
+  - {fileID: 1034873067352620, guid: f05e35a60829fb545a705fd5c329f1db, type: 2}
+  - {fileID: 1185145020588980, guid: 3626f5cf5a330ba44b08a5ce355ed4f5, type: 2}
+  - {fileID: 1628248020197230, guid: 5d4e290e5d1e4b64194b72f4e5948f27, type: 2}
+  - {fileID: 1125032477062438, guid: 424f2d326d339d045b2d9f95ec97fe4e, type: 2}
+--- !u!4 &554338540
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 554338538}
+  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.6875001, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1629744632
 GameObject:
   m_ObjectHideFlags: 0

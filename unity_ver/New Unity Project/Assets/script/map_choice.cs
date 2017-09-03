@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 public class map_choice : MonoBehaviour
 {
-   public GameObject[] map;
+    public GameObject[] map;
     public GameObject map_Rect;
     private int choice = 100;
     private bool choicing = false;
@@ -12,12 +12,23 @@ public class map_choice : MonoBehaviour
     private Vector3 map_pos;
     private bool click = false;
     private float timer = 0;
+
+    public AudioClip touch;
+    private AudioSource touchsound;
+    public AudioClip change;
+    private AudioSource changesound;
     // Use this for initialization
     void Start()
     {
         map_pos.x = 0;
         map_pos.y = 2;
         map_pos.z = -1;
+        this.touchsound = this.gameObject.AddComponent<AudioSource>();
+        this.touchsound.clip = this.touch;
+        this.touchsound.loop = false;
+        this.changesound = this.gameObject.AddComponent<AudioSource>();
+        this.changesound.clip = this.change;
+        this.changesound.loop = false;
     }
     // Update is called once per frame
     void Update()
@@ -73,9 +84,13 @@ public class map_choice : MonoBehaviour
                         choice = 0;
                     }
                     if (hit[i].collider.tag == "choice_map")
+                    {
+                        touchsound.Play();
                         choicing = true;
+                    }
                     if (before_choice != choice)
                     {
+                        changesound.Play();
                         click = false;
                         if (choice_map != null) Destroy(choice_map);
                         map_Rect.transform.position = hit[i].collider.transform.position;
@@ -84,48 +99,47 @@ public class map_choice : MonoBehaviour
 
             }
         }
-
-        if (choice != 0 && choice != 100&&click==false)
+        if (!choicing)
         {
-            click = true;
-            choice_map = Instantiate(map[choice-1], map_pos, Quaternion.identity);
-            timer = 0;
-            //choicing = true;
-        }
-        else if (choice == 0)
-        {
-           
-            if (click==false)
+            if (choice != 0 && choice != 100 && click == false)
             {
-                int map_num = Random.Range(0, 8);
-                choice_map = Instantiate(map[map_num], map_pos, Quaternion.identity);
                 click = true;
+                choice_map = Instantiate(map[choice - 1], map_pos, Quaternion.identity);
+                timer = 0;
+                //choicing = true;
             }
-            else if (click == true)
+            else if (choice == 0)
             {
-                timer += Time.deltaTime;
-                Debug.Log(timer);
-                if (timer > 0.3f)
+
+                if (click == false)
                 {
-                    timer = 0;
-                    click = false;
-                    Destroy(choice_map);
+                    int map_num = Random.Range(0, 8);
+                    choice_map = Instantiate(map[map_num], map_pos, Quaternion.identity);
+                    click = true;
+                }
+                else if (click == true)
+                {
+                    timer += Time.deltaTime;
+                    if (timer > 0.3f)
+                    {
+                        timer = 0;
+                        click = false;
+                        Destroy(choice_map);
+                    }
                 }
             }
         }
-        if (choicing)
+        else if (choicing)
         { //초이스 되었을때 캐릭터 씬으로 바뀐다.
+            
             Debug.Log("맵선정완료");
             //테스트용 
             Singletone.Instance.Mapnumber = choice;
             Debug.LogWarning(Singletone.Instance.Mapnumber);
             // index 5-13까지가 플레이맵 씬임 
-            Application.LoadLevel(2);
+            if (!touchsound.isPlaying)
+               Application.LoadLevel(2);
         }
 
     }
-    void random_map()
-    { 
-    }
-
 }

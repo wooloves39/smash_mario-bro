@@ -37,7 +37,7 @@ GameObject:
   - component: {fileID: 212987435782208722}
   m_Layer: 0
   m_Name: mapRect
-  m_TagString: Untagged
+  m_TagString: choice_map
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -62,8 +62,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1028419180497356}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -2, z: 0}
-  m_LocalScale: {x: 0.4190174, y: 0.41901723, z: 0.41901723}
+  m_LocalPosition: {x: 14, y: -2.107, z: 0}
+  m_LocalScale: {x: 0.3729255, y: 0.3729253, z: 0.3729253}
   m_Children:
   - {fileID: 4796778689512816}
   m_Father: {fileID: 0}
