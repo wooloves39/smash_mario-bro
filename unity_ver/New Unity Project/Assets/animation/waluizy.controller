@@ -549,7 +549,7 @@ AnimatorState:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: wario_rightjump
+  m_Name: waluizy_rightjump
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -563,7 +563,7 @@ AnimatorState:
   m_SpeedParameterActive: 0
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 27657abb47566ea438b5dc744480d318, type: 2}
+  m_Motion: {fileID: 7400000, guid: a733d9f715ab72442a47214dc1418bbf, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -574,7 +574,7 @@ AnimatorState:
   m_ObjectHideFlags: 3
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: wario_leftrun
+  m_Name: waluizy_leftrun
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -588,7 +588,7 @@ AnimatorState:
   m_SpeedParameterActive: 0
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 4191c9e1548872a4d99ea74df156b01c, type: 2}
+  m_Motion: {fileID: 7400000, guid: a733d9f715ab72442a47214dc1418bbf, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -599,7 +599,7 @@ AnimatorState:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: wario_leftidle
+  m_Name: waluizy_leftidle
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -615,7 +615,7 @@ AnimatorState:
   m_SpeedParameterActive: 0
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 666b8edfaefde3a47974b577458c4541, type: 2}
+  m_Motion: {fileID: 7400000, guid: 1c53ef638c84f5948a3a3f67f4d90d7d, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -626,7 +626,7 @@ AnimatorState:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: wario_rightidle
+  m_Name: waluizy_rightidle
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -642,7 +642,7 @@ AnimatorState:
   m_SpeedParameterActive: 0
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 666b8edfaefde3a47974b577458c4541, type: 2}
+  m_Motion: {fileID: 7400000, guid: 1c53ef638c84f5948a3a3f67f4d90d7d, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -653,7 +653,7 @@ AnimatorState:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: wario_rightrun
+  m_Name: waluizy_rightrun
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -667,7 +667,7 @@ AnimatorState:
   m_SpeedParameterActive: 0
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 4191c9e1548872a4d99ea74df156b01c, type: 2}
+  m_Motion: {fileID: 7400000, guid: a733d9f715ab72442a47214dc1418bbf, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -678,7 +678,7 @@ AnimatorState:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: wario_leftjump
+  m_Name: waluizy_leftjump
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -692,7 +692,7 @@ AnimatorState:
   m_SpeedParameterActive: 0
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 27657abb47566ea438b5dc744480d318, type: 2}
+  m_Motion: {fileID: 7400000, guid: fe6f0860394fecf449ba6aab0ae00811, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
