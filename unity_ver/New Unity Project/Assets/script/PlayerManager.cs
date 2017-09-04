@@ -46,46 +46,8 @@ public class PlayerManager : MonoBehaviour
             return;
         }
 
-        /*
-        // 왼쪽 입력 시에
-        if (Input.GetKeyDown (KeyCode.LeftArrow))
-        {
-            Vector3 scale = transform.localScale;
-            scale.x = Mathf.Abs(scale.x);
-            transform.localScale = scale;
 
-            anim.SetInteger("state", 1);
-        } 
-        // 왼쪽을 입력하다가 키를 뗐을 경우
-        if (Input.GetKeyUp (KeyCode.LeftArrow))
-        {
-            Vector3 scale = transform.localScale;
-            scale.x = Mathf.Abs(scale.x);
-            transform.localScale = scale;
-
-            anim.SetInteger("state", 0);
-        }
-
-        // 오른쪽 입력 시에
-        if (Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            Vector3 scale = transform.localScale;
-            scale.x = -Mathf.Abs(scale.x);
-            transform.localScale = scale;
-
-            anim.SetInteger("state", 1);
-        }
-        // 오른쪽을 입력하다가 키를 뗐을 경우
-        if (Input.GetKeyUp(KeyCode.RightArrow))
-        {
-            Vector3 scale = transform.localScale;
-            scale.x = -Mathf.Abs(scale.x);
-            transform.localScale = scale;
-
-            anim.SetInteger("state", 0);
-        }
-        */
-
+        // UI조작임
         if ((!inputRight && !inputLeft))
         {
             animator.SetBool("isMoving", false);
@@ -114,7 +76,10 @@ public class PlayerManager : MonoBehaviour
             animator.SetTrigger("doJumping");
         }
 
-        /* 얘는 키보드 캐릭터 조작입니다!
+        /*
+
+
+
         if (Input.GetAxisRaw ("Horizontal") == 0)
         {
             animator.SetBool("isMoving", false);
@@ -164,7 +129,7 @@ public class PlayerManager : MonoBehaviour
             }
         }
 
-        */
+  */
 
 
         /*

@@ -108,6 +108,12 @@ NavMeshSettings:
     tileSize: 256
     accuratePlacement: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &207357738 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114915265123795260, guid: 5da56bb787f023f4c96cd3628ab9b28f,
+    type: 2}
+  m_PrefabInternal: {fileID: 1368982482}
+  m_Script: {fileID: 11500000, guid: bd9463c56850f9444965680849784f36, type: 3}
 --- !u!1 &389653222
 GameObject:
   m_ObjectHideFlags: 0
@@ -507,11 +513,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4954747987727396, guid: 325c467fe8db21c42b17a51b5f14d9d0, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -0.06
+      value: -0.14
       objectReference: {fileID: 0}
     - target: {fileID: 4954747987727396, guid: 325c467fe8db21c42b17a51b5f14d9d0, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -6.14
+      value: -4.52
       objectReference: {fileID: 0}
     - target: {fileID: 4954747987727396, guid: 325c467fe8db21c42b17a51b5f14d9d0, type: 2}
       propertyPath: m_LocalPosition.z
@@ -536,6 +542,20 @@ Prefab:
     - target: {fileID: 4954747987727396, guid: 325c467fe8db21c42b17a51b5f14d9d0, type: 2}
       propertyPath: m_RootOrder
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 212760816162155526, guid: 325c467fe8db21c42b17a51b5f14d9d0,
+        type: 2}
+      propertyPath: m_Size.x
+      value: 0.99896777
+      objectReference: {fileID: 0}
+    - target: {fileID: 212760816162155526, guid: 325c467fe8db21c42b17a51b5f14d9d0,
+        type: 2}
+      propertyPath: m_Size.y
+      value: 25.678087
+      objectReference: {fileID: 0}
+    - target: {fileID: 4954747987727396, guid: 325c467fe8db21c42b17a51b5f14d9d0, type: 2}
+      propertyPath: m_LocalScale.y
+      value: 1.3736955
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 325c467fe8db21c42b17a51b5f14d9d0, type: 2}
@@ -636,6 +656,56 @@ Prefab:
         type: 2}
       propertyPath: m_Pivot.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114309016569895432, guid: c6db0fcacdb64ab4eaba7d8db521fc41,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 207357738}
+    - target: {fileID: 114309016569895432, guid: c6db0fcacdb64ab4eaba7d8db521fc41,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: LeftDown
+      objectReference: {fileID: 0}
+    - target: {fileID: 114309016569895432, guid: c6db0fcacdb64ab4eaba7d8db521fc41,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 207357738}
+    - target: {fileID: 114309016569895432, guid: c6db0fcacdb64ab4eaba7d8db521fc41,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: LeftUp
+      objectReference: {fileID: 0}
+    - target: {fileID: 114438177261834110, guid: c6db0fcacdb64ab4eaba7d8db521fc41,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 207357738}
+    - target: {fileID: 114438177261834110, guid: c6db0fcacdb64ab4eaba7d8db521fc41,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: RightDown
+      objectReference: {fileID: 0}
+    - target: {fileID: 114438177261834110, guid: c6db0fcacdb64ab4eaba7d8db521fc41,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 207357738}
+    - target: {fileID: 114438177261834110, guid: c6db0fcacdb64ab4eaba7d8db521fc41,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: RightUp
+      objectReference: {fileID: 0}
+    - target: {fileID: 114890365528967760, guid: c6db0fcacdb64ab4eaba7d8db521fc41,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 207357738}
+    - target: {fileID: 114890365528967760, guid: c6db0fcacdb64ab4eaba7d8db521fc41,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: JumlClick
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c6db0fcacdb64ab4eaba7d8db521fc41, type: 2}
