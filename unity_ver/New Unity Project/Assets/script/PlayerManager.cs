@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
-    public float movePower = 1.0f;
-    public float jumpPower = 1.0f;
+    private float movePower = 2.0f;
+    private float jumpPower = 12.0f;
     public int maxHealth = 1;
 
     public bool inputLeft = false;
@@ -68,7 +68,7 @@ public class PlayerManager : MonoBehaviour
         }
 
 
-        if (inputJump && !animator.GetBool("isJumping") || (animator.GetBool ("isJumping")))
+        if (inputJump&&!animator.GetBool("isJumping") )
         {
             isJumping = true;
             inputJump = false;
@@ -172,7 +172,8 @@ public class PlayerManager : MonoBehaviour
     
     void OnTriggerEnter2D (Collider2D other)
     {
-        if (other.gameObject.layer == 10 && rigid.velocity.y < 0) // 땅 밟은거
+        Debug.Log("맵 충돌");
+        if (other.gameObject.tag == "floor" && rigid.velocity.y < 0) // 땅 밟은거
             animator.SetBool("isJumping", false);
 
         else if (other.gameObject.tag == "death" && rigid.velocity.y < 0) // 낙사
@@ -180,18 +181,24 @@ public class PlayerManager : MonoBehaviour
             health = 0;
         }
     }
-
     void FixedUpdate()
     {
         if (health == 0)
         {
             return;
         }
-
+        if (animator.GetBool("isJumping") && rigid.velocity.y > 0)
+        {
+            Physics2D.IgnoreLayerCollision(8, 9, true);
+        }
+        else if(rigid.velocity.y <=0)
+        {
+            Debug.Log(rigid.velocity.y);
+            Physics2D.IgnoreLayerCollision(8, 9, false);
+        }
         Move();
         Jump();
     }
-
     public void Move()
     {
         Vector3 moveVelocity = Vector3.zero;
@@ -219,8 +226,8 @@ public class PlayerManager : MonoBehaviour
         Debug.Log("on Jumping!");
 
         Vector2 jumpVelocity = new Vector2(0, jumpPower);
-        rigid.AddForce(jumpVelocity*5.4f, ForceMode2D.Impulse);
-
+        rigid.AddForce(jumpVelocity, ForceMode2D.Impulse);
+        Debug.Log(rigid.velocity.y);
         isJumping = false;
 
         Debug.Log("jump exit");
