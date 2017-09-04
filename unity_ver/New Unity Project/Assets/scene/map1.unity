@@ -661,21 +661,21 @@ Prefab:
         type: 2}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 207357738}
+      objectReference: {fileID: 1842794504}
     - target: {fileID: 114309016569895432, guid: c6db0fcacdb64ab4eaba7d8db521fc41,
         type: 2}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: LeftDown
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 114309016569895432, guid: c6db0fcacdb64ab4eaba7d8db521fc41,
         type: 2}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 207357738}
+      objectReference: {fileID: 1842794504}
     - target: {fileID: 114309016569895432, guid: c6db0fcacdb64ab4eaba7d8db521fc41,
         type: 2}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: LeftUp
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 114438177261834110, guid: c6db0fcacdb64ab4eaba7d8db521fc41,
         type: 2}

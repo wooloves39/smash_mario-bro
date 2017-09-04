@@ -31,7 +31,7 @@ public class PlayerManager : MonoBehaviour
 
         health = maxHealth;
 
-        UiButtonManager ui = GameObject.FindGameObjectWithTag("Manager").GetComponent<UiButtonManager>();
+        UIButtonManager ui = GameObject.FindGameObjectWithTag("Manager").GetComponent<UIButtonManager>();
         ui.Init();
     }
 
