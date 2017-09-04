@@ -63,7 +63,7 @@
      <Compile Include="Assets\script\Public_datatype.cs" />
      <Compile Include="Assets\script\Ranking.cs" />
      <Compile Include="Assets\script\Singletone.cs" />
-     <Compile Include="Assets\script\UiButtonManager.cs" />
+     <Compile Include="Assets\script\UIButtonManager.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
