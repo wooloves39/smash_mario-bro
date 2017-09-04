@@ -57,14 +57,14 @@ public class PlayerManager : MonoBehaviour
         {
             animator.SetBool("isMoving", true);
 
-            transform.localScale = new Vector3(1, 1, 1);
+            transform.localScale = new Vector3(2, 2, 2);
         }
 
         else if (inputRight)
         {
             animator.SetBool("isMoving", true);
 
-            transform.localScale = new Vector3(-1, 1, 1);
+            transform.localScale = new Vector3(-2, 2, 2);
         }
 
 

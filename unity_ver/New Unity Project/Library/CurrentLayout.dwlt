@@ -70,7 +70,7 @@ MonoBehaviour:
   m_MinSize: {x: 204, y: 342}
   m_MaxSize: {x: 4004, y: 8042}
   vertical: 1
-  controlID: 3107
+  controlID: 232
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -158,7 +158,7 @@ MonoBehaviour:
   m_MinSize: {x: 917, y: 463}
   m_MaxSize: {x: 22012, y: 14042}
   vertical: 0
-  controlID: 22
+  controlID: 85
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -182,7 +182,7 @@ MonoBehaviour:
   m_MinSize: {x: 640, y: 463}
   m_MaxSize: {x: 18010, y: 14042}
   vertical: 1
-  controlID: 23
+  controlID: 86
 --- !u!114 &9
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -207,7 +207,7 @@ MonoBehaviour:
   m_MinSize: {x: 640, y: 342}
   m_MaxSize: {x: 18010, y: 10021}
   vertical: 0
-  controlID: 24
+  controlID: 87
 --- !u!114 &10
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -226,8 +226,8 @@ MonoBehaviour:
     y: 0
     width: 341
     height: 542
-  m_MinSize: {x: 202, y: 221}
-  m_MaxSize: {x: 4002, y: 4021}
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 18}
   m_Panes:
   - {fileID: 18}
@@ -251,8 +251,8 @@ MonoBehaviour:
     y: 0
     width: 676
     height: 364
-  m_MinSize: {x: 204, y: 221}
-  m_MaxSize: {x: 4004, y: 4021}
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 17}
   m_Panes:
   - {fileID: 19}
@@ -305,10 +305,10 @@ MonoBehaviour:
     y: 542
     width: 1421
     height: 386
-  m_MinSize: {x: 206, y: 121}
-  m_MaxSize: {x: 8006, y: 4021}
+  m_MinSize: {x: 204, y: 121}
+  m_MaxSize: {x: 8004, y: 4021}
   vertical: 0
-  controlID: 145
+  controlID: 39
 --- !u!114 &14
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -327,8 +327,8 @@ MonoBehaviour:
     y: 0
     width: 1070
     height: 386
-  m_MinSize: {x: 102, y: 121}
-  m_MaxSize: {x: 4002, y: 4021}
+  m_MinSize: {x: 100, y: 100}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 24}
   m_Panes:
   - {fileID: 23}
@@ -378,8 +378,8 @@ MonoBehaviour:
     y: 0
     width: 483
     height: 928
-  m_MinSize: {x: 277, y: 71}
-  m_MaxSize: {x: 4002, y: 4021}
+  m_MinSize: {x: 275, y: 50}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 26}
   m_Panes:
   - {fileID: 26}
@@ -454,7 +454,7 @@ MonoBehaviour:
       width: 1274.3112
       height: 647.9503
     m_MinimalGUI: 1
-  m_defaultScale: 1
+  m_defaultScale: 0.45277777
   m_TargetTexture: {fileID: 0}
   m_CurrentColorSpace: 0
   m_LastWindowPixelSize: {x: 672, y: 343}
@@ -489,23 +489,23 @@ MonoBehaviour:
     height: 521
   m_TreeViewState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: e2330000
-    m_LastClickedID: 13282
-    m_ExpandedIDs: f088fffff888ffff4ec1ffff16ccffffdcf9ffff00000000
+    m_SelectedIDs: 
+    m_LastClickedID: 0
+    m_ExpandedIDs: 1afcffff00000000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: player_mario
-      m_OriginalName: player_mario
+      m_Name: 
+      m_OriginalName: 
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 13258
+      m_UserData: 0
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 0
+      m_OriginalEventType: 11
       m_IsRenamingFilename: 0
       m_ClientGUIView: {fileID: 10}
     m_SearchString: 
@@ -686,13 +686,14 @@ MonoBehaviour:
   m_LastFolders:
   - Assets/script
   m_LastFoldersGridSize: -1
-  m_LastProjectPath: C:\Users\yeb01\Desktop\New Unity Project
+  m_LastProjectPath: C:\Users\yeb01\Documents\github\smash_mario-bro\unity_ver\New
+    Unity Project
   m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 2c2a0000
-    m_LastClickedID: 10796
-    m_ExpandedIDs: 0000000086270000be27000000ca9a3bffffff7f
+    m_SelectedIDs: e8280000
+    m_LastClickedID: 10472
+    m_ExpandedIDs: 000000002226000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -720,7 +721,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 0000000086270000
+    m_ExpandedIDs: 0000000022260000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -747,7 +748,7 @@ MonoBehaviour:
   m_ListAreaState:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
-    m_HadKeyboardFocusLastEvent: 1
+    m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: 
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -764,7 +765,7 @@ MonoBehaviour:
       m_IsRenaming: 0
       m_OriginalEventType: 11
       m_IsRenamingFilename: 1
-      m_ClientGUIView: {fileID: 0}
+      m_ClientGUIView: {fileID: 12}
     m_CreateAssetUtility:
       m_EndAction: {fileID: 0}
       m_InstanceID: 0
@@ -772,7 +773,7 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
     m_NewAssetIndexInList: -1
-    m_ScrollPosition: {x: 0, y: 188}
+    m_ScrollPosition: {x: 0, y: 120}
     m_GridSize: 64
   m_DirectoriesAreaWidth: 188.5
 --- !u!114 &23
@@ -825,7 +826,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 86270000
     m_LastClickedID: 10118
-    m_ExpandedIDs: 000000008627000000ca9a3bffffff7f
+    m_ExpandedIDs: 0000000022260000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -853,7 +854,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 0000000086270000
+    m_ExpandedIDs: 0000000022260000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -967,15 +968,15 @@ MonoBehaviour:
     - {fileID: 1107966246548171622, guid: 9e8c99ae433747a4c921ea366a1bc68f, type: 2}
     - {fileID: 1107966246548171622, guid: bb2da7f2233c7e94c84d67f4803dd574, type: 2}
     m_ValueSerializationHelper:
-    - {x: 700.2, y: 137}
-    - {x: 700.2, y: 137}
-    - {x: 448.2, y: 137}
-    - {x: 702.2, y: 137}
+    - {x: 436.2, y: 411}
+    - {x: 436.2, y: 423}
+    - {x: 436.2, y: 411}
+    - {x: 702.2, y: 303}
   m_PreviewAnimator: {fileID: 0}
-  m_AnimatorController: {fileID: 9100000, guid: c8fb240e4a8b9db4d8c1736335441c54,
+  m_AnimatorController: {fileID: 9100000, guid: 9e8c99ae433747a4c921ea366a1bc68f,
     type: 2}
   m_BreadCrumbs:
-  - m_Target: {fileID: 1107966246548171622, guid: c8fb240e4a8b9db4d8c1736335441c54,
+  - m_Target: {fileID: 1107966246548171622, guid: 9e8c99ae433747a4c921ea366a1bc68f,
       type: 2}
     m_ScrollPosition: {x: 0, y: 0}
   stateMachineGraph: {fileID: 0}
