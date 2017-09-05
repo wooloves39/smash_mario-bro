@@ -6,12 +6,12 @@ public class PlayerManager : MonoBehaviour
 {
     private float movePower = 2.0f;
     private float jumpPower = 12.0f;
-    public int maxHealth = 1;
+   
 
     public bool inputLeft = false;
     public bool inputRight = false;
     public bool inputJump = false;
-
+    private int jumpcount = 0;
     Rigidbody2D rigid;
     Animator animator;
 
@@ -19,28 +19,52 @@ public class PlayerManager : MonoBehaviour
     bool isDie = false;
     bool isJumping = false;
 
-    int health = 1;
+   
+    public AudioClip[] soundstate;
+    private AudioSource[] sound;
 
 
 
-	void Start ()
+    private int smash_point = 2;    //강한 공격 게이지 및 수치
+    private int gage = 0;  //강한공격은 막기나 일반공격에 의해 게이지가 채워지고 게이지가 10이 넘으면 스매시 포인터가 1개 생긴다. 최대 개수 3개
+    private int n_AttackCount;//일반 공격 어택은 1과2로 구성, 조작에 따른 스프라이트 변경 변수
+    private bool fly = false;//강한공격을 맞아 날아가는 상태인지에 대한 변수
+    private int PlayTime_num;//플레이 시간
+    private int ranking_num;//랭킹
+    private int total_score_num;// 플레이 시간과 초기 공격력을 계산한 전체 점수
+    const int low_power = 12;//약한 공격의 데미지
+    const int High_power = 30;  //약한 때림과 강한 때림에 따른 power
+   private bool live = true;//화면에서 일정 거리 밖으로 나가면 죽는 요소
+   private int damage_num = 100;//초기 공격력
+
+    void Start ()
     {
+        sound = new AudioSource[soundstate.Length];
         Screen.SetResolution(1280, 720, true); // 플레이 해상도 고정
         animator = gameObject.GetComponentInChildren<Animator>();
         rigid = gameObject.GetComponent<Rigidbody2D>();
 
-        health = maxHealth;
+        live = true;
 
         UIButtonManager ui = GameObject.FindGameObjectWithTag("Manager").GetComponent<UIButtonManager>();
         ui.Init();
+        for(int i = 0; i < soundstate.Length; ++i)
+        {
+            this.sound[i] = this.gameObject.AddComponent<AudioSource>();
+            this.sound[i].clip = this.soundstate[i];
+            this.sound[i].loop = false;
+            //유니티도 define이 가능한지 모르겠음..
+            //0번 점프 1번 약한때리기 2번 강한때리기 3번 날아가기 4번 넘어지기 5번 죽음(AI) 6번 죽음(플레이어)
+        }
     }
 
 	void Update ()
     {
-        if (health == 0)
+        if (live == false)
         {
             if(!isDie)
             {
+                sound[5].Play();
                 Die();
             }
             return;
@@ -68,12 +92,14 @@ public class PlayerManager : MonoBehaviour
         }
 
 
-        if (inputJump&&!animator.GetBool("isJumping") )
+        if (inputJump&&jumpcount<2 )
         {
+            ++jumpcount;
             isJumping = true;
             inputJump = false;
             animator.SetBool("isJumping", true);
             animator.SetTrigger("doJumping");
+            sound[0].Play();
         }
 
         /*
@@ -172,18 +198,15 @@ public class PlayerManager : MonoBehaviour
     
     void OnTriggerEnter2D (Collider2D other)
     {
-        Debug.Log("맵 충돌");
         if (other.gameObject.tag == "floor" && rigid.velocity.y < 0) // 땅 밟은거
-            animator.SetBool("isJumping", false);
-
-        else if (other.gameObject.tag == "death" && rigid.velocity.y < 0) // 낙사
         {
-            health = 0;
+            animator.SetBool("isJumping", false);
+            jumpcount = 0;
         }
     }
     void FixedUpdate()
     {
-        if (health == 0)
+        if (!live)
         {
             return;
         }
@@ -198,6 +221,11 @@ public class PlayerManager : MonoBehaviour
         }
         Move();
         Jump();
+        if (transform.position.y < -6) // 낙사
+        {
+            live = false;
+            Debug.Log("dasd");
+        }
     }
     public void Move()
     {
@@ -223,14 +251,12 @@ public class PlayerManager : MonoBehaviour
         }
         rigid.velocity = Vector2.zero;
 
-        Debug.Log("on Jumping!");
-
+        
         Vector2 jumpVelocity = new Vector2(0, jumpPower);
         rigid.AddForce(jumpVelocity, ForceMode2D.Impulse);
         Debug.Log(rigid.velocity.y);
         isJumping = false;
 
-        Debug.Log("jump exit");
     }
 
 }
