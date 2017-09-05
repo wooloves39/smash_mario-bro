@@ -37,7 +37,26 @@ public class UIButtonManager : MonoBehaviour
 
     public void JumlClick()
     {
-        Debug.Log("jump");
         playerScript.inputJump = true;
+    }
+
+    public void GardDown()
+    {
+        playerScript.inputGard = true;
+    }
+
+    public void GardUp()
+    {
+        playerScript.inputGard = false;
+    }
+
+    public void normalAttclick()
+    {
+        playerScript.inputNormalAtt = true;
+    }
+
+    public void hardAttclick()
+    {
+        playerScript.inputHardAtt = true;
     }
 }

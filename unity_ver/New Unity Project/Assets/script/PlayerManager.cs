@@ -11,6 +11,9 @@ public class PlayerManager : MonoBehaviour
     public bool inputLeft = false;
     public bool inputRight = false;
     public bool inputJump = false;
+    public bool inputGard = false;
+    public bool inputNormalAtt = false;
+    public bool inputHardAtt = false;
 
     Rigidbody2D rigid;
     Animator animator;
@@ -19,9 +22,9 @@ public class PlayerManager : MonoBehaviour
     bool isDie = false;
     bool isJumping = false;
 
+    float AttackTime = 0; // 연속공격을 위함이다
+
     int health = 1;
-
-
 
 	void Start ()
     {
@@ -66,9 +69,51 @@ public class PlayerManager : MonoBehaviour
 
             transform.localScale = new Vector3(-2, 2, 2);
         }
+        
+        if (!inputGard) // 가드 입력이 안 된 상태라면 반환
+        {
+            animator.SetBool("isGard", false);
+        }
+
+        else if (inputGard) // 가드 입력이 안 된 상태면서 가드 누르면 가드 실행
+        {
+            animator.SetBool("isGard", true);
+        }
 
 
-        if (inputJump&&!animator.GetBool("isJumping") )
+        /// 이 아래는 공격////////////////////////////////////////////////
+        if (!inputNormalAtt) // 공격상태가 아니라면 애니메이션 재생 안 함 노말공격임
+        {
+            animator.SetBool("doNormalAttack", false);
+        }
+
+        else if (inputNormalAtt) // 공격상태가 아닐 때 공격키 누르면 애니메이션 재생
+        {
+            // 이 부분에다가 점프 중에 약공격 했을 때의 상태를 추가해야 한다
+       
+            inputNormalAtt = false;
+            animator.SetBool("doNormalAttack", true);
+            animator.SetTrigger("isAttack");
+
+            AttackTime = Time.time; // 연속공격을 할 때를 위함
+        }
+
+        if (!inputHardAtt) // 공격상태가 아니면 애니메이션 재생 안 함
+        {
+            animator.SetBool("doHardAttack", false);
+        }
+
+        else if (inputHardAtt) // 공격상태가 아닐 때 공격키 누르면 애니메이션 재생
+        {
+            inputHardAtt = false;
+            animator.SetBool("doHardAttack", true);
+            animator.SetTrigger("isAttack");
+        }
+          
+        ////////////////////////////////////////////////////
+
+        //이건 점프다
+        if (inputJump&&!animator.GetBool("isJumping") ) // 점프 애니 재생중이 아니면서 점프키를 누르면 점프 실행
         {
             isJumping = true;
             inputJump = false;
@@ -223,14 +268,9 @@ public class PlayerManager : MonoBehaviour
         }
         rigid.velocity = Vector2.zero;
 
-        Debug.Log("on Jumping!");
-
         Vector2 jumpVelocity = new Vector2(0, jumpPower);
         rigid.AddForce(jumpVelocity, ForceMode2D.Impulse);
         Debug.Log(rigid.velocity.y);
         isJumping = false;
-
-        Debug.Log("jump exit");
     }
-
 }
