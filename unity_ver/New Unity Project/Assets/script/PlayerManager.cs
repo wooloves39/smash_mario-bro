@@ -7,7 +7,6 @@ public class PlayerManager : MonoBehaviour
     private float movePower = 2.0f;
     private float jumpPower = 12.0f;
    
-
     public bool inputLeft = false;
     public bool inputRight = false;
     public bool inputJump = false;
@@ -120,11 +119,14 @@ public class PlayerManager : MonoBehaviour
             // 이 부분에다가 점프 중에 약공격 했을 때의 상태를 추가해야 한다
        
             inputNormalAtt = false;
-            animator.SetBool("doNormalAttack", true);
-            animator.SetTrigger("isAttack");
+            animator.SetBool("isNormalAttack", true);
+            animator.SetTrigger("doNormalAttack");
 
             AttackTime = Time.time; // 연속공격을 할 때를 위함
         }
+
+
+        ///////////// 강공격
 
         if (!inputHardAtt) // 공격상태가 아니면 애니메이션 재생 안 함
         {
@@ -135,14 +137,23 @@ public class PlayerManager : MonoBehaviour
         else if (inputHardAtt) // 공격상태가 아닐 때 공격키 누르면 애니메이션 재생
         {
             inputHardAtt = false;
-            animator.SetBool("doHardAttack", true);
-            animator.SetTrigger("isAttack");
+            animator.SetBool("isHardAttack", true);
+            animator.SetTrigger("doHardAttack");
         }
           
         ////////////////////////////////////////////////////
 
         //이건 점프다
         if (inputJump&&!animator.GetBool("isJumping") ) // 점프 애니 재생중이 아니면서 점프키를 누르면 점프 실행
+        {
+            while (animator.GetBool("isjumping"))
+            {
+                if (inputNormalAtt)
+                {
+                    animator.GetBool("isJumpAtt");
+                }
+            }
+        }
 
         if (inputJump&&jumpcount<2 )
 
@@ -269,15 +280,15 @@ public class PlayerManager : MonoBehaviour
         }
         else if(rigid.velocity.y <=0)
         {
-            Debug.Log(rigid.velocity.y);
             Physics2D.IgnoreLayerCollision(8, 9, false);
         }
+
         Move();
         Jump();
+
         if (transform.position.y < -6) // 낙사
         {
             live = false;
-            Debug.Log("dasd");
         }
     }
     public void Move()
@@ -306,7 +317,6 @@ public class PlayerManager : MonoBehaviour
 
         Vector2 jumpVelocity = new Vector2(0, jumpPower);
         rigid.AddForce(jumpVelocity, ForceMode2D.Impulse);
-        Debug.Log(rigid.velocity.y);
         isJumping = false;
     }
 }
