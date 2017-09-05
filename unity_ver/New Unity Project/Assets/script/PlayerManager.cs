@@ -11,14 +11,12 @@ public class PlayerManager : MonoBehaviour
     public bool inputLeft = false;
     public bool inputRight = false;
     public bool inputJump = false;
-<<<<<<< HEAD
     public bool inputGard = false;
     public bool inputNormalAtt = false;
     public bool inputHardAtt = false;
 
-=======
     private int jumpcount = 0;
->>>>>>> 140d5348cc42477a48bccab86af6280b123275f8
+
     Rigidbody2D rigid;
     Animator animator;
 
@@ -26,16 +24,13 @@ public class PlayerManager : MonoBehaviour
     bool isDie = false;
     bool isJumping = false;
 
-<<<<<<< HEAD
+
     float AttackTime = 0; // 연속공격을 위함이다
 
     int health = 1;
-=======
    
     public AudioClip[] soundstate;
     private AudioSource[] sound;
-
-
 
     private int smash_point = 2;    //강한 공격 게이지 및 수치
     private int gage = 0;  //강한공격은 막기나 일반공격에 의해 게이지가 채워지고 게이지가 10이 넘으면 스매시 포인터가 1개 생긴다. 최대 개수 3개
@@ -48,7 +43,6 @@ public class PlayerManager : MonoBehaviour
     const int High_power = 30;  //약한 때림과 강한 때림에 따른 power
    private bool live = true;//화면에서 일정 거리 밖으로 나가면 죽는 요소
    private int damage_num = 100;//초기 공격력
->>>>>>> 140d5348cc42477a48bccab86af6280b123275f8
 
     void Start ()
     {
@@ -137,7 +131,7 @@ public class PlayerManager : MonoBehaviour
             animator.SetBool("doHardAttack", false);
         }
 
-<<<<<<< HEAD
+
         else if (inputHardAtt) // 공격상태가 아닐 때 공격키 누르면 애니메이션 재생
         {
             inputHardAtt = false;
@@ -149,9 +143,9 @@ public class PlayerManager : MonoBehaviour
 
         //이건 점프다
         if (inputJump&&!animator.GetBool("isJumping") ) // 점프 애니 재생중이 아니면서 점프키를 누르면 점프 실행
-=======
+
         if (inputJump&&jumpcount<2 )
->>>>>>> 140d5348cc42477a48bccab86af6280b123275f8
+
         {
             ++jumpcount;
             isJumping = true;
@@ -310,17 +304,9 @@ public class PlayerManager : MonoBehaviour
         }
         rigid.velocity = Vector2.zero;
 
-<<<<<<< HEAD
-=======
-        
->>>>>>> 140d5348cc42477a48bccab86af6280b123275f8
         Vector2 jumpVelocity = new Vector2(0, jumpPower);
         rigid.AddForce(jumpVelocity, ForceMode2D.Impulse);
         Debug.Log(rigid.velocity.y);
         isJumping = false;
-<<<<<<< HEAD
-=======
-
->>>>>>> 140d5348cc42477a48bccab86af6280b123275f8
     }
 }
