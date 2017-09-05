@@ -108,6 +108,11 @@ NavMeshSettings:
     tileSize: 256
     accuratePlacement: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &56133763 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1675499292210842, guid: 00f946acc29dae44a914b828a1e7486c,
+    type: 2}
+  m_PrefabInternal: {fileID: 279808021}
 --- !u!114 &207357738 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 114915265123795260, guid: 5da56bb787f023f4c96cd3628ab9b28f,
@@ -859,6 +864,7 @@ GameObject:
   - component: {fileID: 1861844233}
   - component: {fileID: 1861844232}
   - component: {fileID: 1861844231}
+  - component: {fileID: 1861844236}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -936,6 +942,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1861844236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1861844230}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb1aa804d995818489eaadb4e5931786, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 56133763}
 --- !u!1001 &2139117225
 Prefab:
   m_ObjectHideFlags: 0
