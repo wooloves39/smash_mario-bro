@@ -76,6 +76,8 @@ public class Character_choice : MonoBehaviour
             Singletone.Instance.Charnumber = choice;
             if (!touchsound.isPlaying)
                 Application.LoadLevel(Singletone.Instance.Mapnumber + 4);
+            Debug.LogWarning(Singletone.Instance.Charnumber);
+            Debug.LogWarning(choice);
         }
 
         //if (choicing)

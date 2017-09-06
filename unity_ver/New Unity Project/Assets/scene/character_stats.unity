@@ -473,6 +473,7 @@ GameObject:
   - component: {fileID: 1542189699}
   - component: {fileID: 1542189698}
   - component: {fileID: 1542189700}
+  - component: {fileID: 1542189701}
   m_Layer: 0
   m_Name: choice1
   m_TagString: Mario
@@ -547,6 +548,27 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2.4999998, y: 3.9999995, z: 0.19999997}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1542189701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1542189697}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb700cf795ac81c4bb3d65cfa6e72dd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Myplayer:
+  - {fileID: 1675499292210842, guid: 00f946acc29dae44a914b828a1e7486c, type: 2}
+  - {fileID: 1170819805109462, guid: 1a18b6990a7d0ae4d88c4daa9a725a8b, type: 2}
+  - {fileID: 1363454520926112, guid: 2641aa5d16246e54f92d9d6340c05897, type: 2}
+  - {fileID: 1772860384227764, guid: c86c92640f1e82444ad4797f835670ce, type: 2}
+  AIplayer:
+  - {fileID: 1672785848711876, guid: 0559e9ccaaa75154196dd7200b37f47f, type: 2}
+  - {fileID: 1361389229052642, guid: 55726ebaa3fe01149ad0311a40951e4b, type: 2}
+  - {fileID: 1355288300893472, guid: be9c2bac556c6e241ac0542e58ad2d77, type: 2}
+  - {fileID: 1612730927451178, guid: 1742770599f8580478998bebbf1498ad, type: 2}
 --- !u!1 &1756902688
 GameObject:
   m_ObjectHideFlags: 0
