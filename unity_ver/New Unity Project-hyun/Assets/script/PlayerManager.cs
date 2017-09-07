@@ -282,7 +282,8 @@ public class PlayerManager : MonoBehaviour
             animator.SetBool("isJumping", false);
             jumpcount = 0;
         }
-        if (other.gameObject.tag == "Player" && other.gameObject.GetComponent<PlayerManager>().Attack)
+        if ((other.gameObject.tag == "Player"|| other.gameObject.tag == "AI") && 
+            other.gameObject.GetComponent<PlayerManager>().Attack)
         {
             Defence = true;
             Debug.Log("공격 받는 상황 들어갈 영역1111114");
