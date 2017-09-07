@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerManager : MonoBehaviour
+public class AIPlayer : MonoBehaviour
 {
     private float movePower = 2.0f;
     private float jumpPower = 12.0f;
@@ -44,6 +44,13 @@ public class PlayerManager : MonoBehaviour
     private bool live = true;//화면에서 일정 거리 밖으로 나가면 죽는 요소
     private int damage_num = 100;//초기 공격력
 
+    //AI 변수 추가
+    bool road_algo = false;//상대가 나보다 아래에 있을때에 대한 길찾기 알고리즘 변수
+	bool targeting = false;//타겟팅이 되었는지 아닌지 판별
+
+    int movementFlag = 9; // 0. IDLE, 1. LEFT, 2. Right
+    GameObject Target;
+
     void Start()
     {
         sound = new AudioSource[soundstate.Length];
@@ -52,16 +59,26 @@ public class PlayerManager : MonoBehaviour
         rigid = gameObject.GetComponent<Rigidbody2D>();
 
         live = true;
-        UIButtonManager ui = GameObject.FindGameObjectWithTag("Manager").GetComponent<UIButtonManager>();
-        ui.Init();
+
+        StartCoroutine("ChangeMovement");
         for (int i = 0; i < soundstate.Length; ++i)
         {
             this.sound[i] = this.gameObject.AddComponent<AudioSource>();
             this.sound[i].clip = this.soundstate[i];
             this.sound[i].loop = false;
-            //유니티도 define이 가능한지 모르겠음..
-            //0번 점프 1번 약한때리기 2번 강한때리기 3번 날아가기 4번 넘어지기 5번 죽음(AI) 6번 죽음(플레이어)
         }
+    }
+
+    IEnumerator ChangeMovement()
+    {
+
+        if (movementFlag == 0)
+            animator.SetBool("isMoving", false);
+        else animator.SetBool("isMoving", true);
+
+        yield return new WaitForSeconds(3f);
+
+        StartCoroutine("ChangeMovement");
     }
 
     void Update()
@@ -76,99 +93,100 @@ public class PlayerManager : MonoBehaviour
             return;
         }
 
+        Move();
 
-        // UI조작임
-        if ((!inputRight && !inputLeft))
-        {
-            animator.SetBool("isMoving", false);
-        }
+        //// UI조작임
+        //if ((!inputRight && !inputLeft))
+        //{
+        //    animator.SetBool("isMoving", false);
+        //}
 
-        else if (inputLeft)
-        {
-            animator.SetBool("isMoving", true);
+        //else if (inputLeft)
+        //{
+        //    animator.SetBool("isMoving", true);
 
-            transform.localScale = new Vector3(2, 2, 2);
-        }
+        //    transform.localScale = new Vector3(2, 2, 2);
+        //}
 
-        else if (inputRight)
-        {
-            animator.SetBool("isMoving", true);
+        //else if (inputRight)
+        //{
+        //    animator.SetBool("isMoving", true);
 
-            transform.localScale = new Vector3(-2, 2, 2);
-        }
+        //    transform.localScale = new Vector3(-2, 2, 2);
+        //}
 
-        if (!inputGard) // 가드 입력이 안 된 상태라면 반환
-        {
-            animator.SetBool("isGard", false);
-        }
+        //if (!inputGard) // 가드 입력이 안 된 상태라면 반환
+        //{
+        //    animator.SetBool("isGard", false);
+        //}
 
-        else if (inputGard) // 가드 입력이 안 된 상태면서 가드 누르면 가드 실행
-        {
-            animator.SetBool("isGard", true);
-        }
+        //else if (inputGard) // 가드 입력이 안 된 상태면서 가드 누르면 가드 실행
+        //{
+        //    animator.SetBool("isGard", true);
+        //}
 
 
         /// 이 아래는 공격////////////////////////////////////////////////
         /// 
-        if (animator.GetBool("isIdle"))
-        {
-            Attack = false;
-        }
-        if (!inputNormalAtt) // 공격상태가 아니라면 애니메이션 재생 안 함 노말공격임
-        {
-            animator.SetBool("isNormalAttack", false);
-            animator.SetBool("isJumpAtt", false);
-        }
+        //if (animator.GetBool("isIdle"))
+        //{
+        //    Attack = false;
+        //}
+        //if (!inputNormalAtt) // 공격상태가 아니라면 애니메이션 재생 안 함 노말공격임
+        //{
+        //    animator.SetBool("isNormalAttack", false);
+        //    animator.SetBool("isJumpAtt", false);
+        //}
 
-        else if (inputNormalAtt) // 공격상태가 아닐 때 공격키 누르면 애니메이션 재생
-        {
-            // 이 부분에다가 점프 중에 약공격 했을 때의 상태를 추가해야 한다
-            if (!animator.GetBool("isJumping"))
-            {
-                inputNormalAtt = false;
-                animator.SetBool("isNormalAttack", true);
-                animator.SetTrigger("doNormalAttack");
-                Attack = true;
-                AttackTime = Time.time; // 연속공격을 할 때를 위함
-            }
-            else
-            {
-                inputNormalAtt = false;
-                animator.SetBool("isJumpAtt", true);
-                Attack = true;
-            }
-        }
-
-
-        ///////////// 강공격
-
-        if (!inputHardAtt) // 공격상태가 아니면 애니메이션 재생 안 함
-        {
-            animator.SetBool("isHardAttack", false);
-        }
+        //else if (inputNormalAtt) // 공격상태가 아닐 때 공격키 누르면 애니메이션 재생
+        //{
+        //    // 이 부분에다가 점프 중에 약공격 했을 때의 상태를 추가해야 한다
+        //    if (!animator.GetBool("isJumping"))
+        //    {
+        //        inputNormalAtt = false;
+        //        animator.SetBool("isNormalAttack", true);
+        //        animator.SetTrigger("doNormalAttack");
+        //        Attack = true;
+        //        AttackTime = Time.time; // 연속공격을 할 때를 위함
+        //    }
+        //    else
+        //    {
+        //        inputNormalAtt = false;
+        //        animator.SetBool("isJumpAtt", true);
+        //        Attack = true;
+        //    }
+        //}
 
 
-        else if (inputHardAtt) // 공격상태가 아닐 때 공격키 누르면 애니메이션 재생
-        {
-            inputHardAtt = false;
-            animator.SetBool("isHardAttack", true);
-            animator.SetTrigger("doHardAttack");
-            Attack = true;
-        }
+        /////////////// 강공격
 
-        ////////////////////////////////////////////////////
+        //if (!inputHardAtt) // 공격상태가 아니면 애니메이션 재생 안 함
+        //{
+        //    animator.SetBool("isHardAttack", false);
+        //}
 
-        //이건 점프다
-        if (inputJump && !animator.GetBool("isJumping")) // 점프 애니 재생중이 아니면서 점프키를 누르면 점프 실행
-        {
-            while (animator.GetBool("isjumping"))
-            {
-                if (inputNormalAtt)
-                {
-                    animator.GetBool("isJumpAtt");
-                }
-            }
-        }
+
+        //else if (inputHardAtt) // 공격상태가 아닐 때 공격키 누르면 애니메이션 재생
+        //{
+        //    inputHardAtt = false;
+        //    animator.SetBool("isHardAttack", true);
+        //    animator.SetTrigger("doHardAttack");
+        //    Attack = true;
+        //}
+
+        //////////////////////////////////////////////////////
+
+        ////이건 점프다
+        //if (inputJump && !animator.GetBool("isJumping")) // 점프 애니 재생중이 아니면서 점프키를 누르면 점프 실행
+        //{
+        //    while (animator.GetBool("isjumping"))
+        //    {
+        //        if (inputNormalAtt)
+        //        {
+        //            animator.GetBool("isJumpAtt");
+        //        }
+        //    }
+        //}
 
         if (inputJump && jumpcount < 2)
 
@@ -204,7 +222,7 @@ public class PlayerManager : MonoBehaviour
             animator.SetBool("isJumping", false);
             jumpcount = 0;
         }
-        if (other.gameObject.tag == "Player" && other.gameObject.GetComponent<PlayerManager>().Attack)
+        if (other.gameObject.tag == "AIPlayer" && other.gameObject.GetComponent<PlayerManager>().Attack)
         {
             Defence = true;
             Debug.Log("공격 받는 상황 들어갈 영역1111114");
@@ -237,15 +255,18 @@ public class PlayerManager : MonoBehaviour
     {
         Vector3 moveVelocity = Vector3.zero;
 
-        if (inputLeft)
+
+        if(movementFlag == 1)
         {
             moveVelocity = Vector3.left;
+            transform.localScale = new Vector3(3, 3, 3);
         }
-
-        else if (inputRight)
+        else if(movementFlag == 2)
         {
             moveVelocity = Vector3.right;
+            transform.localScale = new Vector3(-3, 3, 3);
         }
+        
         transform.position += moveVelocity * movePower * Time.deltaTime * 2.5f;
     }
 
@@ -262,3 +283,5 @@ public class PlayerManager : MonoBehaviour
         isJumping = false;
     }
 }
+
+

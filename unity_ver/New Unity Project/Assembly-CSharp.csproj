@@ -51,6 +51,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\script\AIPlayer.cs" />
      <Compile Include="Assets\script\Camera_Script.cs" />
      <Compile Include="Assets\script\Character_choice.cs" />
      <Compile Include="Assets\script\Choice_sound.cs" />

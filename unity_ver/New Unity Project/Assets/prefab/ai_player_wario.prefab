@@ -25,6 +25,7 @@ GameObject:
   - component: {fileID: 50754891030829312}
   - component: {fileID: 61374041878035768}
   - component: {fileID: 61290470908947132}
+  - component: {fileID: 114137782128893206}
   m_Layer: 11
   m_Name: ai_player_wario
   m_TagString: Player
@@ -132,13 +133,24 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114805849378457948
+--- !u!114 &114137782128893206
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1355288300893472}
   m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5868e4c1765995940bd20e6e91243bd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114805849378457948
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1355288300893472}
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: be500ba372c142843914e2459333b41a, type: 3}
   m_Name: 
@@ -149,6 +161,8 @@ MonoBehaviour:
   inputGard: 0
   inputNormalAtt: 0
   inputHardAtt: 0
+  Attack: 0
+  Defence: 0
   soundstate: []
 --- !u!212 &212816374823673598
 SpriteRenderer:

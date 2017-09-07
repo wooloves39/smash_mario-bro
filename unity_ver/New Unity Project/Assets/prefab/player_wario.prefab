@@ -25,6 +25,7 @@ GameObject:
   - component: {fileID: 50728896661807780}
   - component: {fileID: 61283449391347248}
   - component: {fileID: 61602324071698344}
+  - component: {fileID: 114998119882152572}
   m_Layer: 11
   m_Name: player_wario
   m_TagString: Player
@@ -138,7 +139,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1363454520926112}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: be500ba372c142843914e2459333b41a, type: 3}
   m_Name: 
@@ -149,7 +150,20 @@ MonoBehaviour:
   inputGard: 0
   inputNormalAtt: 0
   inputHardAtt: 0
+  Attack: 0
+  Defence: 0
   soundstate: []
+--- !u!114 &114998119882152572
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1363454520926112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5868e4c1765995940bd20e6e91243bd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!212 &212421929372101694
 SpriteRenderer:
   m_ObjectHideFlags: 1
