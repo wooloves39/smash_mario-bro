@@ -21,10 +21,10 @@ GameObject:
   - component: {fileID: 4732522560771556}
   - component: {fileID: 212987536486458812}
   - component: {fileID: 95596674819649538}
-  - component: {fileID: 114822367953100794}
   - component: {fileID: 50041239697630140}
   - component: {fileID: 61212955503423140}
   - component: {fileID: 61571037512192862}
+  - component: {fileID: 114594408895413290}
   m_Layer: 11
   m_Name: player_mario
   m_TagString: Player
@@ -132,7 +132,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114822367953100794
+--- !u!114 &114594408895413290
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -143,12 +143,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be500ba372c142843914e2459333b41a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movePower: 1
-  jumpPower: 1
-  maxHealth: 1
   inputLeft: 0
   inputRight: 0
   inputJump: 0
+  inputGard: 0
+  inputNormalAtt: 0
+  inputHardAtt: 0
+  Attack: 0
+  Defence: 0
+  soundstate:
+  - {fileID: 8300000, guid: 1bc25e62f3c2c6d43bf5c54a7fee712a, type: 3}
+  - {fileID: 8300000, guid: ecde214cc654a254f98cc5efa300a092, type: 3}
+  - {fileID: 8300000, guid: bc4edff51a6ba944a80c85e7d09ffe1a, type: 3}
+  - {fileID: 8300000, guid: 83dcdfb7f55d3ec438c602d9ef7beb9e, type: 3}
+  - {fileID: 8300000, guid: 70a46aa8e021f604dacc108bde39d0ae, type: 3}
+  - {fileID: 8300000, guid: 9ade15edfbc794743bc06687371561a9, type: 3}
+  - {fileID: 8300000, guid: ee1a2d0b5768821488c35b40d58c6ab6, type: 3}
 --- !u!212 &212987536486458812
 SpriteRenderer:
   m_ObjectHideFlags: 1

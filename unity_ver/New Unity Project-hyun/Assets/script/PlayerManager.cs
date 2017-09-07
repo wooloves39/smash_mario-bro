@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerManager : MonoBehaviour
 {
     private float movePower = 2.0f;
-    private float jumpPower = 12.0f;
+    private float jumpPower = 20.0f;
 
     public bool inputLeft = false;
     public bool inputRight = false;

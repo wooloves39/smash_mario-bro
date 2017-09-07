@@ -51,7 +51,7 @@ public class LoadScreen : MonoBehaviour {
 
             fillAmount = i / units;
 
-            Instantiate(createPrefab, randomPos, Quaternion.identity);
+           // Instantiate(createPrefab, randomPos, Quaternion.identity);
             yield return null;
         }
 

@@ -21,10 +21,10 @@ GameObject:
   - component: {fileID: 4439163073735912}
   - component: {fileID: 212421929372101694}
   - component: {fileID: 95971582846494390}
-  - component: {fileID: 114924082183688070}
   - component: {fileID: 50728896661807780}
   - component: {fileID: 61283449391347248}
   - component: {fileID: 61602324071698344}
+  - component: {fileID: 114193764238046206}
   m_Layer: 11
   m_Name: player_wario
   m_TagString: Player
@@ -132,7 +132,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114924082183688070
+--- !u!114 &114193764238046206
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -143,12 +143,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be500ba372c142843914e2459333b41a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movePower: 1
-  jumpPower: 1
-  maxHealth: 1
   inputLeft: 0
   inputRight: 0
   inputJump: 0
+  inputGard: 0
+  inputNormalAtt: 0
+  inputHardAtt: 0
+  Attack: 0
+  Defence: 0
+  soundstate:
+  - {fileID: 8300000, guid: 1bc25e62f3c2c6d43bf5c54a7fee712a, type: 3}
+  - {fileID: 8300000, guid: ecde214cc654a254f98cc5efa300a092, type: 3}
+  - {fileID: 8300000, guid: bc4edff51a6ba944a80c85e7d09ffe1a, type: 3}
+  - {fileID: 8300000, guid: 83dcdfb7f55d3ec438c602d9ef7beb9e, type: 3}
+  - {fileID: 8300000, guid: 70a46aa8e021f604dacc108bde39d0ae, type: 3}
+  - {fileID: 8300000, guid: 9ade15edfbc794743bc06687371561a9, type: 3}
+  - {fileID: 8300000, guid: ee1a2d0b5768821488c35b40d58c6ab6, type: 3}
 --- !u!212 &212421929372101694
 SpriteRenderer:
   m_ObjectHideFlags: 1

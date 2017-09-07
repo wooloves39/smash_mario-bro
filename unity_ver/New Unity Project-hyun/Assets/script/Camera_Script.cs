@@ -5,15 +5,24 @@ using UnityEngine;
 public class Camera_Script : MonoBehaviour {
     POINT realpos;//카메라가 도착해야할 위치
                   // Use this for initialization
-    public GameObject target;
+   private GameObject target;
     void Start () {
+        target = GameObject.FindGameObjectWithTag("Player");
         SetPos(target);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        RealsetPos();
-        Add();
+        if (target == null)
+        {
+            target = GameObject.FindGameObjectWithTag("Player");
+            SetPos(target);
+        }
+        else
+        {
+            RealsetPos();
+            Add();
+        }
 	}
    
     void SetPos(GameObject target)

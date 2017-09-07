@@ -6,7 +6,7 @@ public class PlayerManager : MonoBehaviour
 {
     private float movePower = 2.0f;
     private float jumpPower = 12.0f;
-   
+
     public bool inputLeft = false;
     public bool inputRight = false;
     public bool inputJump = false;
@@ -23,11 +23,12 @@ public class PlayerManager : MonoBehaviour
     bool isDie = false;
     bool isJumping = false;
 
-
+    Collider2D attack_col;
     float AttackTime = 0; // 연속공격을 위함이다
 
     int health = 1;
-   
+    public bool Attack;
+    public bool Defence;
     public AudioClip[] soundstate;
     private AudioSource[] sound;
 
@@ -40,10 +41,10 @@ public class PlayerManager : MonoBehaviour
     private int total_score_num;// 플레이 시간과 초기 공격력을 계산한 전체 점수
     const int low_power = 12;//약한 공격의 데미지
     const int High_power = 30;  //약한 때림과 강한 때림에 따른 power
-   private bool live = true;//화면에서 일정 거리 밖으로 나가면 죽는 요소
-   private int damage_num = 100;//초기 공격력
+    private bool live = true;//화면에서 일정 거리 밖으로 나가면 죽는 요소
+    private int damage_num = 100;//초기 공격력
 
-    void Start ()
+    void Start()
     {
         sound = new AudioSource[soundstate.Length];
         Screen.SetResolution(1280, 720, true); // 플레이 해상도 고정
@@ -51,10 +52,9 @@ public class PlayerManager : MonoBehaviour
         rigid = gameObject.GetComponent<Rigidbody2D>();
 
         live = true;
-
         UIButtonManager ui = GameObject.FindGameObjectWithTag("Manager").GetComponent<UIButtonManager>();
         ui.Init();
-        for(int i = 0; i < soundstate.Length; ++i)
+        for (int i = 0; i < soundstate.Length; ++i)
         {
             this.sound[i] = this.gameObject.AddComponent<AudioSource>();
             this.sound[i].clip = this.soundstate[i];
@@ -64,11 +64,11 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-	void Update ()
+    void Update()
     {
         if (live == false)
         {
-            if(!isDie)
+            if (!isDie)
             {
                 sound[5].Play();
                 Die();
@@ -96,7 +96,7 @@ public class PlayerManager : MonoBehaviour
 
             transform.localScale = new Vector3(-2, 2, 2);
         }
-        
+
         if (!inputGard) // 가드 입력이 안 된 상태라면 반환
         {
             animator.SetBool("isGard", false);
@@ -109,20 +109,34 @@ public class PlayerManager : MonoBehaviour
 
 
         /// 이 아래는 공격////////////////////////////////////////////////
+        /// 
+        if (animator.GetBool("isIdle"))
+        {
+            Attack = false;
+        }
         if (!inputNormalAtt) // 공격상태가 아니라면 애니메이션 재생 안 함 노말공격임
         {
-            animator.SetBool("doNormalAttack", false);
+            animator.SetBool("isNormalAttack", false);
+            animator.SetBool("isJumpAtt", false);
         }
 
         else if (inputNormalAtt) // 공격상태가 아닐 때 공격키 누르면 애니메이션 재생
         {
             // 이 부분에다가 점프 중에 약공격 했을 때의 상태를 추가해야 한다
-       
-            inputNormalAtt = false;
-            animator.SetBool("isNormalAttack", true);
-            animator.SetTrigger("doNormalAttack");
-
-            AttackTime = Time.time; // 연속공격을 할 때를 위함
+            if (!animator.GetBool("isJumping"))
+            {
+                inputNormalAtt = false;
+                animator.SetBool("isNormalAttack", true);
+                animator.SetTrigger("doNormalAttack");
+                Attack = true;
+                AttackTime = Time.time; // 연속공격을 할 때를 위함
+            }
+            else
+            {
+                inputNormalAtt = false;
+                animator.SetBool("isJumpAtt", true);
+                Attack = true;
+            }
         }
 
 
@@ -130,7 +144,7 @@ public class PlayerManager : MonoBehaviour
 
         if (!inputHardAtt) // 공격상태가 아니면 애니메이션 재생 안 함
         {
-            animator.SetBool("doHardAttack", false);
+            animator.SetBool("isHardAttack", false);
         }
 
 
@@ -139,12 +153,13 @@ public class PlayerManager : MonoBehaviour
             inputHardAtt = false;
             animator.SetBool("isHardAttack", true);
             animator.SetTrigger("doHardAttack");
+            Attack = true;
         }
-          
+
         ////////////////////////////////////////////////////
 
         //이건 점프다
-        if (inputJump&&!animator.GetBool("isJumping") ) // 점프 애니 재생중이 아니면서 점프키를 누르면 점프 실행
+        if (inputJump && !animator.GetBool("isJumping")) // 점프 애니 재생중이 아니면서 점프키를 누르면 점프 실행
         {
             while (animator.GetBool("isjumping"))
             {
@@ -155,7 +170,7 @@ public class PlayerManager : MonoBehaviour
             }
         }
 
-        if (inputJump&&jumpcount<2 )
+        if (inputJump && jumpcount < 2)
 
         {
             ++jumpcount;
@@ -245,7 +260,7 @@ public class PlayerManager : MonoBehaviour
         }
         */
     }
-    
+
     void Die()
     {
         isDie = true;
@@ -259,13 +274,18 @@ public class PlayerManager : MonoBehaviour
         Vector2 dieVelocity = new Vector2(0, 10f);
         rigid.AddForce(dieVelocity, ForceMode2D.Impulse);
     }
-    
-    void OnTriggerEnter2D (Collider2D other)
+
+    void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.tag == "floor" && rigid.velocity.y < 0) // 땅 밟은거
         {
             animator.SetBool("isJumping", false);
             jumpcount = 0;
+        }
+        if (other.gameObject.tag == "Player" && other.gameObject.GetComponent<PlayerManager>().Attack)
+        {
+            Defence = true;
+            Debug.Log("공격 받는 상황 들어갈 영역1111114");
         }
     }
     void FixedUpdate()
@@ -278,7 +298,7 @@ public class PlayerManager : MonoBehaviour
         {
             Physics2D.IgnoreLayerCollision(8, 9, true);
         }
-        else if(rigid.velocity.y <=0)
+        else if (rigid.velocity.y <= 0)
         {
             Physics2D.IgnoreLayerCollision(8, 9, false);
         }

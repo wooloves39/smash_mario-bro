@@ -149,6 +149,8 @@ MonoBehaviour:
   inputGard: 0
   inputNormalAtt: 0
   inputHardAtt: 0
+  Attack: 0
+  Defence: 0
   soundstate: []
 --- !u!212 &212987536486458812
 SpriteRenderer:

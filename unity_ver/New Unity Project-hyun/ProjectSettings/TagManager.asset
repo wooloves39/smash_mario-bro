@@ -9,6 +9,7 @@ TagManager:
   - floor
   - start
   - Manager
+  - AI
   layers:
   - Default
   - TransparentFX
